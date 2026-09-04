@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 commit: 1ecd16ccfa69d0bfd83c335fa6ae6c118de0a841
 path: firebase-service-account.json:2   
 node_modules/
 firebase-service-account.json
-=======
-commit: 1ecd16ccfa69d0bfd83c335fa6ae6c118de0a841
-path: firebase-service-account.json:2   
-node_modules/
-firebase-service-account.json
->>>>>>> fb177ed56e9b6521f7d208ac9b39fc5db30f901b
