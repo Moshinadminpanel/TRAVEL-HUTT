@@ -1,3 +1,2827 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+
+  <style>
+    /* ==========================================
+        1. CSS VARIABLES & BASE RESET
+        ========================================== */
+    :root {
+      --primary: #ff385c;
+      --primary-dark: #e00b41;
+      --primary-gradient: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
+      --dark: #1a1a1a;
+      --gray: #6a6a6a;
+      --light-gray: #f8f9fa;
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 28px;
+      --radius-pill: 999px;
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      --spring-transition: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --glass-bg: rgba(255, 255, 255, 0.85);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: #fcfcfc;
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ==========================================
+        2. ANIMATIONS
+        ========================================== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes popupBounce {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ==========================================
+        3. HEADER & NAVIGATION
+        ========================================== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 6%;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 0;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.8px;
+      transition: var(--transition);
+    }
+
+    .logo:hover {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      padding: 6px 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+      border-radius: 2px;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .badge {
+      background: var(--primary-gradient);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      margin-left: 4px;
+      font-weight: 700;
+      display: inline-block;
+      box-shadow: 0 2px 6px rgba(255, 56, 92, 0.3);
+    }
+
+    /* ==========================================
+        4. CATEGORIES FILTER BAR
+        ========================================== */
+    .categories-bar {
+      display: flex;
+      gap: 36px;
+      overflow-x: auto;
+      padding: 16px 6%;
+      border-bottom: 1px solid var(--border-light);
+      background: #ffffff;
+      scrollbar-width: none;
+      align-items: center;
+    }
+
+    .categories-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--gray);
+      font-size: 13px;
+      font-weight: 600;
+      padding-bottom: 10px;
+      border-bottom: 2.5px solid transparent;
+      white-space: nowrap;
+      transition: var(--transition);
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+
+    .category-item:hover,
+    .category-item.active {
+      color: var(--dark);
+      opacity: 1;
+      border-bottom-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================
+        5. HERO SECTION & SEARCH CAPSULE
+        ========================================== */
+    .hero-banner {
+      position: relative;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.65) 100%), url('https://images.unsplash.com/photo-1684153815450-aea8170e18f5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fGNveCUyMGJhemFyJTIwc2VhJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D') center/cover no-repeat;
+      padding: 90px 24px 140px 24px;
+      color: #ffffff;
+      text-align: center;
+      border-radius: var(--radius-lg);
+      margin-bottom: 48px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .hero-title {
+      font-size: 44px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-subtitle {
+      font-size: 17px;
+      max-width: 680px;
+      margin: 0 auto 36px auto;
+      line-height: 1.6;
+      opacity: 0.95;
+      font-weight: 400;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-capsule-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 100;
+    }
+
+    .search-capsule {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: var(--radius-pill);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+      padding: 8px 10px 8px 18px;
+      width: 100%;
+      max-width: 860px;
+      position: relative;
+    }
+
+    .capsule-segment {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      text-align: left;
+    }
+
+    .capsule-segment:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background-color: var(--border-light);
+    }
+
+    .capsule-segment:hover,
+    .capsule-segment.active-segment {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .capsule-segment label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    .capsule-segment input {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: var(--dark);
+      background: transparent;
+      margin-top: 4px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: 600;
+      text-overflow: ellipsis;
+    }
+
+    .search-btn-round {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.25s var(--spring-transition), box-shadow 0.2s ease;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(255, 56, 92, 0.4);
+    }
+
+    .search-btn-round:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(255, 56, 92, 0.6);
+    }
+
+    /* SEARCH POPUPS */
+    .search-popup {
+      position: absolute;
+      top: 76px;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+      padding: 24px;
+      z-index: 500;
+      animation: popupBounce 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      display: none;
+      max-width: 100%;
+      text-align: left;
+      color: var(--dark);
+    }
+
+    .search-popup.show {
+      display: block;
+    }
+
+    #popup-where {
+      left: 0;
+      width: 360px;
+    }
+
+    #popup-when {
+      left: 0;
+      width: 620px;
+    }
+
+    #popup-who {
+      right: 0;
+      width: 320px;
+    }
+
+    .destination-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .destination-item:hover {
+      background: var(--light-gray);
+      transform: translateX(4px);
+    }
+
+    /* CALENDAR RANGES */
+    .calendar-nav-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .calendar-nav-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      color: var(--dark);
+      flex-shrink: 0;
+    }
+
+    .calendar-nav-btn:hover {
+      border-color: var(--dark);
+      background: var(--light-gray);
+    }
+
+    .calendar-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .calendar-nav-btn:disabled:hover {
+      border-color: var(--border);
+      background: #fff;
+    }
+
+    .calendar-months-wrap {
+      display: flex;
+      gap: 28px;
+    }
+
+    .calendar-month-block {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .calendar-month-title {
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: var(--dark);
+      letter-spacing: -0.2px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .calendar-day-head {
+      font-weight: 700;
+      color: var(--gray);
+      font-size: 11px;
+      padding-bottom: 6px;
+    }
+
+    .calendar-day {
+      padding: 9px 0;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+    }
+
+    .calendar-day:hover {
+      background: var(--light-gray);
+    }
+
+    .calendar-day.selected {
+      background: var(--primary) !important;
+      color: #fff !important;
+      border-radius: 50%;
+    }
+
+    .calendar-day.in-range {
+      background: rgba(255, 56, 92, 0.12);
+      border-radius: 0;
+    }
+
+    .calendar-day.in-range.selected {
+      border-radius: 50%;
+    }
+
+    .calendar-day.disabled {
+      color: var(--border);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .calendar-day.empty {
+      visibility: hidden;
+      cursor: default;
+    }
+
+    .guest-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .guest-row:not(:last-child) {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .counter-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .counter-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .counter-btn:hover {
+      border-color: var(--dark);
+      background: var(--light-gray);
+    }
+
+    /* ==========================================
+        6. SECTIONS & COMPONENTS
+        ========================================== */
+    section {
+      margin-bottom: 56px;
+    }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 22px;
+      letter-spacing: -0.5px;
+      color: var(--dark);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      font-weight: 700;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .destinations-flex {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: none;
+    }
+
+    .dest-chip {
+      padding: 14px 28px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dest-chip:hover {
+      border-color: var(--dark);
+      background: var(--dark);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .offer-banner {
+      background: linear-gradient(135deg, #FF385C 0%, #a10035 100%);
+      color: #fff;
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+
+    .offer-banner:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+    }
+
+    .cat-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cat-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      color: var(--primary);
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 24px;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-number {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -1px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--gray);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .blogs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .blog-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .blog-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .blog-content {
+      padding: 20px;
+    }
+
+    .newsletter-box {
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+      padding: 48px 24px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+
+    .newsletter-form {
+      display: flex;
+      max-width: 480px;
+      margin: 20px auto 0 auto;
+      gap: 12px;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      outline: none;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    /* ==========================================
+        7. CARDS, GRID & BUTTONS
+        ========================================== */
+    main {
+      flex: 1;
+      padding: 32px 6%;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .page-view {
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px 24px;
+    }
+
+    .card {
+      border: none;
+      background: transparent;
+      transition: transform 0.3s var(--spring-transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .card-img-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 90%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover img {
+      transform: scale(1.08);
+    }
+
+    .card-heart-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      border: none;
+      color: rgba(255, 255, 255, 0.95);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 2;
+      transition: var(--transition);
+    }
+
+    .card-heart-btn:hover {
+      transform: scale(1.15);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .card-subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+
+    .card-price {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      font-size: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 56, 92, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--dark);
+      color: var(--dark);
+    }
+
+    .btn-outline:hover {
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .form-container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 36px;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.15);
+    }
+
+    /* ==========================================
+        8. ADMIN & TABLES
+        ========================================== */
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 32px;
+    }
+
+    .admin-sidebar {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .admin-sidebar ul {
+      list-style: none;
+    }
+
+    .admin-sidebar li {
+      padding: 12px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      margin-bottom: 6px;
+    }
+
+    .admin-sidebar li:hover {
+      background: var(--light-gray);
+      color: var(--primary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 20px;
+      background: #fff;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+
+    th,
+    td {
+      padding: 16px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--light-gray);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    td {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    /* ==========================================
+        9. TOAST & FOOTER
+        ========================================== */
+    #toast-container {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .toast {
+      background: var(--dark);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      animation: slideInRight 0.3s ease;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-light);
+      padding: 48px 6% 32px 6%;
+      background: #ffffff;
+      margin-top: auto;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px;
+      margin-bottom: 36px;
+      text-align: left;
+    }
+
+    .footer-links h4 {
+      font-size: 15px;
+      margin-bottom: 14px;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .footer-links a {
+      display: block;
+      color: var(--gray);
+      font-size: 14px;
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      color: var(--gray);
+      font-size: 14px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 24px;
+      font-weight: 500;
+    }
+
+    /* ==========================================
+        10. MOBILE HEADER BAR / BOTTOM NAV
+        ========================================== */
+    .mobile-header-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 5%;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 1001;
+    }
+
+    .mobile-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .mobile-logo {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .mobile-logo svg {
+      color: var(--primary);
+    }
+
+    .mobile-icon-badge {
+      position: absolute;
+      top: -2px;
+      right: -4px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+    }
+
+    .mobile-nav-panel {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 78%;
+      max-width: 320px;
+      height: 100%;
+      background: #ffffff;
+      z-index: 2000;
+      box-shadow: var(--shadow-lg);
+      padding: 24px 20px;
+      flex-direction: column;
+      gap: 4px;
+      animation: slideInLeft 0.25s ease forwards;
+    }
+
+    .mobile-nav-panel.open {
+      display: flex;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .mobile-nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1999;
+    }
+
+    .mobile-nav-overlay.open {
+      display: block;
+    }
+
+    .mobile-nav-panel a {
+      padding: 14px 8px;
+      font-weight: 700;
+      color: var(--dark);
+      text-decoration: none;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid var(--border-light);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    }
+
+    .mobile-nav-items {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .mobile-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--gray);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      padding: 4px 8px;
+    }
+
+    .mobile-nav-item.active {
+      color: var(--primary);
+    }
+
+    .mobile-nav-item.active svg {
+      stroke: var(--primary);
+    }
+
+    .mobile-nav-item .mobile-cart-badge {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        display: none;
+      }
+
+      .mobile-header-bar {
+        display: flex;
+      }
+
+      .mobile-bottom-nav {
+        display: block;
+      }
+
+      body {
+        padding-bottom: 68px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      nav {
+        overflow-x: auto;
+        width: 100%;
+        padding-bottom: 6px;
+      }
+
+      .search-capsule {
+        flex-direction: column;
+        border-radius: var(--radius-md);
+        padding: 16px;
+      }
+
+      .capsule-segment:not(:last-child)::after {
+        display: none;
+      }
+
+      .search-popup {
+        position: relative !important;
+        top: 0 !important;
+        width: 100% !important;
+        left: 0 !important;
+        margin-top: 12px;
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .calendar-months-wrap {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      #popup-when {
+        width: 100% !important;
+      }
+    }
+
+    /* ==========================================
+        11. PAYMENT METHOD MODAL
+        ========================================== */
+    .pay-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pay-modal-overlay.open {
+      display: flex;
+    }
+
+    .pay-modal {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow-lg);
+      animation: popupBounce 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .pay-method-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pay-method-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: var(--transition);
+      text-align: left;
+    }
+
+    .pay-method-btn:hover {
+      border-color: var(--primary);
+      background: rgba(255, 56, 92, 0.04);
+    }
+
+    .pay-method-icon {
+      font-size: 20px;
+      width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    #stripeCardElementWrap {
+      margin-top: 16px;
+      display: none;
+    }
+
+    #stripeCardElement {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .pnr-tag {
+      font-family: 'Courier New', monospace;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--primary);
+      background: rgba(255, 56, 92, 0.08);
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- PAYMENT METHOD MODAL -->
+  <div class="pay-modal-overlay" id="payModalOverlay" onclick="closePaymentModal(event)">
+    <div class="pay-modal" onclick="event.stopPropagation()">
+      <h3 style="font-size:18px; font-weight:800;">Choose Payment Method</h3>
+      <p style="font-size:13px; color:var(--gray); margin-top:4px;">Your booking will get a PNR once created.</p>
+      <div class="pay-method-list">
+        <button class="pay-method-btn" onclick="payWith('bkash')"><span class="pay-method-icon">📱</span> bKash</button>
+        <button class="pay-method-btn" onclick="payWith('nagad')"><span class="pay-method-icon">🟠</span> Nagad</button>
+        <button class="pay-method-btn" onclick="payWith('card')"><span class="pay-method-icon">💳</span> Debit/Credit
+          Card</button>
+        <button class="pay-method-btn" onclick="payWith('stripe')"><span class="pay-method-icon">🅢</span> Stripe
+          Checkout</button>
+      </div>
+      <div id="stripeCardElementWrap">
+        <div id="stripeCardElement"></div>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="confirmStripeCardPayment()">Pay Now</button>
+      </div>
+      <button class="btn btn-outline" style="margin-top:16px;" onclick="closePaymentModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- MOBILE TOP BAR (hamburger + logo + wishlist) -->
+  <div class="mobile-header-bar">
+    <button class="mobile-icon-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
+    <a onclick="navigate('index')" class="mobile-logo">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor">
+        <path
+          d="M16 1c2.008 0 3.463.963 4.751 3.269l.533 1.025c1.954 3.83 6.114 12.54 7.1 14.836l.145.353c.667 1.591.91 2.472.96 3.396l.011.315c0 4.308-3.235 7.806-7.5 7.806-3.155 0-5.86-1.896-7.016-4.625l-.084-.213-.084.213c-1.156 2.729-3.861 4.625-7.016 4.625-4.265 0-7.5-3.498-7.5-7.806 0-.924.243-1.805.91-3.396l.145-.353c.986-2.296 5.146-11.006 7.1-14.836l.533-1.025C12.537 1.963 13.992 1 16 1zm0 2c-1.237 0-2.274.652-3.385 2.637l-.447.859c-1.895 3.712-5.986 12.28-6.918 14.453l-.116.282c-.546 1.302-.734 1.98-.77 2.657l-.008.212c0 3.218 2.378 5.806 5.644 5.806 2.603 0 4.837-1.636 5.513-4.041l.145-.521h.786l.145.521c.676 2.405 2.91 4.041 5.513 4.041 3.266 0 5.644-2.588 5.644-5.806 0-.677-.188-1.355-.734-2.657l-.116-.282c-.932-2.173-5.023-10.741-6.918-14.453l-.447-.859C18.274 3.652 17.237 3 16 3z" />
+      </svg>
+      Travel Hart
+    </a>
+    <button class="mobile-icon-btn" onclick="navigate('wishlist')" aria-label="Wishlist">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path
+          d="M12 21s-7.5-4.6-10-9.3C.6 8.2 2.3 4 6.4 4c2.1 0 3.7 1.2 5.6 3.4C13.9 5.2 15.5 4 17.6 4 21.7 4 23.4 8.2 22 11.7 19.5 16.4 12 21 12 21z" />
+      </svg>
+      <span class="mobile-icon-badge" id="mobileWishlistCount">0</span>
+    </button>
+  </div>
+
+  <!-- MOBILE SLIDE-OUT NAV PANEL -->
+  <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="toggleMobileMenu()"></div>
+  <div class="mobile-nav-panel" id="mobileNavPanel">
+    <div style="font-weight:800; font-size:18px; margin-bottom: 10px;">Menu</div>
+    <a onclick="navigate('index')">🏠 Home</a>
+    <a onclick="navigate('hotels')">🏨 Explore Stays</a>
+    <a onclick="navigate('wishlist')">♥ Wishlist</a>
+    <a onclick="navigate('bookings')">📋 My Bookings</a>
+    <a onclick="navigate('about')">ℹ️ About Us</a>
+    <a onclick="navigate('admin')" id="mobileAdminLink" style="display:none; color: var(--primary);">🛠️ Admin
+      Portal</a>
+    <div id="mobileAuthArea" style="margin-top: 16px;"></div>
+  </div>
+
+  <!-- NAVIGATION BAR -->
+  <header>
+    <a onclick="navigate('index')" class="logo">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor">
+        <path
+          d="M16 1c2.008 0 3.463.963 4.751 3.269l.533 1.025c1.954 3.83 6.114 12.54 7.1 14.836l.145.353c.667 1.591.91 2.472.96 3.396l.011.315c0 4.308-3.235 7.806-7.5 7.806-3.155 0-5.86-1.896-7.016-4.625l-.084-.213-.084.213c-1.156 2.729-3.861 4.625-7.016 4.625-4.265 0-7.5-3.498-7.5-7.806 0-.924.243-1.805.91-3.396l.145-.353c.986-2.296 5.146-11.006 7.1-14.836l.533-1.025C12.537 1.963 13.992 1 16 1zm0 2c-1.237 0-2.274.652-3.385 2.637l-.447.859c-1.895 3.712-5.986 12.28-6.918 14.453l-.116.282c-.546 1.302-.734 1.98-.77 2.657l-.008.212c0 3.218 2.378 5.806 5.644 5.806 2.603 0 4.837-1.636 5.513-4.041l.145-.521h.786l.145.521c.676 2.405 2.91 4.041 5.513 4.041 3.266 0 5.644-2.588 5.644-5.806 0-.677-.188-1.355-.734-2.657l-.116-.282c-.932-2.173-5.023-10.741-6.918-14.453l-.447-.859C18.274 3.652 17.237 3 16 3z" />
+      </svg>
+      TRAVEL HUTT
+    </a>
+    <nav>
+      <a onclick="navigate('hotels')">Explore Stays</a>
+      <a onclick="navigate('wishlist')">Wishlist <span class="badge" id="wishlistCount">0</span></a>
+      <a onclick="navigate('bookings')">My Bookings</a>
+      <a onclick="navigate('about')">About Us</a>
+      <a id="navAdminLink" onclick="navigate('admin')" style="color: var(--primary); display:none;">Admin Portal</a>
+      <span id="navAuth">
+        <a onclick="navigate('login')" class="btn btn-outline"
+          style="padding: 8px 18px; border-radius: 20px; font-size: 13px;">Login</a>
+      </span>
+    </nav>
+  </header>
+
+  <!-- CATEGORIES FILTER BAR -->
+  <div class="categories-bar">
+    <div class="category-item active">🏖️ Beachfront</div>
+    <div class="category-item">⛰️ Amazing views</div>
+    <div class="category-item">🏰 Castles</div>
+    <div class="category-item">🏡 Cabins</div>
+    <div class="category-item">🏊 Luxe Pools</div>
+    <div class="category-item">🏙️ Iconic cities</div>
+    <div class="category-item">🌲 Tropical</div>
+    <div class="category-item">⛵ Boats</div>
+  </div>
+
+  <main>
+    <!-- PAGE 1: HOME PAGE -->
+    <section id="page-index" class="page-view">
+
+      <!-- HERO SECTION -->
+      <div class="hero-banner">
+        <h1 class="hero-title">Find Your Next Luxury Escape</h1>
+        <p class="hero-subtitle">
+          Experience Luxury, Comfort & Savings.
+          কোস্টাল ও শহরের প্রিমিয়াম হোটেলগুলোতে সেরা মূল্যে বুকিং, ফ্রি ব্রেকফাস্ট এবং ট্রান্সফার সুবিধা পান।
+        </p>
+
+        <!-- SEARCH CAPSULE -->
+        <div class="search-capsule-wrapper" id="searchCapsuleWrapper">
+          <div class="search-capsule" id="searchCapsule">
+
+            <!-- DESTINATION SEGMENT -->
+            <div class="capsule-segment" id="seg-where" onclick="togglePopup('where', event)">
+              <label>Destination</label>
+              <input type="text" id="searchDest" placeholder="Where to?" readonly>
+            </div>
+
+            <!-- CHECK-IN / CHECK-OUT RANGE SEGMENT -->
+            <div class="capsule-segment" id="seg-when" onclick="togglePopup('when', event)">
+              <label>Check-in / Out</label>
+              <input type="text" id="searchDates" placeholder="Add dates" readonly>
+            </div>
+
+            <!-- GUESTS SEGMENT -->
+            <div class="capsule-segment" id="seg-who" onclick="togglePopup('who', event)">
+              <label>Guests</label>
+              <input type="text" id="searchGuests" placeholder="Add guests" readonly>
+            </div>
+
+            <button class="search-btn-round" onclick="executeSearch(event)">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="4">
+                <circle cx="14" cy="14" r="9" />
+                <path d="M21 21l7 7" />
+              </svg>
+            </button>
+
+            <!-- POPUP 1: WHERE -->
+            <div class="search-popup" id="popup-where" onclick="event.stopPropagation()">
+              <div style="font-weight: 800; font-size: 12px; margin-bottom: 12px; color: var(--gray);">SUGGESTED
+                DESTINATIONS</div>
+              <div class="destination-item" onclick="selectDestination('Cox\'s Bazar', 'Bangladesh')">
+                <span>🏖️</span>
+                <div><strong>Cox's Bazar</strong><br><small>Longest sandy beach</small></div>
+              </div>
+              <div class="destination-item" onclick="selectDestination('Sylhet', 'Bangladesh')">
+                <span>⛰️</span>
+                <div><strong>Sylhet</strong><br><small>Tea gardens & hills</small></div>
+              </div>
+              <div class="destination-item" onclick="selectDestination('Kuala Lumpur', 'Malaysia')">
+                <span>🏙️</span>
+                <div><strong>Kuala Lumpur</strong><br><small>Iconic city view</small></div>
+              </div>
+            </div>
+
+            <!-- POPUP 2: WHEN (CHECK-IN TO CHECK-OUT RANGE PICKER) -->
+            <div class="search-popup" id="popup-when" onclick="event.stopPropagation()">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+                <span id="calendarPrompt" style="font-weight:700; font-size:14px; color:var(--dark);">Select Check-in
+                  Date</span>
+                <button onclick="resetDateSelection()"
+                  style="background:none; border:none; color:var(--primary); font-size:12px; font-weight:700; cursor:pointer;">Reset</button>
+              </div>
+              <div class="calendar-nav-header">
+                <button class="calendar-nav-btn" id="calPrevBtn" onclick="shiftCalendarMonth(-1)"
+                  aria-label="Previous month">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <div style="display:flex; flex:1;">
+                  <div class="calendar-month-title" id="calMonthTitle0" style="flex:1;"></div>
+                  <div class="calendar-month-title" id="calMonthTitle1" style="flex:1;"></div>
+                </div>
+                <button class="calendar-nav-btn" id="calNextBtn" onclick="shiftCalendarMonth(1)"
+                  aria-label="Next month">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+              </div>
+              <div class="calendar-months-wrap">
+                <div class="calendar-month-block">
+                  <div class="calendar-grid" id="calendarGrid0"></div>
+                </div>
+                <div class="calendar-month-block">
+                  <div class="calendar-grid" id="calendarGrid1"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- POPUP 3: WHO (GUEST COUNTER) -->
+            <div class="search-popup" id="popup-who" onclick="event.stopPropagation()">
+              <div class="guest-row">
+                <div><strong>Adults</strong><br><small>Ages 13+</small></div>
+                <div class="counter-btn-group">
+                  <button class="counter-btn" onclick="updateGuests('adults', -1, event)">-</button>
+                  <span id="cnt-adults" style="font-weight:700; width:16px; text-align:center;">2</span>
+                  <button class="counter-btn" onclick="updateGuests('adults', 1, event)">+</button>
+                </div>
+              </div>
+              <div class="guest-row">
+                <div><strong>Children</strong><br><small>Ages 2-12</small></div>
+                <div class="counter-btn-group">
+                  <button class="counter-btn" onclick="updateGuests('children', -1, event)">-</button>
+                  <span id="cnt-children" style="font-weight:700; width:16px; text-align:center;">0</span>
+                  <button class="counter-btn" onclick="updateGuests('children', 1, event)">+</button>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="margin-top: 14px; padding: 10px;"
+                onclick="closeAllPopups()">Done</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: WHY BOOK WITH US -->
+      <section>
+        <h2 class="section-title">Why Book With Us</h2>
+        <div class="features-grid">
+          <div class="feature-card">🏷️ Best Price Guarantee</div>
+          <div class="feature-card">🍳 Free Daily Breakfast</div>
+          <div class="feature-card">🚗 Free Private Transfer</div>
+          <div class="feature-card">⚡ Instant Confirmation</div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: FEATURED HOTELS -->
+      <section>
+        <h2 class="section-title">Featured Hotels</h2>
+        <div class="grid" id="featuredGrid"></div>
+      </section>
+
+      <!-- SECTION 4: POPULAR DESTINATIONS -->
+      <section>
+        <h2 class="section-title">Popular Destinations</h2>
+        <div class="destinations-flex">
+          <div class="dest-chip" onclick="filterByDest('Cox\'s Bazar')">Cox's Bazar</div>
+          <div class="dest-chip" onclick="filterByDest('Saint Martin')">Saint Martin</div>
+          <div class="dest-chip" onclick="filterByDest('Sylhet')">Sylhet</div>
+          <div class="dest-chip" onclick="filterByDest('Sajek')">Sajek Valley</div>
+          <div class="dest-chip" onclick="filterByDest('Dhaka')">Dhaka</div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: SPECIAL OFFERS -->
+      <section>
+        <h2 class="section-title">Special Offers</h2>
+        <div class="offers-grid">
+          <div class="offer-banner">
+            <div>
+              <h3>Summer Escape Sale</h3>
+              <p style="margin-top: 6px; opacity: 0.9;">Up to 30% off on beachfront luxury resorts.</p>
+            </div>
+            <button class="btn btn-outline"
+              style="color: #fff; border-color: #fff; width: fit-content; margin-top: 20px;"
+              onclick="navigate('hotels')">Claim Discount</button>
+          </div>
+          <div class="offer-banner" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+            <div>
+              <h3>Weekend Getaway</h3>
+              <p style="margin-top: 6px; opacity: 0.9;">Complimentary spa vouchers with stay.</p>
+            </div>
+            <button class="btn btn-outline"
+              style="color: #fff; border-color: #fff; width: fit-content; margin-top: 20px;"
+              onclick="navigate('hotels')">Explore Stays</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: HOTEL CATEGORIES -->
+      <section>
+        <h2 class="section-title">Hotel Categories</h2>
+        <div class="categories-grid">
+          <div class="cat-card">💎 Luxury</div>
+          <div class="cat-card">🏖️ Beach</div>
+          <div class="cat-card">🪙 Budget</div>
+          <div class="cat-card">👨‍👩‍👧‍👦 Family</div>
+          <div class="cat-card">💼 Business</div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: CUSTOMER REVIEWS -->
+      <section>
+        <h2 class="section-title">Customer Reviews</h2>
+        <div class="feature-card" style="text-align: left; padding: 28px;">
+          <div style="color: #ffb400; font-size: 20px; margin-bottom: 10px;">★★★★★</div>
+          <p style="font-style: italic; margin-bottom: 14px; font-weight: 500; font-size: 15px; color: #444;">"Seamless
+            booking experience! Free airport transfer in Cox's Bazar was right on time. Highly recommended."</p>
+          <strong style="color: var(--dark);">- Tanvir Islam</strong>
+        </div>
+      </section>
+
+      <!-- SECTION 8: OUR NUMBERS -->
+      <section>
+        <div class="stats-bar">
+          <div>
+            <div class="stat-number">150+</div>
+            <div class="stat-label">Hotels</div>
+          </div>
+          <div>
+            <div class="stat-number">25+</div>
+            <div class="stat-label">Cities</div>
+          </div>
+          <div>
+            <div class="stat-number">10k+</div>
+            <div class="stat-label">Guests</div>
+          </div>
+          <div>
+            <div class="stat-number">18k+</div>
+            <div class="stat-label">Bookings</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 9: TRAVEL BLOG -->
+      <section>
+        <h2 class="section-title">Travel Blog</h2>
+        <div class="blogs-grid">
+          <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80"
+              alt="Blog">
+            <div class="blog-content">
+              <h4 style="font-size: 16px;">Top 5 Beach Resorts in Cox's Bazar</h4>
+              <p style="font-size: 13px; color: var(--gray); margin-top: 8px;">Discover ultimate comfort next to the
+                ocean waves.</p>
+            </div>
+          </div>
+          <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=500&q=80"
+              alt="Blog">
+            <div class="blog-content">
+              <h4 style="font-size: 16px;">Exploring Tea Gardens in Sylhet</h4>
+              <p style="font-size: 13px; color: var(--gray); margin-top: 8px;">A peaceful weekend journey among green
+                hills.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 10: NEWSLETTER -->
+      <section>
+        <div class="newsletter-box">
+          <h2 style="font-size: 26px;">Subscribe to Special Deals</h2>
+          <p style="font-size: 15px; color: var(--gray); margin-top: 6px;">Get exclusive discount coupons directly to
+            your inbox.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Enter your email address">
+            <button class="btn btn-primary" style="width: auto; padding: 14px 28px;"
+              onclick="showToast('Subscribed successfully!')">Subscribe</button>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- PAGE 2: EXPLORE HOTELS PAGE -->
+    <section id="page-hotels" class="page-view hidden">
+      <h2 class="section-title">All Available Accommodations</h2>
+      <div class="grid" id="allHotelsGrid"></div>
+    </section>
+
+    <!-- PAGE 3: WISHLIST PAGE -->
+    <section id="page-wishlist" class="page-view hidden">
+      <h2 class="section-title">Your Saved Stays</h2>
+      <div class="grid" id="wishlistGrid"></div>
+    </section>
+
+    <!-- PAGE 4: MY BOOKINGS PAGE -->
+    <section id="page-bookings" class="page-view hidden">
+      <h2 class="section-title">Your Reservations</h2>
+      <div id="bookingsList"></div>
+    </section>
+
+    <!-- PAGE 5: ABOUT US PAGE -->
+    <section id="page-about" class="page-view hidden">
+      <div class="form-container" style="max-width: 700px;">
+        <h2 class="section-title">About Mine Hotel</h2>
+        <p style="line-height: 1.7; color: var(--gray); font-size: 15px;">Mine Hotel provides premium accommodation
+          booking experiences across Bangladesh and top international travel spots. We offer transparent pricing,
+          instant voucher verification, and guaranteed comfort.</p>
+      </div>
+    </section>
+
+    <!-- PAGE 6: ADMIN PORTAL -->
+    <section id="page-admin" class="page-view hidden">
+      <h2 class="section-title">Admin Management Portal</h2>
+      <div class="admin-grid">
+        <div class="admin-sidebar">
+          <ul>
+            <li onclick="showAdminSection('overview')">📊 Dashboard Overview</li>
+            <li onclick="showAdminSection('bookings')">📋 Manage Bookings</li>
+            <li onclick="showAdminSection('hotels')">🏨 Manage Hotels</li>
+          </ul>
+        </div>
+        <div>
+
+          <!-- ADMIN: DASHBOARD OVERVIEW -->
+          <div id="adminSection-overview">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Dashboard Overview</h3>
+            <div class="stats-bar" style="padding: 24px;">
+              <div>
+                <div class="stat-number" id="statTotalHotels">0</div>
+                <div class="stat-label">Hotels Listed</div>
+              </div>
+              <div>
+                <div class="stat-number" id="statTotalBookings">0</div>
+                <div class="stat-label">Total Bookings</div>
+              </div>
+              <div>
+                <div class="stat-number" id="statConfirmed">0</div>
+                <div class="stat-label">Confirmed</div>
+              </div>
+              <div>
+                <div class="stat-number" id="statCancelled">0</div>
+                <div class="stat-label">Cancelled</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN: MANAGE BOOKINGS -->
+          <div id="adminSection-bookings" class="hidden">
+            <h3 style="font-size: 18px; font-weight: 700;">Recent Bookings System</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>PNR</th>
+                  <th>Guest</th>
+                  <th>Hotel</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody">
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ADMIN: MANAGE HOTELS -->
+          <div id="adminSection-hotels" class="hidden">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Hotel Inventory</h3>
+
+            <div class="form-container" style="max-width: 100%; margin: 0 0 24px 0; padding: 24px;">
+              <h4 style="font-size: 15px; margin-bottom: 14px;">Add New Hotel</h4>
+              <div class="form-group">
+                <label>Hotel Name</label>
+                <input type="text" id="newHotelTitle" placeholder="e.g. Ocean Breeze Resort">
+              </div>
+              <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="newHotelLocation" placeholder="e.g. Cox's Bazar, Bangladesh">
+              </div>
+              <div class="form-group">
+                <label>Price / Night</label>
+                <input type="text" id="newHotelPrice" placeholder="e.g. 9500">
+              </div>
+              <div class="form-group">
+                <label>Image URL</label>
+                <input type="text" id="newHotelImage" placeholder="https://...">
+              </div>
+              <button class="btn btn-primary" onclick="addHotel()">Add Hotel</button>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Hotel</th>
+                  <th>Location</th>
+                  <th>Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminHotelsTableBody">
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 7: LOGIN PAGE -->
+    <section id="page-login" class="page-view hidden">
+      <div class="form-container">
+        <h2 style="margin-bottom: 20px; text-align: center; font-size: 24px;">Welcome Back</h2>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="moshin566@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" onclick="handleLogin()">Sign In</button>
+        <p style="text-align:center; font-size:12px; color:var(--gray); margin-top:14px;">New here? Just sign in with an
+          email/password — an account is created automatically.</p>
+      </div>
+    </section>
+
+    <!-- PAGE 8: HOTEL DETAILS / BOOK NOW -->
+    <section id="page-details" class="page-view hidden">
+      <div id="detailsContent"></div>
+    </section>
+
+    <!-- PAGE 9: PAYMENT RESULT (bKash/Nagad redirect back here) -->
+    <section id="page-payment-result" class="page-view hidden">
+      <div class="form-container" style="text-align:center;">
+        <div id="paymentResultIcon" style="font-size:48px; margin-bottom:12px;"></div>
+        <h2 id="paymentResultTitle" style="font-size:22px; font-weight:800;"></h2>
+        <p id="paymentResultBody" style="color:var(--gray); margin-top:8px;"></p>
+        <button class="btn btn-primary" style="margin-top:20px;" onclick="navigate('bookings')">View My
+          Bookings</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- MOBILE BOTTOM TAB BAR -->
+  <div class="mobile-bottom-nav">
+    <div class="mobile-nav-items">
+      <div class="mobile-nav-item" id="mnav-index" onclick="navigate('index')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5 12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+        </svg>
+        <span>Home</span>
+      </div>
+      <div class="mobile-nav-item" id="mnav-hotels" onclick="navigate('hotels')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+        <span>Category</span>
+      </div>
+      <div class="mobile-nav-item" id="mnav-bookings" onclick="navigate('bookings')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
+        </svg>
+        <span class="mobile-cart-badge" id="mobileCartBadge">0</span>
+        <span>Cart</span>
+      </div>
+      <div class="mobile-nav-item" id="mnav-chat" onclick="showToast('Chat support coming soon!')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span>Chat</span>
+      </div>
+      <div class="mobile-nav-item" id="mnav-login" onclick="navigate(currentUser ? 'bookings' : 'login')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span id="mobileLoginLabel">Login</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <div>
+        <h4>Support</h4>
+        <a onclick="showToast('Help Center Opened')">Help Center</a>
+        <a onclick="showToast('Safety Info Opened')">AirCover</a>
+        <a onclick="showToast('Anti-discrimination Opened')">Anti-discrimination</a>
+      </div>
+      <div>
+        <h4>Hosting</h4>
+        <a onclick="showToast('Airbnb your home')">Mine Hotel your home</a>
+        <a onclick="showToast('AirCover for Hosts')">AirCover for Hosts</a>
+        <a onclick="showToast('Hosting resources')">Hosting resources</a>
+      </div>
+      <div>
+        <h4>Mine Hotel</h4>
+        <a onclick="showToast('Newsroom')">Newsroom</a>
+        <a onclick="showToast('New features')">New features</a>
+        <a onclick="showToast('Careers')">Careers</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Mine Hotel, Inc. · Privacy · Terms · Sitemap
+    </div>
+  </footer>
+
+  <!-- FIREBASE SDK (Authentication) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import {
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      signOut, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+    // Firebase console -> Project settings -> General -> Your apps -> SDK config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAr2QYSm6K9OHWrGnqyIX8GfFdsT8KlJYc",
+      authDomain: "travel-hutt-security.firebaseapp.com",
+      projectId: "travel-hutt-security",
+      storageBucket: "travel-hutt-security.firebasestorage.app",
+      messagingSenderId: "296563597622",
+      appId: "1:296563597622:web:06ebb0f283ee665a4ad397",
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.firebaseAuth = auth;
+    window.firebaseFns = { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged };
+    window.dispatchEvent(new Event('firebase-ready'));
+  </script>
+
+  <!-- STRIPE.JS (Card payments) -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // ⚠️ Set this to your deployed backend URL before going live.
+    const API_BASE = 'https://travel-hutt.onrender.com';
+    // Stripe publishable key (safe to expose client-side) — from dashboard.stripe.com/test/apikeys
+    const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY';
+
+    let hotelsData = [];
+    let wishlist = [];
+    let guestCounts = { adults: 2, children: 0 };
+
+    // DATE RANGE PICKER STATE
+    let checkInDate = null;  // Date object
+    let checkOutDate = null; // Date object
+    let calendarViewDate = new Date(); // month currently shown as the LEFT calendar
+    calendarViewDate.setDate(1);
+    const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    /* ==========================================
+        AUTH SYSTEM (Firebase + backend role sync)
+        ========================================== */
+    let currentUser = null;    // { email, role } — role comes from OUR backend (Mongo), not Firebase
+    let currentIdToken = null;
+
+    async function authFetch(path, options = {}) {
+      const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+      // Force token refresh to prevent 403 Invalid or expired token errors
+      if (window.firebaseAuth && window.firebaseAuth.currentUser) {
+        currentIdToken = await window.firebaseAuth.currentUser.getIdToken(true);
+      }
+      if (currentIdToken) headers.Authorization = `Bearer ${currentIdToken}`;
+      const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Request failed: ${res.status}`);
+      }
+      return res.json();
+    }
+
+    window.addEventListener('firebase-ready', () => {
+      window.firebaseFns.onAuthStateChanged(window.firebaseAuth, async (fbUser) => {
+        if (fbUser) {
+          try {
+            currentIdToken = await fbUser.getIdToken(true);
+            const profile = await authFetch('/auth/me'); // creates the Mongo user record on first login
+            currentUser = { email: fbUser.email, role: profile.role };
+          } catch (err) {
+            console.error('Failed to sync user profile:', err);
+            currentUser = { email: fbUser.email, role: 'user' };
+          }
+        } else {
+          currentIdToken = null;
+          currentUser = null;
+        }
+        updateAuthUI();
+        if (document.getElementById('page-bookings') && !document.getElementById('page-bookings').classList.contains('hidden')) {
+          renderBookings();
+        }
+      });
+
+      // Kick off initial data load once Firebase is wired up
+      loadHotels();
+    });
+
+    async function handleLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!email || !password) { showToast('Please enter email and password'); return; }
+
+      try {
+        await window.firebaseFns.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+      } catch (err) {
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+          try {
+            await window.firebaseFns.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+          } catch (createErr) {
+            showToast(createErr.message);
+            return;
+          }
+        } else {
+          showToast(err.message);
+          return;
+        }
+      }
+
+      document.getElementById('loginEmail').value = '';
+      document.getElementById('loginPassword').value = '';
+      showToast('Logged in successfully!');
+      navigate('index');
+    }
+
+    async function logout() {
+      await window.firebaseFns.signOut(window.firebaseAuth);
+      showToast('Logged out successfully!');
+      navigate('index');
+    }
+
+    function updateAuthUI() {
+      const navAuth = document.getElementById('navAuth');
+      const adminLink = document.getElementById('navAdminLink');
+      const mobileAdminLink = document.getElementById('mobileAdminLink');
+      const mobileAuthArea = document.getElementById('mobileAuthArea');
+      const mobileLoginLabel = document.getElementById('mobileLoginLabel');
+
+      if (currentUser) {
+        const displayName = currentUser.email.split('@')[0];
+        navAuth.innerHTML = `
+          <a onclick="navigate('bookings')" class="btn btn-outline" style="padding: 8px 18px; border-radius: 20px; font-size: 13px;">Hi, ${displayName}</a>
+          <a onclick="logout()" class="btn btn-outline" style="padding: 8px 18px; border-radius: 20px; font-size: 13px; margin-left: 8px;">Logout</a>
+        `;
+        adminLink.style.display = currentUser.role === 'admin' ? 'inline-block' : 'none';
+        if (mobileAdminLink) mobileAdminLink.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+        if (mobileAuthArea) mobileAuthArea.innerHTML = `
+          <button class="btn btn-outline" style="margin-bottom:8px;" onclick="navigate('bookings'); toggleMobileMenu();">Hi, ${displayName}</button>
+          <button class="btn btn-primary" onclick="logout(); toggleMobileMenu();">Logout</button>
+        `;
+        if (mobileLoginLabel) mobileLoginLabel.innerText = 'Profile';
+      } else {
+        navAuth.innerHTML = `<a onclick="navigate('login')" class="btn btn-outline" style="padding: 8px 18px; border-radius: 20px; font-size: 13px;">Login</a>`;
+        adminLink.style.display = 'none';
+        if (mobileAdminLink) mobileAdminLink.style.display = 'none';
+        if (mobileAuthArea) mobileAuthArea.innerHTML = `<button class="btn btn-primary" onclick="navigate('login'); toggleMobileMenu();">Login</button>`;
+        if (mobileLoginLabel) mobileLoginLabel.innerText = 'Login';
+      }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobileNavPanel').classList.toggle('open');
+      document.getElementById('mobileNavOverlay').classList.toggle('open');
+    }
+
+    function setActiveBottomNav(pageId) {
+      const map = { index: 'mnav-index', hotels: 'mnav-hotels', bookings: 'mnav-bookings' };
+      document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
+      const activeId = map[pageId];
+      if (activeId) {
+        const el = document.getElementById(activeId);
+        if (el) el.classList.add('active');
+      }
+    }
+
+    function navigate(pageId) {
+      if (pageId === 'admin' && (!currentUser || currentUser.role !== 'admin')) {
+        showToast('Admin access only. Please login as admin.');
+        pageId = 'login';
+      }
+
+      document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('page-' + pageId);
+      if (target) target.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      document.getElementById('mobileNavPanel').classList.remove('open');
+      document.getElementById('mobileNavOverlay').classList.remove('open');
+      setActiveBottomNav(pageId);
+
+      if (pageId === 'admin') {
+        showAdminSection('overview');
+      }
+      if (pageId === 'bookings') {
+        renderBookings();
+      }
+    }
+
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerText = msg;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function formatPrice(hotel) {
+      const symbol = hotel.currency === 'BDT' ? '৳' : (hotel.currency || '') + ' ';
+      return `${symbol}${Number(hotel.pricePerNight).toLocaleString()}`;
+    }
+
+    /* ==========================================
+        HOTELS: LOAD FROM BACKEND
+        ========================================== */
+    async function loadHotels() {
+      try {
+        const res = await fetch(`${API_BASE}/hotels`);
+        hotelsData = await res.json();
+      } catch (err) {
+        console.error('Failed to load hotels:', err);
+        showToast('Could not reach the server — check API_BASE / backend is running.');
+        hotelsData = [];
+      }
+      renderHotels();
+      renderAdminHotels();
+      updateAdminStats();
+    }
+
+    function renderHotels() {
+      const featuredContainer = document.getElementById('featuredGrid');
+      const allHotelsContainer = document.getElementById('allHotelsGrid');
+
+      const cardsHtml = hotelsData.map(h => `
+        <div class="card" onclick="viewHotelDetails('${h._id}')">
+          <div class="card-img-wrapper">
+            <img src="${h.image}" alt="${h.title}">
+            <button class="card-heart-btn" onclick="event.stopPropagation(); toggleWishlist('${h._id}')">♥</button>
+          </div>
+          <div class="card-title">${h.title}</div>
+          <div class="card-subtitle">${h.location}</div>
+          <div class="card-price">${formatPrice(h)} <span style="font-size:12px; font-weight:normal; color:var(--gray);">/ night</span></div>
+        </div>
+      `).join('');
+
+      if (featuredContainer) featuredContainer.innerHTML = cardsHtml;
+      if (allHotelsContainer) allHotelsContainer.innerHTML = cardsHtml;
+    }
+
+    function toggleWishlist(id) {
+      const idx = wishlist.indexOf(id);
+      if (idx === -1) {
+        wishlist.push(id);
+        showToast('Added to Wishlist!');
+      } else {
+        wishlist.splice(idx, 1);
+        showToast('Removed from Wishlist!');
+      }
+      document.getElementById('wishlistCount').innerText = wishlist.length;
+      const mobileWishlistCount = document.getElementById('mobileWishlistCount');
+      if (mobileWishlistCount) mobileWishlistCount.innerText = wishlist.length;
+      renderWishlist();
+    }
+
+    function renderWishlist() {
+      const container = document.getElementById('wishlistGrid');
+      if (!container) return;
+      const list = hotelsData.filter(h => wishlist.includes(h._id));
+      if (list.length === 0) {
+        container.innerHTML = '<p style="color:var(--gray); grid-column: 1/-1;">No saved stays yet.</p>';
+        return;
+      }
+      container.innerHTML = list.map(h => `
+        <div class="card" onclick="viewHotelDetails('${h._id}')">
+          <div class="card-img-wrapper">
+            <img src="${h.image}" alt="${h.title}">
+            <button class="card-heart-btn" style="color:var(--primary);" onclick="event.stopPropagation(); toggleWishlist('${h._id}')">♥</button>
+          </div>
+          <div class="card-title">${h.title}</div>
+          <div class="card-subtitle">${h.location}</div>
+          <div class="card-price">${formatPrice(h)} / night</div>
+        </div>
+      `).join('');
+    }
+
+    /* ==========================================
+        HOTEL DETAILS / BOOK NOW PAGE
+        ========================================== */
+    let selectedHotelId = null;
+
+    function viewHotelDetails(id) {
+      const hotel = hotelsData.find(h => h._id === id);
+      if (!hotel) return;
+      selectedHotelId = id;
+
+      const totalGuests = guestCounts.adults + guestCounts.children;
+      const dates = document.getElementById('searchDates') ? document.getElementById('searchDates').value : '';
+
+      const container = document.getElementById('detailsContent');
+      container.innerHTML = `
+        <button class="btn btn-outline" style="width:auto; padding:8px 18px; margin-bottom:20px;" onclick="navigate('hotels')">← Back to results</button>
+        <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:32px; align-items:start;">
+          <div>
+            <div class="card-img-wrapper" style="padding-top:65%;">
+              <img src="${hotel.image}" alt="${hotel.title}">
+            </div>
+            <h2 style="margin-top:20px; font-size:26px; font-weight:800;">${hotel.title}</h2>
+            <p style="color:var(--gray); margin-top:6px; font-size:15px;">📍 ${hotel.location}</p>
+            <div class="features-grid" style="margin-top:24px;">
+              <div class="feature-card">🏷️ Best Price Guarantee</div>
+              <div class="feature-card">🍳 Free Daily Breakfast</div>
+              <div class="feature-card">🚗 Free Private Transfer</div>
+              <div class="feature-card">⚡ Instant Confirmation</div>
+            </div>
+          </div>
+          <div class="form-container" style="margin:0;">
+            <h3 style="font-size:18px; font-weight:800; margin-bottom:16px;">Reservation Summary</h3>
+            <div class="guest-row"><span>Price</span><strong>${formatPrice(hotel)} / night</strong></div>
+            <div class="guest-row"><span>Dates</span><strong>${dates || 'Not selected'}</strong></div>
+            <div class="guest-row"><span>Guests</span><strong>${totalGuests || 2} guest${totalGuests !== 1 ? 's' : ''}</strong></div>
+            <div class="guest-row"><span>Booked by</span><strong>${currentUser ? currentUser.email : 'Guest'}</strong></div>
+            <button class="btn btn-primary" style="margin-top:20px;" onclick="confirmBookingFromDetails()">Confirm Booking</button>
+          </div>
+        </div>
+      `;
+
+      navigate('details');
+    }
+
+    /* ==========================================
+        PAYMENT METHOD MODAL + BOOKING CREATION
+        ========================================== */
+    let pendingHotelId = null;
+    let pendingBookingId = null;
+    let stripeInstance = null;
+    let stripeElements = null;
+    let stripeCardEl = null;
+
+    function confirmBookingFromDetails() {
+      if (!currentUser) { showToast('Please login first'); navigate('login'); return; }
+      if (!checkInDate || !checkOutDate) { showToast('Please select check-in and check-out dates'); return; }
+      pendingHotelId = selectedHotelId;
+      openPaymentModal();
+    }
+
+    function openPaymentModal() {
+      document.getElementById('payModalOverlay').classList.add('open');
+      document.getElementById('stripeCardElementWrap').style.display = 'none';
+    }
+
+    function closePaymentModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('payModalOverlay').classList.remove('open');
+    }
+
+    async function payWith(method) {
+      try {
+        const booking = await authFetch('/bookings', {
+          method: 'POST',
+          body: JSON.stringify({
+            hotelId: pendingHotelId,
+            checkIn: checkInDate,
+            checkOut: checkOutDate,
+            guests: guestCounts,
+            paymentMethod: method,
+          }),
+        });
+        pendingBookingId = booking._id;
+        showToast(`Booking created — PNR ${booking.pnr}`);
+
+        if (method === 'bkash') {
+          const { bkashURL } = await authFetch('/payments/bkash/create', {
+            method: 'POST', body: JSON.stringify({ bookingId: booking._id }),
+          });
+          window.location.href = bkashURL;
+
+        } else if (method === 'nagad') {
+          const { redirectURL } = await authFetch('/payments/nagad/create', {
+            method: 'POST', body: JSON.stringify({ bookingId: booking._id }),
+          });
+          window.location.href = redirectURL;
+
+        } else {
+          // 'card' and 'stripe' both use Stripe's hosted card element
+          const { clientSecret } = await authFetch('/payments/stripe/create-intent', {
+            method: 'POST', body: JSON.stringify({ bookingId: booking._id }),
+          });
+          await mountStripeCardElement(clientSecret);
+        }
+      } catch (err) {
+        showToast(err.message || 'Something went wrong starting payment');
+      }
+    }
+
+    async function mountStripeCardElement(clientSecret) {
+      if (!stripeInstance) stripeInstance = Stripe(STRIPE_PUBLISHABLE_KEY);
+      stripeElements = stripeInstance.elements({ clientSecret });
+      stripeCardEl = stripeElements.create('payment');
+      document.getElementById('stripeCardElementWrap').style.display = 'block';
+      stripeCardEl.mount('#stripeCardElement');
+    }
+
+    async function confirmStripeCardPayment() {
+      if (!stripeInstance || !stripeElements) return;
+      const { error } = await stripeInstance.confirmPayment({
+        elements: stripeElements,
+        confirmParams: { return_url: `${window.location.origin}${window.location.pathname}?payment=stripe` },
+      });
+      if (error) {
+        showToast(error.message);
+      }
+      // On success, Stripe redirects to return_url; the webhook (server-side)
+      // is the actual source of truth for marking the booking confirmed.
+    }
+
+    // Handle bKash/Nagad bounce-back: ?ok=1&pnr=XXXX in the URL
+    function handlePaymentRedirect() {
+      const params = new URLSearchParams(window.location.search);
+      if (!params.has('ok')) return;
+      const ok = params.get('ok') === '1';
+      const pnr = params.get('pnr') || '';
+      document.getElementById('paymentResultIcon').innerText = ok ? '✅' : '❌';
+      document.getElementById('paymentResultTitle').innerText = ok ? 'Payment Successful' : 'Payment Failed';
+      document.getElementById('paymentResultBody').innerHTML = pnr
+        ? `Your booking reference is <span class="pnr-tag">${pnr}</span>`
+        : 'Please check your bookings or try again.';
+      navigate('payment-result');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    /* ==========================================
+        MY BOOKINGS
+        ========================================== */
+    async function renderBookings() {
+      const container = document.getElementById('bookingsList');
+      const mobileCartBadge = document.getElementById('mobileCartBadge');
+      if (!container) return;
+
+      if (!currentUser) {
+        container.innerHTML = '<p style="color:var(--gray);">Please login to see your reservations.</p>';
+        if (mobileCartBadge) mobileCartBadge.innerText = '0';
+        return;
+      }
+
+      let bookings = [];
+      try {
+        bookings = await authFetch('/bookings/mine');
+      } catch (err) {
+        container.innerHTML = `<p style="color:var(--gray);">Could not load bookings: ${err.message}</p>`;
+        return;
+      }
+
+      if (mobileCartBadge) mobileCartBadge.innerText = bookings.length;
+
+      if (bookings.length === 0) {
+        container.innerHTML = '<p style="color:var(--gray);">No reservations active.</p>';
+        return;
+      }
+
+      container.innerHTML = bookings.map(b => `
+        <div class="feature-card" style="text-align:left; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <strong>${b.hotel ? b.hotel.title : 'Hotel'}</strong>
+              <span class="pnr-tag">PNR ${b.pnr}</span>
+            </div>
+            <div style="font-size:13px; color:var(--gray); margin-top:4px;">${b.hotel ? b.hotel.location : ''}</div>
+            <div style="font-size:12px; margin-top:4px; font-weight:700; color:${b.status === 'cancelled' ? '#ef4444' : b.status === 'confirmed' ? '#10b981' : '#f59e0b'};">
+              ${b.status.replace('_', ' ')} · payment ${b.payment.status}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:700; color:var(--primary); margin-bottom:8px;">${b.currency} ${Number(b.totalAmount).toLocaleString()}</div>
+            ${b.status !== 'cancelled' ? `<button class="btn btn-outline" style="width:auto; padding:6px 14px; font-size:12px;" onclick="cancelBooking('${b._id}')">Cancel</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function cancelBooking(id) {
+      try {
+        await authFetch(`/bookings/${id}/cancel`, { method: 'PATCH' });
+        showToast('Booking cancelled');
+        renderBookings();
+        renderAdminBookings();
+        updateAdminStats();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    /* ==========================================
+        SEARCH POPUP INTERACTION ENGINE
+        ========================================== */
+    function togglePopup(type, event) {
+      if (event) event.stopPropagation();
+
+      const targetPop = document.getElementById('popup-' + type);
+      const isAlreadyShow = targetPop.classList.contains('show');
+
+      closeAllPopups();
+
+      if (!isAlreadyShow) {
+        targetPop.classList.add('show');
+        document.getElementById('seg-' + type).classList.add('active-segment');
+      }
+    }
+
+    function closeAllPopups() {
+      document.querySelectorAll('.search-popup').forEach(p => p.classList.remove('show'));
+      document.querySelectorAll('.capsule-segment').forEach(s => s.classList.remove('active-segment'));
+    }
+
+    function selectDestination(name, country) {
+      document.getElementById('searchDest').value = `${name}, ${country}`;
+      closeAllPopups();
+      togglePopup('when'); // Auto open dates next
+    }
+
+    /* ==========================================
+        CALENDAR: TWO-MONTH RANGE PICKER
+        ========================================== */
+    function shiftCalendarMonth(direction) {
+      const next = new Date(calendarViewDate);
+      next.setMonth(next.getMonth() + direction);
+
+      // Don't allow navigating the left calendar before the current month
+      const minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      if (next < minMonth) return;
+
+      calendarViewDate = next;
+      renderCalendar();
+    }
+
+    function buildMonthCells(monthDate) {
+      const year = monthDate.getFullYear();
+      const month = monthDate.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const startOffset = firstDay.getDay(); // 0=Sun
+
+      let cellsHtml = `
+        <div class="calendar-day-head">Sun</div><div class="calendar-day-head">Mon</div><div class="calendar-day-head">Tue</div>
+        <div class="calendar-day-head">Wed</div><div class="calendar-day-head">Thu</div><div class="calendar-day-head">Fri</div><div class="calendar-day-head">Sat</div>
+      `;
+
+      for (let i = 0; i < startOffset; i++) {
+        cellsHtml += `<div class="calendar-day empty"></div>`;
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cellDate = new Date(year, month, d);
+        const classes = ['calendar-day'];
+
+        if (cellDate < today) {
+          classes.push('disabled');
+        }
+        if (checkInDate && cellDate.getTime() === checkInDate.getTime()) classes.push('selected');
+        if (checkOutDate && cellDate.getTime() === checkOutDate.getTime()) classes.push('selected');
+        if (checkInDate && checkOutDate && cellDate > checkInDate && cellDate < checkOutDate) classes.push('in-range');
+
+        cellsHtml += `<div class="${classes.join(' ')}" onclick="handleDateClick(${year}, ${month}, ${d})">${d}</div>`;
+      }
+
+      return cellsHtml;
+    }
+
+    function renderCalendar() {
+      const leftMonth = new Date(calendarViewDate);
+      const rightMonth = new Date(calendarViewDate);
+      rightMonth.setMonth(rightMonth.getMonth() + 1);
+
+      document.getElementById('calMonthTitle0').innerText = `${MONTH_NAMES[leftMonth.getMonth()]}, ${leftMonth.getFullYear()}`;
+      document.getElementById('calMonthTitle1').innerText = `${MONTH_NAMES[rightMonth.getMonth()]}, ${rightMonth.getFullYear()}`;
+
+      document.getElementById('calendarGrid0').innerHTML = buildMonthCells(leftMonth);
+      document.getElementById('calendarGrid1').innerHTML = buildMonthCells(rightMonth);
+
+      const minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const prevBtn = document.getElementById('calPrevBtn');
+      if (prevBtn) prevBtn.disabled = (leftMonth.getFullYear() === minMonth.getFullYear() && leftMonth.getMonth() === minMonth.getMonth());
+    }
+
+    function handleDateClick(year, month, day) {
+      const clicked = new Date(year, month, day);
+      if (clicked < today) return;
+
+      if (!checkInDate || (checkInDate && checkOutDate)) {
+        checkInDate = clicked;
+        checkOutDate = null;
+        document.getElementById('calendarPrompt').innerText = 'Select Check-out Date';
+      } else if (checkInDate && !checkOutDate) {
+        if (clicked > checkInDate) {
+          checkOutDate = clicked;
+          const totalDays = Math.round((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+          document.getElementById('searchDates').value =
+            `${formatShortDate(checkInDate)} - ${formatShortDate(checkOutDate)} (${totalDays} day${totalDays > 1 ? 's' : ''})`;
+          setTimeout(() => {
+            closeAllPopups();
+            togglePopup('who'); // Auto open guests
+          }, 250);
+        } else {
+          checkInDate = clicked;
+        }
+      }
+
+      if (checkInDate && !checkOutDate) {
+        document.getElementById('searchDates').value = `${formatShortDate(checkInDate)} - Check-out`;
+      }
+
+      renderCalendar();
+    }
+
+    function formatShortDate(d) {
+      return `${MONTH_NAMES[d.getMonth()].slice(0, 3)} ${d.getDate()}`;
+    }
+
+    function resetDateSelection() {
+      checkInDate = null;
+      checkOutDate = null;
+      document.getElementById('searchDates').value = '';
+      document.getElementById('calendarPrompt').innerText = 'Select Check-in Date';
+      calendarViewDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      renderCalendar();
+    }
+
+    /* GUEST COUNTER LOGIC */
+    function updateGuests(type, change, event) {
+      if (event) event.stopPropagation();
+      guestCounts[type] = Math.max(0, guestCounts[type] + change);
+      document.getElementById('cnt-' + type).innerText = guestCounts[type];
+
+      const totalGuests = guestCounts.adults + guestCounts.children;
+      document.getElementById('searchGuests').value = `${totalGuests} Guest${totalGuests > 1 ? 's' : ''} (${guestCounts.adults}A, ${guestCounts.children}C)`;
+    }
+
+    function executeSearch(event) {
+      if (event) event.stopPropagation();
+      closeAllPopups();
+      showToast('Searching available hotel...');
+      navigate('hotels');
+    }
+
+    // Global Dismiss on outside click
+    document.addEventListener('click', function (e) {
+      const capsule = document.getElementById('searchCapsule');
+      if (capsule && !capsule.contains(e.target)) {
+        closeAllPopups();
+      }
+    });
+
+    function filterByDest(dest) {
+      showToast('Filtering for ' + dest);
+      navigate('hotels');
+    }
+
+    /* ==========================================
+        ADMIN: SECTION SWITCHING
+        ========================================== */
+    function showAdminSection(section) {
+      ['overview', 'bookings', 'hotels'].forEach(s => {
+        const el = document.getElementById('adminSection-' + s);
+        if (el) el.classList.toggle('hidden', s !== section);
+      });
+      if (section === 'bookings') renderAdminBookings();
+      if (section === 'hotels') renderAdminHotels();
+      if (section === 'overview') updateAdminStats();
+    }
+
+    /* ==========================================
+        ADMIN: MANAGE BOOKINGS (backend-backed)
+        ========================================== */
+    let allBookingsCache = [];
+
+    async function renderAdminBookings() {
+      const tbody = document.getElementById('adminTableBody');
+      if (!tbody) return;
+
+      try {
+        allBookingsCache = await authFetch('/bookings');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">${err.message}</td></tr>`;
+        return;
+      }
+
+      if (allBookingsCache.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">No bookings yet.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = allBookingsCache.map(b => `
+        <tr>
+          <td><span class="pnr-tag">${b.pnr}</span></td>
+          <td>${b.user ? b.user.email : ''}</td>
+          <td>${b.hotel ? b.hotel.title : ''}</td>
+          <td>${b.currency} ${Number(b.totalAmount).toLocaleString()}</td>
+          <td><span style="color:${b.status === 'cancelled' ? '#ef4444' : b.status === 'confirmed' ? '#10b981' : '#f59e0b'}; font-weight: 700;">${b.status.replace('_', ' ')}</span></td>
+          <td>
+            <button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="toggleBookingStatus('${b._id}', '${b.status}')">
+              ${b.status === 'cancelled' ? 'Restore' : 'Cancel'}
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function toggleBookingStatus(id, currentStatus) {
+      const nextStatus = currentStatus === 'cancelled' ? 'confirmed' : 'cancelled';
+      try {
+        await authFetch(`/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: nextStatus }) });
+        showToast(`Booking marked as ${nextStatus}`);
+        renderAdminBookings();
+        renderBookings();
+        updateAdminStats();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    /* ==========================================
+        ADMIN: MANAGE HOTELS (backend-backed)
+        ========================================== */
+    async function renderAdminHotels() {
+      const tbody = document.getElementById('adminHotelsTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = hotelsData.map(h => `
+        <tr>
+          <td>${h._id.slice(-6)}</td>
+          <td>${h.title}</td>
+          <td>${h.location}</td>
+          <td>${formatPrice(h)}</td>
+          <td>
+            <button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="editHotel('${h._id}')">Edit</button>
+            <button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="deleteHotel('${h._id}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+
+      const statTotalHotels = document.getElementById('statTotalHotels');
+      if (statTotalHotels) statTotalHotels.innerText = hotelsData.length;
+    }
+
+    async function addHotel() {
+      const title = document.getElementById('newHotelTitle').value.trim();
+      const location = document.getElementById('newHotelLocation').value.trim();
+      const pricePerNight = Number(document.getElementById('newHotelPrice').value.trim());
+      const image = document.getElementById('newHotelImage').value.trim();
+
+      if (!title || !location || !pricePerNight) {
+        showToast('Please fill in hotel name, location and price');
+        return;
+      }
+
+      try {
+        await authFetch('/hotels', {
+          method: 'POST',
+          body: JSON.stringify({ title, location, pricePerNight, currency: 'BDT', image }),
+        });
+
+        document.getElementById('newHotelTitle').value = '';
+        document.getElementById('newHotelLocation').value = '';
+        document.getElementById('newHotelPrice').value = '';
+        document.getElementById('newHotelImage').value = '';
+
+        showToast('Hotel added successfully!');
+        await loadHotels();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function editHotel(id) {
+      const hotel = hotelsData.find(h => h._id === id);
+      if (!hotel) return;
+
+      const newTitle = prompt('Hotel name:', hotel.title);
+      if (newTitle === null) return;
+      const newLocation = prompt('Location:', hotel.location);
+      if (newLocation === null) return;
+      const newPrice = prompt('Price / night:', hotel.pricePerNight);
+      if (newPrice === null) return;
+
+      try {
+        await authFetch(`/hotels/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({ title: newTitle, location: newLocation, pricePerNight: Number(newPrice) }),
+        });
+        showToast('Hotel updated successfully!');
+        await loadHotels();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function deleteHotel(id) {
+      const hotel = hotelsData.find(h => h._id === id);
+      if (!hotel) return;
+      if (!confirm(`Delete "${hotel.title}"? This cannot be undone.`)) return;
+
+      try {
+        await authFetch(`/hotels/${id}`, { method: 'DELETE' });
+        showToast('Hotel deleted');
+        await loadHotels();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    /* ==========================================
+        ADMIN: DASHBOARD STATS
+        ========================================== */
+    async function updateAdminStats() {
+      const totalHotelsEl = document.getElementById('statTotalHotels');
+      const totalBookingsEl = document.getElementById('statTotalBookings');
+      const confirmedEl = document.getElementById('statConfirmed');
+      const cancelledEl = document.getElementById('statCancelled');
+
+      if (totalHotelsEl) totalHotelsEl.innerText = hotelsData.length;
+
+      if (!currentUser || currentUser.role !== 'admin') return;
+
+      try {
+        const bookings = await authFetch('/bookings');
+        if (totalBookingsEl) totalBookingsEl.innerText = bookings.length;
+        if (confirmedEl) confirmedEl.innerText = bookings.filter(b => b.status === 'confirmed').length;
+        if (cancelledEl) cancelledEl.innerText = bookings.filter(b => b.status === 'cancelled').length;
+      } catch (err) {
+        // admin stats are non-critical — fail quietly
+      }
+    }
+
+    // Initialize
+    window.onload = function () {
+      renderCalendar();
+      updateAuthUI();
+      setActiveBottomNav('index');
+      document.getElementById('mobileWishlistCount').innerText = wishlist.length;
+      document.getElementById('mobileCartBadge').innerText = '0';
+      document.getElementById('searchGuests').value = '2 Guests (2A, 0C)';
+      handlePaymentRedirect();
+      // loadHotels() is triggered by the 'firebase-ready' event once auth is wired up
+    };
+  </script>
+</body>
+
+</html>
+=======
 <!DOCTYPE html>
 <html lang="en">
 
@@ -2820,3 +5644,4 @@
 </body>
 
 </html>
+>>>>>>> fb177ed56e9b6521f7d208ac9b39fc5db30f901b
