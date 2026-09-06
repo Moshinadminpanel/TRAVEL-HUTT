@@ -234,6 +234,23 @@ app.patch('/api/bookings/:id/cancel', verifyToken, async (req, res) => {
     }
 });
 
+// User permanently deletes their own booking (or admin deletes any booking)
+// This is a hard delete from MongoDB — used by the "Cancel" button on the client.
+app.delete('/api/bookings/:id', verifyToken, async (req, res) => {
+    try {
+        const filter = req.user.role === 'admin'
+            ? { _id: req.params.id }
+            : { _id: req.params.id, user: req.user._id };
+
+        const booking = await Booking.findOneAndDelete(filter);
+        if (!booking) return res.status(404).json({ error: 'Booking not found' });
+
+        res.json({ message: 'Booking deleted', _id: req.params.id });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 // Admin gets all bookings
 app.get('/api/bookings', verifyToken, verifyAdmin, async (req, res) => {
     try {

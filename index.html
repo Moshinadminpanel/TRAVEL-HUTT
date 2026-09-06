@@ -1284,6 +1284,63 @@
       #popup-when {
         width: 100% !important;
       }
+
+      /* ---- Hotel details / booking page ---- */
+      .details-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+      }
+
+      /* ---- Booking list rows (My Reservations) ---- */
+      .booking-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px;
+      }
+
+      .booking-row>div:last-child {
+        text-align: left !important;
+        width: 100%;
+      }
+
+      /* ---- Admin panel tables ---- */
+      .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--radius-md);
+      }
+
+      .table-responsive table {
+        min-width: 600px;
+      }
+
+      #page-admin .stats-bar {
+        padding: 20px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+      }
+
+      #page-admin .form-container {
+        padding: 16px !important;
+      }
+
+      .admin-sidebar ul {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        scrollbar-width: none;
+      }
+
+      .admin-sidebar li {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+
+      /* ---- Active location filter chip on hotels page ---- */
+      .active-filter-bar {
+        flex-wrap: wrap;
+      }
     }
 
     /* ==========================================
@@ -1452,6 +1509,7 @@
       <a onclick="navigate('wishlist')">Wishlist <span class="badge" id="wishlistCount">0</span></a>
       <a onclick="navigate('bookings')">My Bookings</a>
       <a onclick="navigate('about')">About Us</a>
+
       <a id="navAdminLink" onclick="navigate('admin')" style="color: var(--primary); display:none;">Admin Portal</a>
       <span id="navAuth">
         <a onclick="navigate('login')" class="btn btn-outline"
@@ -1606,12 +1664,6 @@
         </div>
       </section>
 
-      <!-- SECTION 3: FEATURED HOTELS -->
-      <section>
-        <h2 class="section-title">Featured Hotels</h2>
-        <div class="grid" id="featuredGrid"></div>
-      </section>
-
       <!-- SECTION 4: POPULAR DESTINATIONS -->
       <section>
         <h2 class="section-title">Popular Destinations</h2>
@@ -1738,6 +1790,13 @@
     <!-- PAGE 2: EXPLORE HOTELS PAGE -->
     <section id="page-hotels" class="page-view hidden">
       <h2 class="section-title">All Available Accommodations</h2>
+      <div id="activeFilterBar" class="active-filter-bar hidden" style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+        <span style="color:var(--gray); font-size:14px;">Showing results for:</span>
+        <span class="dest-chip" style="cursor:default; padding:8px 16px; display:flex; align-items:center; gap:8px;">
+          <strong id="activeFilterLabel"></strong>
+          <span onclick="clearLocationFilter()" style="cursor:pointer; font-weight:800;">✕</span>
+        </span>
+      </div>
       <div class="grid" id="allHotelsGrid"></div>
     </section>
 
@@ -1750,18 +1809,21 @@
     <!-- PAGE 4: MY BOOKINGS PAGE -->
     <section id="page-bookings" class="page-view hidden">
       <h2 class="section-title">Your Reservations</h2>
+      <div class="form-group" style="max-width:320px; margin-bottom:20px;">
+        <input type="text" id="myBookingsPnrSearch" placeholder="🔍 Search by PNR..." oninput="filterMyBookings()">
+      </div>
       <div id="bookingsList"></div>
     </section>
 
     <!-- PAGE 5: ABOUT US PAGE -->
     <section id="page-about" class="page-view hidden">
-      <div class="form-container" style="max-width: 700px;">
-        <h2 class="section-title">About Travell Hut</h2>
-        <p style="line-height: 1.7; color: var(--gray); font-size: Travell Hut provides premium accommodation
-          booking experiences across Bangladesh and top international travel spots. We offer transparent pricing,
-          instant voucher verification, and guaranteed comfort.</p>
-      </div>
-    </section>
+  <div class="form-container" style="max-width: 700px;">
+    <h2 class="section-title">About Travell Hut</h2>
+    <p style="line-height: 1.7; color: var(--gray); font-size: 15px;">Travell Hut provides premium accommodation
+      booking experiences across Bangladesh and top international travel spots. We offer transparent pricing,
+      instant voucher verification, and guaranteed comfort.</p>
+  </div>
+</section>
 
     <!-- PAGE 6: ADMIN PORTAL -->
     <section id="page-admin" class="page-view hidden">
@@ -1802,20 +1864,25 @@
           <!-- ADMIN: MANAGE BOOKINGS -->
           <div id="adminSection-bookings" class="hidden">
             <h3 style="font-size: 18px; font-weight: 700;">Recent Bookings System</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>PNR</th>
-                  <th>Guest</th>
-                  <th>Hotel</th>
-                  <th>Price</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminTableBody">
-              </tbody>
-            </table>
+            <div class="form-group" style="max-width:320px;">
+              <input type="text" id="adminPnrSearch" placeholder="🔍 Search by PNR..." oninput="filterAdminBookings()">
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>PNR</th>
+                    <th>Guest</th>
+                    <th>Hotel</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <!-- ADMIN: MANAGE HOTELS -->
@@ -1843,19 +1910,21 @@
               <button class="btn btn-primary" onclick="addHotel()">Add Hotel</button>
             </div>
 
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Hotel</th>
-                  <th>Location</th>
-                  <th>Price</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminHotelsTableBody">
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Hotel</th>
+                    <th>Location</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminHotelsTableBody">
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>
@@ -1956,13 +2025,13 @@
       </div>
       <div>
         <h4>Hosting</h4>
-        <a onclick="showToast('Airbnb your Travell Hut your home)">Marketing Your Business</a>
+        <a >Marketing Your Business</a>
       </div>
       <div>
         <Travell Hut</h4>
-        <a onclick="showToast('Newsroom')">Newsroom</a>
-        <a onclick="showToast('New features')">New features</a>
-        <a onclick="showToast('Careers')">Careers</a>
+        <a >Newsroom</a>
+        <a >New features</a>
+        <a >Careers</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -2008,6 +2077,7 @@
     const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY';
 
     let hotelsData = [];
+    let currentLocationFilter = ''; // active "Where" filter applied to the Hotels page
     let wishlist = [];
     let guestCounts = { adults: 2, children: 0 };
 
@@ -2200,11 +2270,8 @@
       updateAdminStats();
     }
 
-    function renderHotels() {
-      const featuredContainer = document.getElementById('featuredGrid');
-      const allHotelsContainer = document.getElementById('allHotelsGrid');
-
-      const cardsHtml = hotelsData.map(h => `
+    function hotelCardHtml(h) {
+      return `
         <div class="card" onclick="viewHotelDetails('${h._id}')">
           <div class="card-img-wrapper">
             <img src="${h.image}" alt="${h.title}">
@@ -2214,10 +2281,42 @@
           <div class="card-subtitle">${h.location}</div>
           <div class="card-price">${formatPrice(h)} <span style="font-size:12px; font-weight:normal; color:var(--gray);">/ night</span></div>
         </div>
-      `).join('');
+      `;
+    }
 
-      if (featuredContainer) featuredContainer.innerHTML = cardsHtml;
-      if (allHotelsContainer) allHotelsContainer.innerHTML = cardsHtml;
+    function renderHotels() {
+      const allHotelsContainer = document.getElementById('allHotelsGrid');
+      const filterBar = document.getElementById('activeFilterBar');
+      const filterLabel = document.getElementById('activeFilterLabel');
+
+      if (!allHotelsContainer) return;
+
+      const query = (currentLocationFilter || '').trim().toLowerCase();
+      const filtered = query
+        ? hotelsData.filter(h =>
+            (h.location || '').toLowerCase().includes(query) ||
+            (h.title || '').toLowerCase().includes(query))
+        : hotelsData;
+
+      if (filterBar) filterBar.classList.toggle('hidden', !query);
+      if (filterLabel) filterLabel.innerText = currentLocationFilter;
+
+      if (query && filtered.length === 0) {
+        allHotelsContainer.innerHTML = `<p style="color:var(--gray); grid-column: 1/-1;">No hotels found for "${currentLocationFilter}". Try another destination or clear the filter.</p>`;
+        return;
+      }
+
+      allHotelsContainer.innerHTML = filtered.map(hotelCardHtml).join('');
+    }
+
+    function applyLocationFilter(text) {
+      currentLocationFilter = text || '';
+      renderHotels();
+    }
+
+    function clearLocationFilter() {
+      applyLocationFilter('');
+      showToast('Filter cleared');
     }
 
     function toggleWishlist(id) {
@@ -2272,7 +2371,7 @@
       const container = document.getElementById('detailsContent');
       container.innerHTML = `
         <button class="btn btn-outline" style="width:auto; padding:8px 18px; margin-bottom:20px;" onclick="navigate('hotels')">← Back to results</button>
-        <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:32px; align-items:start;">
+        <div class="details-grid" style="display:grid; grid-template-columns: 1.2fr 1fr; gap:32px; align-items:start;">
           <div>
             <div class="card-img-wrapper" style="padding-top:65%;">
               <img src="${hotel.image}" alt="${hotel.title}">
@@ -2404,6 +2503,8 @@
     /* ==========================================
         MY BOOKINGS
         ========================================== */
+    let myBookingsCache = [];
+
     async function renderBookings() {
       const container = document.getElementById('bookingsList');
       const mobileCartBadge = document.getElementById('mobileCartBadge');
@@ -2415,23 +2516,41 @@
         return;
       }
 
-      let bookings = [];
       try {
-        bookings = await authFetch('/bookings/mine');
+        myBookingsCache = await authFetch('/bookings/mine');
       } catch (err) {
         container.innerHTML = `<p style="color:var(--gray);">Could not load bookings: ${err.message}</p>`;
         return;
       }
 
-      if (mobileCartBadge) mobileCartBadge.innerText = bookings.length;
+      if (mobileCartBadge) mobileCartBadge.innerText = myBookingsCache.length;
+      filterMyBookings();
+    }
+
+    // Filters the already-fetched bookings by PNR as the user types — no re-fetch needed.
+    function filterMyBookings() {
+      const container = document.getElementById('bookingsList');
+      if (!container) return;
+
+      const searchInput = document.getElementById('myBookingsPnrSearch');
+      const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+      const bookings = query
+        ? myBookingsCache.filter(b => (b.pnr || '').toLowerCase().includes(query))
+        : myBookingsCache;
+
+      if (myBookingsCache.length === 0) {
+        container.innerHTML = '<p style="color:var(--gray);">No reservations found.</p>';
+        return;
+      }
 
       if (bookings.length === 0) {
-        container.innerHTML = '<p style="color:var(--gray);">No reservations active.</p>';
+        container.innerHTML = `<p style="color:var(--gray);">No booking found for PNR "${searchInput.value.trim()}".</p>`;
         return;
       }
 
       container.innerHTML = bookings.map(b => `
-        <div class="feature-card" style="text-align:left; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div class="feature-card booking-row" style="text-align:left; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="display:flex; align-items:center; gap:10px;">
               <strong>${b.hotel ? b.hotel.title : 'Hotel'}</strong>
@@ -2450,10 +2569,13 @@
       `).join('');
     }
 
+    // Permanently deletes the booking document from MongoDB (not a soft "cancelled" status).
+    // Requires a DELETE /api/bookings/:id route on the backend — see server.js notes.
     async function cancelBooking(id) {
+      if (!confirm('Cancel this booking? This will permanently delete it and cannot be undone.')) return;
       try {
-        await authFetch(`/bookings/${id}/cancel`, { method: 'PATCH' });
-        showToast('Booking cancelled');
+        await authFetch(`/bookings/${id}`, { method: 'DELETE' });
+        showToast('Booking cancelled and removed');
         renderBookings();
         renderAdminBookings();
         updateAdminStats();
@@ -2610,7 +2732,9 @@
     function executeSearch(event) {
       if (event) event.stopPropagation();
       closeAllPopups();
-      showToast('Searching available hotel...');
+      const destValue = document.getElementById('searchDest').value.trim();
+      applyLocationFilter(destValue);
+      showToast(destValue ? 'Searching in ' + destValue : 'Searching available hotel...');
       navigate('hotels');
     }
 
@@ -2623,6 +2747,7 @@
     });
 
     function filterByDest(dest) {
+      applyLocationFilter(dest);
       showToast('Filtering for ' + dest);
       navigate('hotels');
     }
@@ -2656,29 +2781,51 @@
         return;
       }
 
+      filterAdminBookings();
+    }
+
+    // Filters the already-fetched admin bookings by PNR as the user types — no re-fetch needed.
+    function filterAdminBookings() {
+      const tbody = document.getElementById('adminTableBody');
+      if (!tbody) return;
+
+      const searchInput = document.getElementById('adminPnrSearch');
+      const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
       if (allBookingsCache.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">No bookings yet.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = allBookingsCache.map(b => `
+      const rows = query
+        ? allBookingsCache.filter(b => (b.pnr || '').toLowerCase().includes(query))
+        : allBookingsCache;
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">No booking found for PNR "${searchInput.value.trim()}".</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(b => `
         <tr>
           <td><span class="pnr-tag">${b.pnr}</span></td>
           <td>${b.user ? b.user.email : ''}</td>
           <td>${b.hotel ? b.hotel.title : ''}</td>
           <td>${b.currency} ${Number(b.totalAmount).toLocaleString()}</td>
           <td><span style="color:${b.status === 'cancelled' ? '#ef4444' : b.status === 'confirmed' ? '#10b981' : '#f59e0b'}; font-weight: 700;">${b.status.replace('_', ' ')}</span></td>
-          <td>
-            <button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="toggleBookingStatus('${b._id}', '${b.status}')">
-              ${b.status === 'cancelled' ? 'Restore' : 'Cancel'}
-            </button>
+          <td style="display:flex; gap:8px; flex-wrap:wrap;">
+            ${b.status !== 'confirmed' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px; background:#10b981; color:#fff; border:none;" onclick="toggleBookingStatus('${b._id}', 'confirmed')">Confirm</button>` : ''}
+            ${b.status !== 'cancelled' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="toggleBookingStatus('${b._id}', 'cancelled')">Cancel</button>` : ''}
+            ${b.status === 'cancelled' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="toggleBookingStatus('${b._id}', 'confirmed')">Restore</button>` : ''}
           </td>
         </tr>
       `).join('');
     }
 
-    async function toggleBookingStatus(id, currentStatus) {
-      const nextStatus = currentStatus === 'cancelled' ? 'confirmed' : 'cancelled';
+    // Admin sets a booking's status explicitly (confirmed / cancelled / restored).
+    // Because renderBookings() on the client's "My Bookings" page always re-fetches
+    // fresh data from the backend, whatever the admin sets here shows up there too.
+    async function toggleBookingStatus(id, nextStatus) {
       try {
         await authFetch(`/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: nextStatus }) });
         showToast(`Booking marked as ${nextStatus}`);
