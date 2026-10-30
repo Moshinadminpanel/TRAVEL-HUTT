@@ -4,17 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>TRAVEL HUT</title>
 
   <style>
     /* ==========================================
         1. CSS VARIABLES & BASE RESET
         ========================================== */
     :root {
-      --primary: #ff385c;
-      --primary-dark: #e00b41;
-      --primary-gradient: linear-gradient(135deg, #ff385c 0%, #e00b41 100%);
-      --dark: #1a1a1a;
+      --primary: #00a3a2;
+      --primary-dark: #012a62;
+      --accent: #f98e0c;
+      --navy: #012a62;
+      --teal: #00bab8;
+      --primary-gradient: linear-gradient(135deg, #00a9a7 0%, #0067b1 100%);
+      --dark: #0a1f44;
       --gray: #6a6a6a;
       --light-gray: #f8f9fa;
       --border: #e2e8f0;
@@ -52,49 +55,23 @@
         2. ANIMATIONS
         ========================================== */
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
     @keyframes fadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
+      from { opacity: 1; }
+      to { opacity: 0; }
     }
 
     @keyframes popupBounce {
-      0% {
-        opacity: 0;
-        transform: translateY(12px) scale(0.97);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      0% { opacity: 0; transform: translateY(12px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     /* ==========================================
@@ -115,7 +92,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
     }
 
-    .logo {
+    .logo img {
       font-size: 24px;
       font-weight: 800;
       color: var(--primary);
@@ -128,15 +105,9 @@
       transition: var(--transition);
     }
 
-    .logo:hover {
-      transform: translateY(-1px) scale(1.02);
-    }
+    .logo img:hover { transform: translateY(-1px) scale(1.02); }
 
-    nav {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
+    nav { display: flex; gap: 24px; align-items: center; }
 
     nav a {
       text-decoration: none;
@@ -161,13 +132,8 @@
       border-radius: 2px;
     }
 
-    nav a:hover {
-      color: var(--primary);
-    }
-
-    nav a:hover::after {
-      width: 100%;
-    }
+    nav a:hover { color: var(--primary); }
+    nav a:hover::after { width: 100%; }
 
     .badge {
       background: var(--primary-gradient);
@@ -178,8 +144,22 @@
       margin-left: 4px;
       font-weight: 700;
       display: inline-block;
-      box-shadow: 0 2px 6px rgba(255, 56, 92, 0.3);
+      box-shadow: 0 2px 6px rgba(0, 163, 162, 0.3);
     }
+
+    /* ==========================================
+        PROFILE DROPDOWN
+        ========================================== */
+    .profile-dropdown-wrapper { position: relative; display: inline-block; margin-left: 10px; }
+    .profile-icon-btn { background: #fff; border: 1px solid var(--border); color: var(--dark); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); }
+    .profile-icon-btn:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-2px); color: var(--primary); }
+    .profile-dropdown-menu { position: absolute; top: 54px; right: 0; background: #fff; border: 1px solid var(--border-light); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); width: 200px; display: none; flex-direction: column; z-index: 1050; overflow: hidden; animation: popupBounce 0.2s ease forwards; text-align: left; }
+    .profile-dropdown-menu.show { display: flex; }
+    .profile-dropdown-menu .dropdown-header { padding: 14px 16px; border-bottom: 1px solid var(--border-light); font-weight: 700; font-size: 13px; color: var(--gray); word-break: break-all; background: var(--light-gray); }
+    .profile-dropdown-menu a { padding: 12px 16px; text-decoration: none !important; color: var(--dark) !important; font-weight: 600; font-size: 14px; cursor: pointer; transition: var(--transition); display: block; border-bottom: 1px solid var(--border-light); margin: 0 !important; }
+    .profile-dropdown-menu a::after { display: none !important; }
+    .profile-dropdown-menu a:last-child { border-bottom: none; color: #ef4444 !important; }
+    .profile-dropdown-menu a:hover { background: rgba(0,0,0,0.03); color: var(--primary) !important; padding-left: 20px; }
 
     /* ==========================================
         4. CATEGORIES FILTER BAR
@@ -195,9 +175,7 @@
       align-items: center;
     }
 
-    .categories-bar::-webkit-scrollbar {
-      display: none;
-    }
+    .categories-bar::-webkit-scrollbar { display: none; }
 
     .category-item {
       display: inline-flex;
@@ -229,7 +207,7 @@
         ========================================== */
     .hero-banner {
       position: relative;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.65) 100%), url('https://images.unsplash.com/photo-1684153815450-aea8170e18f5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fGNveCUyMGJhemFyJTIwc2VhJTIwYmVhY2h8ZW58MHx8MHx8fDA%3D') center/cover no-repeat;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.65) 100%), url('https://images.unsplash.com/photo-1684153815450-aea8170e18f5?w=600&auto=format&fit=crop&q=60') center/cover no-repeat;
       padding: 90px 24px 140px 24px;
       color: #ffffff;
       text-align: center;
@@ -238,1194 +216,289 @@
       box-shadow: var(--shadow-lg);
     }
 
-    .hero-title {
-      font-size: 44px;
-      font-weight: 800;
-      margin-bottom: 14px;
-      letter-spacing: -1px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
+    .hero-title { font-size: 44px; font-weight: 800; margin-bottom: 14px; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+    .hero-subtitle { font-size: 17px; max-width: 680px; margin: 0 auto 36px auto; line-height: 1.6; opacity: 0.95; font-weight: 400; text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2); }
 
-    .hero-subtitle {
-      font-size: 17px;
-      max-width: 680px;
-      margin: 0 auto 36px auto;
-      line-height: 1.6;
-      opacity: 0.95;
-      font-weight: 400;
-      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    }
+    .search-capsule-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 100; }
+    .search-capsule { display: flex; align-items: center; background: #ffffff; border: 1px solid rgba(255, 255, 255, 0.8); border-radius: var(--radius-pill); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); transition: var(--transition); padding: 8px 10px 8px 18px; width: 100%; max-width: 860px; position: relative; }
 
-    .search-capsule-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      z-index: 100;
-    }
+    .capsule-segment { display: flex; flex-direction: column; flex: 1; padding: 8px 20px; border-radius: var(--radius-pill); cursor: pointer; transition: var(--transition); position: relative; text-align: left; }
+    .capsule-segment:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background-color: var(--border-light); }
+    .capsule-segment:hover, .capsule-segment.active-segment { background: rgba(0, 0, 0, 0.05); }
+    .capsule-segment label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--dark); cursor: pointer; }
+    .capsule-segment input { border: none; outline: none; font-size: 14px; color: var(--dark); background: transparent; margin-top: 4px; width: 100%; cursor: pointer; font-weight: 600; text-overflow: ellipsis; }
 
-    .search-capsule {
-      display: flex;
-      align-items: center;
-      background: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      border-radius: var(--radius-pill);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      transition: var(--transition);
-      padding: 8px 10px 8px 18px;
-      width: 100%;
-      max-width: 860px;
-      position: relative;
-    }
-
-    .capsule-segment {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      padding: 8px 20px;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      text-align: left;
-    }
-
-    .capsule-segment:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 20%;
-      height: 60%;
-      width: 1px;
-      background-color: var(--border-light);
-    }
-
-    .capsule-segment:hover,
-    .capsule-segment.active-segment {
-      background: rgba(0, 0, 0, 0.05);
-    }
-
-    .capsule-segment label {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--dark);
-      cursor: pointer;
-    }
-
-    .capsule-segment input {
-      border: none;
-      outline: none;
-      font-size: 14px;
-      color: var(--dark);
-      background: transparent;
-      margin-top: 4px;
-      width: 100%;
-      cursor: pointer;
-      font-weight: 600;
-      text-overflow: ellipsis;
-    }
-
-    .search-btn-round {
-      background: var(--primary-gradient);
-      color: white;
-      border: none;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: transform 0.25s var(--spring-transition), box-shadow 0.2s ease;
-      flex-shrink: 0;
-      box-shadow: 0 4px 15px rgba(255, 56, 92, 0.4);
-    }
-
-    .search-btn-round:hover {
-      transform: scale(1.08);
-      box-shadow: 0 6px 20px rgba(255, 56, 92, 0.6);
-    }
+    .search-btn-round { background: var(--primary-gradient); color: white; border: none; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.25s var(--spring-transition), box-shadow 0.2s ease; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0, 163, 162, 0.4); }
+    .search-btn-round:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0, 163, 162, 0.6); }
 
     /* SEARCH POPUPS */
-    .search-popup {
-      position: absolute;
-      top: 76px;
-      background: #ffffff;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border-light);
-      padding: 24px;
-      z-index: 500;
-      animation: popupBounce 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      display: none;
-      max-width: 100%;
-      text-align: left;
-      color: var(--dark);
-    }
+    .search-popup { position: absolute; top: 76px; background: #ffffff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); padding: 24px; z-index: 500; animation: popupBounce 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; display: none; max-width: 100%; text-align: left; color: var(--dark); }
+    .search-popup.show { display: block; }
+    #popup-where { left: 0; width: 360px; }
+    #popup-when { left: 0; width: 620px; }
+    #popup-who { right: 0; width: 320px; }
 
-    .search-popup.show {
-      display: block;
-    }
-
-    #popup-where {
-      left: 0;
-      width: 360px;
-    }
-
-    #popup-when {
-      left: 0;
-      width: 620px;
-    }
-
-    #popup-who {
-      right: 0;
-      width: 320px;
-    }
-
-    .destination-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .destination-item:hover {
-      background: var(--light-gray);
-      transform: translateX(4px);
-    }
+    .destination-item { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); }
+    .destination-item:hover { background: var(--light-gray); transform: translateX(4px); }
 
     /* CALENDAR RANGES */
-    .calendar-nav-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
+    .calendar-nav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .calendar-nav-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); color: var(--dark); flex-shrink: 0; }
+    .calendar-nav-btn:hover { border-color: var(--dark); background: var(--light-gray); }
+    .calendar-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .calendar-months-wrap { display: flex; gap: 28px; }
+    .calendar-month-block { flex: 1; min-width: 0; }
+    .calendar-month-title { text-align: center; font-weight: 800; font-size: 14px; margin-bottom: 12px; color: var(--dark); }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; font-size: 13px; }
+    .calendar-day-head { font-weight: 700; color: var(--gray); font-size: 11px; padding-bottom: 6px; }
+    .calendar-day { padding: 9px 0; border-radius: 50%; cursor: pointer; transition: var(--transition); font-weight: 600; }
+    .calendar-day:hover { background: var(--light-gray); }
+    .calendar-day.selected { background: var(--primary) !important; color: #fff !important; }
+    .calendar-day.in-range { background: rgba(0, 163, 162, 0.12); border-radius: 0; }
+    .calendar-day.disabled { color: var(--border); cursor: not-allowed; pointer-events: none; }
+    .calendar-day.empty { visibility: hidden; cursor: default; }
 
-    .calendar-nav-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-      color: var(--dark);
-      flex-shrink: 0;
-    }
-
-    .calendar-nav-btn:hover {
-      border-color: var(--dark);
-      background: var(--light-gray);
-    }
-
-    .calendar-nav-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    .calendar-nav-btn:disabled:hover {
-      border-color: var(--border);
-      background: #fff;
-    }
-
-    .calendar-months-wrap {
-      display: flex;
-      gap: 28px;
-    }
-
-    .calendar-month-block {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .calendar-month-title {
-      text-align: center;
-      font-weight: 800;
-      font-size: 14px;
-      margin-bottom: 12px;
-      color: var(--dark);
-      letter-spacing: -0.2px;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
-      text-align: center;
-      font-size: 13px;
-    }
-
-    .calendar-day-head {
-      font-weight: 700;
-      color: var(--gray);
-      font-size: 11px;
-      padding-bottom: 6px;
-    }
-
-    .calendar-day {
-      padding: 9px 0;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: var(--transition);
-      font-weight: 600;
-    }
-
-    .calendar-day:hover {
-      background: var(--light-gray);
-    }
-
-    .calendar-day.selected {
-      background: var(--primary) !important;
-      color: #fff !important;
-      border-radius: 50%;
-    }
-
-    .calendar-day.in-range {
-      background: rgba(255, 56, 92, 0.12);
-      border-radius: 0;
-    }
-
-    .calendar-day.in-range.selected {
-      border-radius: 50%;
-    }
-
-    .calendar-day.disabled {
-      color: var(--border);
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    .calendar-day.empty {
-      visibility: hidden;
-      cursor: default;
-    }
-
-    .guest-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-    }
-
-    .guest-row:not(:last-child) {
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .counter-btn-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .counter-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: #fff;
-      cursor: pointer;
-      font-weight: 700;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .counter-btn:hover {
-      border-color: var(--dark);
-      background: var(--light-gray);
-    }
+    .guest-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+    .guest-row:not(:last-child) { border-bottom: 1px solid var(--border-light); }
+    .counter-btn-group { display: flex; align-items: center; gap: 12px; }
+    .counter-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border); background: #fff; cursor: pointer; font-weight: 700; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
+    .counter-btn:hover { border-color: var(--dark); background: var(--light-gray); }
 
     /* ==========================================
         6. SECTIONS & COMPONENTS
         ========================================== */
-    section {
-      margin-bottom: 56px;
-    }
+    section { margin-bottom: 56px; }
+    .section-title { font-size: 26px; font-weight: 800; margin-bottom: 22px; color: var(--dark); }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .feature-card { background: #ffffff; padding: 24px; border-radius: var(--radius-md); text-align: center; font-weight: 700; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); transition: var(--transition); }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
 
-    .section-title {
-      font-size: 26px;
-      font-weight: 800;
-      margin-bottom: 22px;
-      letter-spacing: -0.5px;
-      color: var(--dark);
-    }
+    .destinations-flex { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+    .dest-chip { padding: 14px 28px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-pill); font-weight: 700; cursor: pointer; white-space: nowrap; transition: var(--transition); box-shadow: var(--shadow-sm); }
+    .dest-chip:hover { border-color: var(--dark); background: var(--dark); color: #fff; transform: translateY(-2px); }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+    .offers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .offer-banner { background: linear-gradient(135deg, #012a62 0%, #0076b5 55%, #00a9a7 100%); color: #fff; padding: 32px; border-radius: var(--radius-lg); display: flex; flex-direction: column; justify-content: space-between; min-height: 180px; box-shadow: var(--shadow-md); transition: var(--transition); }
+    .offer-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 
-    .feature-card {
-      background: #ffffff;
-      padding: 24px;
-      border-radius: var(--radius-md);
-      text-align: center;
-      font-weight: 700;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-    }
+    .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+    .cat-card { background: #ffffff; border: 1px solid var(--border-light); padding: 20px; border-radius: var(--radius-md); text-align: center; font-weight: 700; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); }
+    .cat-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow-md); color: var(--primary); }
 
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-    }
+    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; background: #ffffff; padding: 40px; border-radius: var(--radius-lg); text-align: center; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); }
+    .stat-number { font-size: 34px; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+    .stat-label { font-size: 14px; color: var(--gray); font-weight: 600; margin-top: 4px; }
 
-    .destinations-flex {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      scrollbar-width: none;
-    }
+    .blogs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .blog-card { background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: var(--transition); }
+    .blog-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+    .blog-card img { width: 100%; height: 180px; object-fit: cover; }
+    .blog-content { padding: 20px; }
 
-    .dest-chip {
-      padding: 14px 28px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-pill);
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .dest-chip:hover {
-      border-color: var(--dark);
-      background: var(--dark);
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .offers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-
-    .offer-banner {
-      background: linear-gradient(135deg, #FF385C 0%, #a10035 100%);
-      color: #fff;
-      padding: 32px;
-      border-radius: var(--radius-lg);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 180px;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-    }
-
-    .offer-banner:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .categories-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 16px;
-    }
-
-    .cat-card {
-      background: #ffffff;
-      border: 1px solid var(--border-light);
-      padding: 20px;
-      border-radius: var(--radius-md);
-      text-align: center;
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .cat-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-      color: var(--primary);
-    }
-
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 24px;
-      background: #ffffff;
-      padding: 40px;
-      border-radius: var(--radius-lg);
-      text-align: center;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .stat-number {
-      font-size: 34px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -1px;
-    }
-
-    .stat-label {
-      font-size: 14px;
-      color: var(--gray);
-      font-weight: 600;
-      margin-top: 4px;
-    }
-
-    .blogs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .blog-card {
-      background: #ffffff;
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-    }
-
-    .blog-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .blog-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .blog-content {
-      padding: 20px;
-    }
-
-    .newsletter-box {
-      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
-      padding: 48px 24px;
-      border-radius: var(--radius-lg);
-      text-align: center;
-    }
-
-    .newsletter-form {
-      display: flex;
-      max-width: 480px;
-      margin: 20px auto 0 auto;
-      gap: 12px;
-    }
-
-    .newsletter-form input {
-      flex: 1;
-      padding: 14px 20px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-pill);
-      outline: none;
-      font-size: 14px;
-      background: #fff;
-    }
+    .newsletter-box { background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); padding: 48px 24px; border-radius: var(--radius-lg); text-align: center; }
+    .newsletter-form { display: flex; max-width: 480px; margin: 20px auto 0 auto; gap: 12px; }
+    .newsletter-form input { flex: 1; padding: 14px 20px; border: 1px solid var(--border); border-radius: var(--radius-pill); outline: none; font-size: 14px; background: #fff; }
 
     /* ==========================================
         7. CARDS, GRID & BUTTONS
         ========================================== */
-    main {
-      flex: 1;
-      padding: 32px 6%;
-      max-width: 1400px;
-      margin: 0 auto;
-      width: 100%;
-    }
+    main { flex: 1; padding: 32px 6%; max-width: 1400px; margin: 0 auto; width: 100%; }
+    .page-view { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .hidden { display: none !important; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 32px 24px; }
 
-    .page-view {
-      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
+    .card { border: none; background: transparent; transition: transform 0.3s var(--spring-transition); cursor: pointer; position: relative; }
+    .card:hover { transform: translateY(-6px); }
+    .card-img-wrapper { position: relative; width: 100%; padding-top: 90%; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+    .card-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .card:hover img { transform: scale(1.08); }
 
-    .hidden {
-      display: none !important;
-    }
+    .card-heart-btn { position: absolute; top: 14px; right: 14px; background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(8px); border: none; color: rgba(255, 255, 255, 0.95); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; z-index: 2; transition: var(--transition); }
+    .card-heart-btn:hover { transform: scale(1.15); background: rgba(0, 0, 0, 0.4); }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 32px 24px;
-    }
+    .card-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .card-subtitle { font-size: 14px; color: var(--gray); margin-bottom: 6px; }
+    .card-price { font-size: 16px; font-weight: 800; color: var(--dark); }
 
-    .card {
-      border: none;
-      background: transparent;
-      transition: transform 0.3s var(--spring-transition);
-      cursor: pointer;
-      position: relative;
-    }
+    .btn { display: inline-block; width: 100%; padding: 14px 24px; border: none; border-radius: var(--radius-pill); font-weight: 700; cursor: pointer; text-align: center; transition: var(--transition); font-size: 14px; box-shadow: var(--shadow-sm); }
+    .btn-primary { background: var(--primary-gradient); color: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 163, 162, 0.4); }
+    .btn-outline { background: transparent; border: 2px solid var(--dark); color: var(--dark); }
+    .btn-outline:hover { background: var(--dark); color: #fff; }
 
-    .card:hover {
-      transform: translateY(-6px);
-    }
-
-    .card-img-wrapper {
-      position: relative;
-      width: 100%;
-      padding-top: 90%;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      margin-bottom: 14px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .card img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .card:hover img {
-      transform: scale(1.08);
-    }
-
-    .card-heart-btn {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(8px);
-      border: none;
-      color: rgba(255, 255, 255, 0.95);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-      z-index: 2;
-      transition: var(--transition);
-    }
-
-    .card-heart-btn:hover {
-      transform: scale(1.15);
-      background: rgba(0, 0, 0, 0.4);
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--dark);
-    }
-
-    .card-subtitle {
-      font-size: 14px;
-      color: var(--gray);
-      margin-bottom: 6px;
-    }
-
-    .card-price {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--dark);
-    }
-
-    .btn {
-      display: inline-block;
-      width: 100%;
-      padding: 14px 24px;
-      border: none;
-      border-radius: var(--radius-pill);
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-      transition: var(--transition);
-      font-size: 14px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn-primary {
-      background: var(--primary-gradient);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 56, 92, 0.4);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--dark);
-      color: var(--dark);
-    }
-
-    .btn-outline:hover {
-      background: var(--dark);
-      color: #fff;
-    }
-
-    .form-container {
-      max-width: 500px;
-      margin: 30px auto;
-      padding: 36px;
-      background: #ffffff;
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--dark);
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      outline: none;
-      transition: var(--transition);
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.15);
-    }
+    .form-container { max-width: 500px; margin: 30px auto; padding: 36px; background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none; transition: var(--transition); }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 163, 162, 0.15); }
 
     /* ==========================================
         8. ADMIN & TABLES
         ========================================== */
-    .admin-grid {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 32px;
-    }
+    .admin-grid { display: grid; grid-template-columns: 240px 1fr; gap: 32px; }
+    .admin-sidebar { background: #ffffff; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); }
+    .admin-sidebar ul { list-style: none; }
+    .admin-sidebar li { padding: 12px 16px; font-weight: 600; cursor: pointer; border-radius: var(--radius-sm); transition: var(--transition); margin-bottom: 6px; }
+    .admin-sidebar li:hover { background: var(--light-gray); color: var(--primary); }
 
-    .admin-sidebar {
-      background: #ffffff;
-      padding: 20px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .admin-sidebar ul {
-      list-style: none;
-    }
-
-    .admin-sidebar li {
-      padding: 12px 16px;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: var(--radius-sm);
-      transition: var(--transition);
-      margin-bottom: 6px;
-    }
-
-    .admin-sidebar li:hover {
-      background: var(--light-gray);
-      color: var(--primary);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-top: 20px;
-      background: #fff;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 1px solid var(--border-light);
-    }
-
-    th,
-    td {
-      padding: 16px;
-      text-align: left;
-      font-size: 14px;
-    }
-
-    th {
-      background: var(--light-gray);
-      font-weight: 700;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    td {
-      border-bottom: 1px solid var(--border-light);
-    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; background: #fff; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-light); }
+    th, td { padding: 16px; text-align: left; font-size: 14px; }
+    th { background: var(--light-gray); font-weight: 700; border-bottom: 1px solid var(--border-light); }
+    td { border-bottom: 1px solid var(--border-light); }
 
     /* ==========================================
         9. TOAST & FOOTER
         ========================================== */
-    #toast-container {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    #toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
+    .toast { background: var(--dark); color: #fff; padding: 14px 24px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; box-shadow: var(--shadow-lg); animation: slideInRight 0.3s ease; }
 
-    .toast {
-      background: var(--dark);
-      color: #fff;
-      padding: 14px 24px;
-      border-radius: var(--radius-pill);
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: var(--shadow-lg);
-      animation: slideInRight 0.3s ease;
-    }
-
-    footer {
-      border-top: 1px solid var(--border-light);
-      padding: 48px 6% 32px 6%;
-      background: #ffffff;
-      margin-top: auto;
-    }
-
-    .footer-links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 32px;
-      margin-bottom: 36px;
-      text-align: left;
-    }
-
-    .footer-links h4 {
-      font-size: 15px;
-      margin-bottom: 14px;
-      font-weight: 800;
-      color: var(--dark);
-    }
-
-    .footer-links a {
-      display: block;
-      color: var(--gray);
-      font-size: 14px;
-      text-decoration: none;
-      margin-bottom: 10px;
-      transition: var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: var(--primary);
-    }
-
-    .footer-bottom {
-      text-align: center;
-      color: var(--gray);
-      font-size: 14px;
-      border-top: 1px solid var(--border-light);
-      padding-top: 24px;
-      font-weight: 500;
-    }
+    footer { border-top: 1px solid var(--border-light); padding: 48px 6% 32px 6%; background: #ffffff; margin-top: auto; }
+    .footer-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 32px; margin-bottom: 36px; text-align: left; }
+    .footer-links h4 { font-size: 15px; margin-bottom: 14px; font-weight: 800; color: var(--dark); }
+    .footer-links a { display: block; color: var(--gray); font-size: 14px; text-decoration: none; margin-bottom: 10px; transition: var(--transition); }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-bottom { text-align: center; color: var(--gray); font-size: 14px; border-top: 1px solid var(--border-light); padding-top: 24px; font-weight: 500; }
 
     /* ==========================================
         10. MOBILE HEADER BAR / BOTTOM NAV
         ========================================== */
-    .mobile-header-bar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 5%;
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-light);
-      position: sticky;
-      top: 0;
-      z-index: 1001;
+    .mobile-header-bar { display: none; align-items: center; justify-content: space-between; padding: 14px 5%; background: #ffffff; border-bottom: 1px solid var(--border-light); position: sticky; top: 0; z-index: 1001; }
+    .mobile-icon-btn { background: none; border: none; cursor: pointer; color: var(--dark); display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; position: relative; flex-shrink: 0; }
+    .mobile-logo { font-size: 17px; font-weight: 800; color: var(--dark); letter-spacing: -0.5px; display: flex; align-items: center; gap: 6px; cursor: pointer; text-decoration: none; }
+    .mobile-logo svg { color: var(--primary); }
+    .mobile-icon-badge { position: absolute; top: -2px; right: -4px; background: var(--primary); color: #fff; font-size: 10px; font-weight: 800; min-width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+
+    .mobile-nav-panel { display: none; position: fixed; top: 0; left: 0; width: 78%; max-width: 320px; height: 100%; background: #ffffff; z-index: 2000; box-shadow: var(--shadow-lg); padding: 24px 20px; flex-direction: column; gap: 4px; animation: slideInLeft 0.25s ease forwards; }
+    .mobile-nav-panel.open { display: flex; }
+    @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
+    .mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 1999; }
+    .mobile-nav-overlay.open { display: block; }
+    .mobile-nav-panel a { padding: 14px 8px; font-weight: 700; color: var(--dark); text-decoration: none; cursor: pointer; border-bottom: 1px solid var(--border-light); }
+
+    .mobile-bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; border-top: 1px solid var(--border-light); box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05); z-index: 1000; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); }
+    .mobile-nav-items { display: flex; justify-content: space-around; align-items: center; }
+    .mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--gray); font-size: 11px; font-weight: 600; cursor: pointer; position: relative; padding: 4px 8px; }
+    .mobile-nav-item.active { color: var(--primary); }
+    .mobile-nav-item.active svg { stroke: var(--primary); }
+    .mobile-nav-item .mobile-cart-badge { position: absolute; top: -2px; right: 2px; background: var(--primary); color: #fff; font-size: 10px; font-weight: 800; min-width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+
+   @media (max-width: 768px) {
+      header { display: none; }
+      .mobile-header-bar { display: flex; }
+      .mobile-bottom-nav { display: block; }
+      body { padding-bottom: 68px; }
+      nav { overflow-x: auto; width: 100%; padding-bottom: 6px; }
+      .search-capsule { flex-direction: column; border-radius: var(--radius-md); padding: 16px; }
+      .capsule-segment:not(:last-child)::after { display: none; }
+      .search-popup { position: relative !important; top: 0 !important; width: 100% !important; left: 0 !important; margin-top: 12px; }
+      .admin-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 32px; }
+      .calendar-months-wrap { flex-direction: column; gap: 20px; }
+      #popup-when { width: 100% !important; }
+      .details-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+      .booking-row { flex-direction: column !important; align-items: flex-start !important; gap: 12px; }
+      .booking-row>div:last-child { text-align: left !important; width: 100%; }
+      .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-md); }
+      .table-responsive table { min-width: 600px; }
+      #page-admin .stats-bar { padding: 20px !important; grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+      #page-admin .form-container { padding: 16px !important; }
+      .admin-sidebar ul { display: flex; overflow-x: auto; gap: 8px; scrollbar-width: none; }
+      .admin-sidebar li { white-space: nowrap; margin-bottom: 0; }
+      .active-filter-bar { flex-wrap: wrap; }
     }
+@media (max-width: 768px) {
+  /* Prevent the grid columns from blowing out the viewport */
+  .admin-grid > div { 
+    min-width: 0; 
+  }
+  
+  /* Restrict the sidebar width so horizontal scroll activates */
+  .admin-sidebar { 
+    max-width: 100%; 
+    overflow: hidden; 
+    padding: 16px; 
+  }
 
-    .mobile-icon-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      position: relative;
-      flex-shrink: 0;
-    }
+  /* Your existing list rule, updated with width: 100% */
+  .admin-sidebar ul { 
+    display: flex; 
+    overflow-x: auto; 
+    gap: 8px; 
+    scrollbar-width: none; 
+    width: 100%; 
+  }
+  
+  /* ... (Keep your other existing mobile rules here) ... */
+}
+@media (max-width: 768px) {
+  /* ... your existing mobile rules ... */
 
-    .mobile-logo {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--dark);
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      text-decoration: none;
-    }
+  /* FIX HOME PAGE OVERFLOW */
+  .offers-grid, 
+  .blogs-grid, 
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Ensure main container prevents inner elements from breaking out */
+  main {
+    max-width: 100vw;
+    overflow-x: hidden;
+    padding: 20px 5%;
+  }
 
-    .mobile-logo svg {
-      color: var(--primary);
-    }
+  /* Make sure horizontal scrollers don't push the viewport */
+  .destinations-flex {
+    width: 100%;
+  } 
+}
+/* FIX PROFILE CARD OVERFLOW ON MOBILE */
+  #userProfileCard {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px;
+  }
+  
+  #userProfileCard > div:last-child {
+    text-align: left !important;
+    width: 100%;
+  }
 
-    .mobile-icon-badge {
-      position: absolute;
-      top: -2px;
-      right: -4px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 800;
-      min-width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 3px;
-    }
-
-    .mobile-nav-panel {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 78%;
-      max-width: 320px;
-      height: 100%;
-      background: #ffffff;
-      z-index: 2000;
-      box-shadow: var(--shadow-lg);
-      padding: 24px 20px;
-      flex-direction: column;
-      gap: 4px;
-      animation: slideInLeft 0.25s ease forwards;
-    }
-
-    .mobile-nav-panel.open {
-      display: flex;
-    }
-
-    @keyframes slideInLeft {
-      from {
-        transform: translateX(-100%);
-      }
-
-      to {
-        transform: translateX(0);
-      }
-    }
-
-    .mobile-nav-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 1999;
-    }
-
-    .mobile-nav-overlay.open {
-      display: block;
-    }
-
-    .mobile-nav-panel a {
-      padding: 14px 8px;
-      font-weight: 700;
-      color: var(--dark);
-      text-decoration: none;
-      cursor: pointer;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .mobile-bottom-nav {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #ffffff;
-      border-top: 1px solid var(--border-light);
-      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
-      z-index: 1000;
-      padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-    }
-
-    .mobile-nav-items {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-
-    .mobile-nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      color: var(--gray);
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      position: relative;
-      padding: 4px 8px;
-    }
-
-    .mobile-nav-item.active {
-      color: var(--primary);
-    }
-
-    .mobile-nav-item.active svg {
-      stroke: var(--primary);
-    }
-
-    .mobile-nav-item .mobile-cart-badge {
-      position: absolute;
-      top: -2px;
-      right: 2px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 800;
-      min-width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 3px;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        display: none;
-      }
-
-      .mobile-header-bar {
-        display: flex;
-      }
-
-      .mobile-bottom-nav {
-        display: block;
-      }
-
-      body {
-        padding-bottom: 68px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-      }
-
-      nav {
-        overflow-x: auto;
-        width: 100%;
-        padding-bottom: 6px;
-      }
-
-      .search-capsule {
-        flex-direction: column;
-        border-radius: var(--radius-md);
-        padding: 16px;
-      }
-
-      .capsule-segment:not(:last-child)::after {
-        display: none;
-      }
-
-      .search-popup {
-        position: relative !important;
-        top: 0 !important;
-        width: 100% !important;
-        left: 0 !important;
-        margin-top: 12px;
-      }
-
-      .admin-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-title {
-        font-size: 32px;
-      }
-
-      .calendar-months-wrap {
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      #popup-when {
-        width: 100% !important;
-      }
-
-      /* ---- Hotel details / booking page ---- */
-      .details-grid {
-        grid-template-columns: 1fr !important;
-        gap: 20px !important;
-      }
-
-      /* ---- Booking list rows (My Reservations) ---- */
-      .booking-row {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 12px;
-      }
-
-      .booking-row>div:last-child {
-        text-align: left !important;
-        width: 100%;
-      }
-
-      /* ---- Admin panel tables ---- */
-      .table-responsive {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border-radius: var(--radius-md);
-      }
-
-      .table-responsive table {
-        min-width: 600px;
-      }
-
-      #page-admin .stats-bar {
-        padding: 20px !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 16px !important;
-      }
-
-      #page-admin .form-container {
-        padding: 16px !important;
-      }
-
-      .admin-sidebar ul {
-        display: flex;
-        overflow-x: auto;
-        gap: 8px;
-        scrollbar-width: none;
-      }
-
-      .admin-sidebar li {
-        white-space: nowrap;
-        margin-bottom: 0;
-      }
-
-      /* ---- Active location filter chip on hotels page ---- */
-      .active-filter-bar {
-        flex-wrap: wrap;
-      }
-    }
-
+  /* Force long email addresses to wrap to the next line if needed */
+  #profileEmailDisplay {
+    word-break: break-all;
+  }
     /* ==========================================
         11. PAYMENT METHOD MODAL
         ========================================== */
-    .pay-modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 3000;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+    .pay-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
+    .pay-modal-overlay.open { display: flex; }
+    .pay-modal { background: #fff; border-radius: var(--radius-lg); padding: 28px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); animation: popupBounce 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .pay-method-list { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+    .pay-method-btn { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-md); background: #fff; cursor: pointer; font-weight: 700; font-size: 14px; transition: var(--transition); text-align: left; }
+    .pay-method-btn:hover { border-color: var(--primary); background: rgba(0, 163, 162, 0.04); }
+    .pay-method-icon { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+    #stripeCardElementWrap { margin-top: 16px; display: none; }
+    #stripeCardElement { padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+    .pnr-tag { font-family: 'Courier New', monospace; font-weight: 800; letter-spacing: 1px; color: var(--primary); background: rgba(0, 163, 162, 0.08); padding: 3px 10px; border-radius: var(--radius-sm); font-size: 13px; }
 
-    .pay-modal-overlay.open {
-      display: flex;
+    /* SEARCH POPUPS (destination, calendar, guests): always centered on screen (desktop + mobile) */
+    .calendar-backdrop { display: none; position: fixed; inset: 0; background: rgba(10, 31, 68, 0.45); z-index: 1999; }
+    .calendar-backdrop.show { display: block; }
+    #popup-where, #popup-when, #popup-who {
+      position: fixed !important;
+      inset: 0 !important;
+      margin: auto !important;
+      height: fit-content !important;
+      max-height: 90vh;
+      overflow-y: auto;
+      z-index: 2000 !important;
     }
-
-    .pay-modal {
-      background: #fff;
-      border-radius: var(--radius-lg);
-      padding: 28px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: var(--shadow-lg);
-      animation: popupBounce 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .pay-method-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .pay-method-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
-      background: #fff;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 14px;
-      transition: var(--transition);
-      text-align: left;
-    }
-
-    .pay-method-btn:hover {
-      border-color: var(--primary);
-      background: rgba(255, 56, 92, 0.04);
-    }
-
-    .pay-method-icon {
-      font-size: 20px;
-      width: 28px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    #stripeCardElementWrap {
-      margin-top: 16px;
-      display: none;
-    }
-
-    #stripeCardElement {
-      padding: 12px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-    }
-
-    .pnr-tag {
-      font-family: 'Courier New', monospace;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--primary);
-      background: rgba(255, 56, 92, 0.08);
-      padding: 3px 10px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-    }
+    #popup-where { width: min(400px, 94vw) !important; }
+    #popup-when { width: min(620px, 94vw) !important; }
+    #popup-who { width: min(360px, 94vw) !important; }
+    .calendar-day.min-stay { color: var(--border); cursor: not-allowed; text-decoration: line-through; }
   </style>
 </head>
 
@@ -1442,10 +515,8 @@
       <div class="pay-method-list">
         <button class="pay-method-btn" onclick="payWith('bkash')"><span class="pay-method-icon">📱</span> bKash</button>
         <button class="pay-method-btn" onclick="payWith('nagad')"><span class="pay-method-icon">🟠</span> Nagad</button>
-        <button class="pay-method-btn" onclick="payWith('card')"><span class="pay-method-icon">💳</span> Debit/Credit
-          Card</button>
-        <button class="pay-method-btn" onclick="payWith('stripe')"><span class="pay-method-icon">🅢</span> Stripe
-          Checkout</button>
+        <button class="pay-method-btn" onclick="payWith('card')"><span class="pay-method-icon">💳</span> Debit/Credit Card</button>
+        <button class="pay-method-btn" onclick="payWith('stripe')"><span class="pay-method-icon">🅢</span> Stripe Checkout</button>
       </div>
       <div id="stripeCardElementWrap">
         <div id="stripeCardElement"></div>
@@ -1458,24 +529,18 @@
   <!-- MOBILE TOP BAR (hamburger + logo + wishlist) -->
   <div class="mobile-header-bar">
     <button class="mobile-icon-btn" onclick="toggleMobileMenu()" aria-label="Menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6" />
         <line x1="3" y1="12" x2="21" y2="12" />
         <line x1="3" y1="18" x2="21" y2="18" />
       </svg>
     </button>
-    <a onclick="navigate('index')" class="mobile-logo">
-      <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor">
-        <path
-          d="M16 1c2.008 0 3.463.963 4.751 3.269l.533 1.025c1.954 3.83 6.114 12.54 7.1 14.836l.145.353c.667 1.591.91 2.472.96 3.396l.011.315c0 4.308-3.235 7.806-7.5 7.806-3.155 0-5.86-1.896-7.016-4.625l-.084-.213-.084.213c-1.156 2.729-3.861 4.625-7.016 4.625-4.265 0-7.5-3.498-7.5-7.806 0-.924.243-1.805.91-3.396l.145-.353c.986-2.296 5.146-11.006 7.1-14.836l.533-1.025C12.537 1.963 13.992 1 16 1zm0 2c-1.237 0-2.274.652-3.385 2.637l-.447.859c-1.895 3.712-5.986 12.28-6.918 14.453l-.116.282c-.546 1.302-.734 1.98-.77 2.657l-.008.212c0 3.218 2.378 5.806 5.644 5.806 2.603 0 4.837-1.636 5.513-4.041l.145-.521h.786l.145.521c.676 2.405 2.91 4.041 5.513 4.041 3.266 0 5.644-2.588 5.644-5.806 0-.677-.188-1.355-.734-2.657l-.116-.282c-.932-2.173-5.023-10.741-6.918-14.453l-.447-.859C18.274 3.652 17.237 3 16 3z" />
-      </svg>
-      TRAVEL HUTT
-    </a>
+    <a onclick="navigate('index')" class="logo img">
+    <img src="travel_hutt_logo_1.PNG" alt="Travel Hut Logo" width="200" height="60" style="max-width: 100%; height: auto;">
+</a>
     <button class="mobile-icon-btn" onclick="navigate('wishlist')" aria-label="Wishlist">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path
-          d="M12 21s-7.5-4.6-10-9.3C.6 8.2 2.3 4 6.4 4c2.1 0 3.7 1.2 5.6 3.4C13.9 5.2 15.5 4 17.6 4 21.7 4 23.4 8.2 22 11.7 19.5 16.4 12 21 12 21z" />
+        <path d="M12 21s-7.5-4.6-10-9.3C.6 8.2 2.3 4 6.4 4c2.1 0 3.7 1.2 5.6 3.4C13.9 5.2 15.5 4 17.6 4 21.7 4 23.4 8.2 22 11.7 19.5 16.4 12 21 12 21z" />
       </svg>
       <span class="mobile-icon-badge" id="mobileWishlistCount">0</span>
     </button>
@@ -1488,32 +553,27 @@
     <a onclick="navigate('index')">🏠 Home</a>
     <a onclick="navigate('hotels')">🏨 Explore Stays</a>
     <a onclick="navigate('wishlist')">♥ Wishlist</a>
-    <a onclick="navigate('bookings')">📋 My Bookings</a>
+    <a onclick="navigate('bookings')" id="mobileBookingsLink" style="display:none;">📋 My Bookings</a>
+    <a onclick="navigate('agent')" id="mobileAgentLink" style="display:none; color: #10b981;">💼 Agent Portal</a>
     <a onclick="navigate('about')">ℹ️ About Us</a>
-    <a onclick="navigate('admin')" id="mobileAdminLink" style="display:none; color: var(--primary);">🛠️ Admin
-      Portal</a>
+    <a onclick="navigate('admin')" id="mobileAdminLink" style="display:none; color: var(--primary);">🛠️ Admin Portal</a>
     <div id="mobileAuthArea" style="margin-top: 16px;"></div>
   </div>
 
   <!-- NAVIGATION BAR -->
   <header>
     <a onclick="navigate('index')" class="logo">
-      <svg width="28" height="28" viewBox="0 0 32 32" fill="currentColor">
-        <path
-          d="M16 1c2.008 0 3.463.963 4.751 3.269l.533 1.025c1.954 3.83 6.114 12.54 7.1 14.836l.145.353c.667 1.591.91 2.472.96 3.396l.011.315c0 4.308-3.235 7.806-7.5 7.806-3.155 0-5.86-1.896-7.016-4.625l-.084-.213-.084.213c-1.156 2.729-3.861 4.625-7.016 4.625-4.265 0-7.5-3.498-7.5-7.806 0-.924.243-1.805.91-3.396l.145-.353c.986-2.296 5.146-11.006 7.1-14.836l.533-1.025C12.537 1.963 13.992 1 16 1zm0 2c-1.237 0-2.274.652-3.385 2.637l-.447.859c-1.895 3.712-5.986 12.28-6.918 14.453l-.116.282c-.546 1.302-.734 1.98-.77 2.657l-.008.212c0 3.218 2.378 5.806 5.644 5.806 2.603 0 4.837-1.636 5.513-4.041l.145-.521h.786l.145.521c.676 2.405 2.91 4.041 5.513 4.041 3.266 0 5.644-2.588 5.644-5.806 0-.677-.188-1.355-.734-2.657l-.116-.282c-.932-2.173-5.023-10.741-6.918-14.453l-.447-.859C18.274 3.652 17.237 3 16 3z" />
-      </svg>
-      TRAVELL HUT
+        <img src="travel_hutt_logo_1.PNG" alt="Travel Hut Logo" width="200" height="40">
     </a>
     <nav>
       <a onclick="navigate('hotels')">Explore Stays</a>
       <a onclick="navigate('wishlist')">Wishlist <span class="badge" id="wishlistCount">0</span></a>
-      <a onclick="navigate('bookings')">My Bookings</a>
+      <a id="navBookingsLink" onclick="navigate('bookings')" style="display:none;">My Bookings</a>
       <a onclick="navigate('about')">About Us</a>
-
+      <a id="navAgentLink" onclick="navigate('agent')" style="color: #10b981; display:none;">Agent Portal</a>
       <a id="navAdminLink" onclick="navigate('admin')" style="color: var(--primary); display:none;">Admin Portal</a>
       <span id="navAuth">
-        <a onclick="navigate('login')" class="btn btn-outline"
-          style="padding: 8px 18px; border-radius: 20px; font-size: 13px;">Login</a>
+        <a onclick="navigate('login')" class="btn btn-outline" style="padding: 8px 18px; border-radius: 20px; font-size: 13px;">Login</a>
       </span>
     </nav>
   </header>
@@ -1533,7 +593,6 @@
   <main>
     <!-- PAGE 1: HOME PAGE -->
     <section id="page-index" class="page-view">
-
       <!-- HERO SECTION -->
       <div class="hero-banner">
         <h1 class="hero-title">Find Your Next Luxury Escape</h1>
@@ -1545,20 +604,16 @@
         <!-- SEARCH CAPSULE -->
         <div class="search-capsule-wrapper" id="searchCapsuleWrapper">
           <div class="search-capsule" id="searchCapsule">
-
-            <!-- DESTINATION SEGMENT -->
             <div class="capsule-segment" id="seg-where" onclick="togglePopup('where', event)">
               <label>Destination</label>
               <input type="text" id="searchDest" placeholder="Where to?" readonly>
             </div>
 
-            <!-- CHECK-IN / CHECK-OUT RANGE SEGMENT -->
             <div class="capsule-segment" id="seg-when" onclick="togglePopup('when', event)">
               <label>Check-in / Out</label>
               <input type="text" id="searchDates" placeholder="Add dates" readonly>
             </div>
 
-            <!-- GUESTS SEGMENT -->
             <div class="capsule-segment" id="seg-who" onclick="togglePopup('who', event)">
               <label>Guests</label>
               <input type="text" id="searchGuests" placeholder="Add guests" readonly>
@@ -1573,35 +628,30 @@
 
             <!-- POPUP 1: WHERE -->
             <div class="search-popup" id="popup-where" onclick="event.stopPropagation()">
-              <div style="font-weight: 800; font-size: 12px; margin-bottom: 12px; color: var(--gray);">SUGGESTED
-                DESTINATIONS</div>
-              <div class="destination-item" onclick="selectDestination('Cox\'s Bazar', 'Bangladesh')">
-                <span>🏖️</span>
-                <div><strong>Cox's Bazar</strong><br><small>Longest sandy beach</small></div>
+              <div style="font-weight: 800; font-size: 12px; margin-bottom: 12px; color: var(--gray);">SUGGESTED DESTINATIONS</div>
+              <div class="destination-item" onclick="selectAllDestinations()">
+                <span>🌍</span><div><strong>All Locations</strong><br><small>Show all hotels</small></div>
               </div>
-              <div class="destination-item" onclick="selectDestination('Sylhet', 'Bangladesh')">
-                <span>⛰️</span>
-                <div><strong>Sylhet</strong><br><small>Tea gardens & hills</small></div>
+              <div class="destination-item" onclick="selectDestination('Inani', 'Cox bazar')">
+                <span>🏖️</span><div><strong>Inani,Cox's Bazar</strong><br><small>Longest sandy beach</small></div>
               </div>
-              <div class="destination-item" onclick="selectDestination('Kuala Lumpur', 'Malaysia')">
-                <span>🏙️</span>
-                <div><strong>Kuala Lumpur</strong><br><small>Iconic city view</small></div>
+              <div class="destination-item" onclick="selectDestination('Laboni', 'Cox bazar')">
+                <span>⛰️</span><div><strong>Laboni,Cox's Bazar</strong><br><small>Best enjoy</small></div>
+              </div>
+              <div class="destination-item" onclick="selectDestination('Shugondha', 'Cox bazar')">
+                <span>🏙️</span><div><strong>Shugondha</strong><br><small>Iconic city view</small></div>
               </div>
             </div>
 
-            <!-- POPUP 2: WHEN (CHECK-IN TO CHECK-OUT RANGE PICKER) -->
+            <!-- POPUP 2: WHEN -->
             <div class="search-popup" id="popup-when" onclick="event.stopPropagation()">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
-                <span id="calendarPrompt" style="font-weight:700; font-size:14px; color:var(--dark);">Select Check-in
-                  Date</span>
-                <button onclick="resetDateSelection()"
-                  style="background:none; border:none; color:var(--primary); font-size:12px; font-weight:700; cursor:pointer;">Reset</button>
+                <span id="calendarPrompt" style="font-weight:700; font-size:14px; color:var(--dark);">Select Check-in Date</span>
+                <button onclick="resetDateSelection()" style="background:none; border:none; color:var(--primary); font-size:12px; font-weight:700; cursor:pointer;">Reset</button>
               </div>
               <div class="calendar-nav-header">
-                <button class="calendar-nav-btn" id="calPrevBtn" onclick="shiftCalendarMonth(-1)"
-                  aria-label="Previous month">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round">
+                <button class="calendar-nav-btn" id="calPrevBtn" onclick="shiftCalendarMonth(-1)" aria-label="Previous month">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
                 </button>
@@ -1609,25 +659,19 @@
                   <div class="calendar-month-title" id="calMonthTitle0" style="flex:1;"></div>
                   <div class="calendar-month-title" id="calMonthTitle1" style="flex:1;"></div>
                 </div>
-                <button class="calendar-nav-btn" id="calNextBtn" onclick="shiftCalendarMonth(1)"
-                  aria-label="Next month">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round">
+                <button class="calendar-nav-btn" id="calNextBtn" onclick="shiftCalendarMonth(1)" aria-label="Next month">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </button>
               </div>
               <div class="calendar-months-wrap">
-                <div class="calendar-month-block">
-                  <div class="calendar-grid" id="calendarGrid0"></div>
-                </div>
-                <div class="calendar-month-block">
-                  <div class="calendar-grid" id="calendarGrid1"></div>
-                </div>
+                <div class="calendar-month-block"><div class="calendar-grid" id="calendarGrid0"></div></div>
+                <div class="calendar-month-block"><div class="calendar-grid" id="calendarGrid1"></div></div>
               </div>
             </div>
 
-            <!-- POPUP 3: WHO (GUEST COUNTER) -->
+            <!-- POPUP 3: WHO -->
             <div class="search-popup" id="popup-who" onclick="event.stopPropagation()">
               <div class="guest-row">
                 <div><strong>Adults</strong><br><small>Ages 13+</small></div>
@@ -1645,15 +689,12 @@
                   <button class="counter-btn" onclick="updateGuests('children', 1, event)">+</button>
                 </div>
               </div>
-              <button class="btn btn-primary" style="margin-top: 14px; padding: 10px;"
-                onclick="closeAllPopups()">Done</button>
+              <button class="btn btn-primary" style="margin-top: 14px; padding: 10px;" onclick="closeAllPopups()">Done</button>
             </div>
-
           </div>
         </div>
       </div>
 
-      <!-- SECTION 2: WHY BOOK WITH US -->
       <section>
         <h2 class="section-title">Why Book With Us</h2>
         <div class="features-grid">
@@ -1664,44 +705,37 @@
         </div>
       </section>
 
-      <!-- SECTION 4: POPULAR DESTINATIONS -->
       <section>
         <h2 class="section-title">Popular Destinations</h2>
         <div class="destinations-flex">
-          <div class="dest-chip" onclick="filterByDest('Cox\'s Bazar')">Cox's Bazar</div>
-          <div class="dest-chip" onclick="filterByDest('Saint Martin')">Saint Martin</div>
-          <div class="dest-chip" onclick="filterByDest('Sylhet')">Sylhet</div>
-          <div class="dest-chip" onclick="filterByDest('Sajek')">Sajek Valley</div>
-          <div class="dest-chip" onclick="filterByDest('Dhaka')">Dhaka</div>
-        </div>
-      </section>
-
-      <!-- SECTION 5: SPECIAL OFFERS -->
+          <div class="dest-chip" onclick="('Cox\'s Bazar')">Cox's Bazar</div>
+          <div class="dest-chip" onclick="('Saint Martin')">Saint Martin</div>
+          <div class="dest-chip" onclick="('Sylhet')">Sylhet</div>
+          <div class="dest-chip" onclick="('Sajek')">Sajek Valley</div>
+          <div class="dest-chip" onclick="('Dhaka')">Dhaka</div>
+        </div> 
+      </section> 
+ 
       <section>
         <h2 class="section-title">Special Offers</h2>
         <div class="offers-grid">
           <div class="offer-banner">
             <div>
               <h3>Summer Escape Sale</h3>
-              <p style="margin-top: 6px; opacity: 0.9;">Up to 30% off on beachfront luxury resorts.</p>
+              <p style="margin-top: 6px; opacity: 0.9;">Up to 20% off on beachfront luxury resorts.</p>
             </div>
-            <button class="btn btn-outline"
-              style="color: #fff; border-color: #fff; width: fit-content; margin-top: 20px;"
-              onclick="navigate('hotels')">Claim Discount</button>
+            <button class="btn btn-outline" style="color: #fff; border-color: #fff; width: fit-content; margin-top: 20px;" onclick="navigate('hotels')">Claim Discount</button>
           </div>
           <div class="offer-banner" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
             <div>
               <h3>Weekend Getaway</h3>
               <p style="margin-top: 6px; opacity: 0.9;">Complimentary spa vouchers with stay.</p>
             </div>
-            <button class="btn btn-outline"
-              style="color: #fff; border-color: #fff; width: fit-content; margin-top: 20px;"
-              onclick="navigate('hotels')">Explore Stays</button>
+            <button class="btn btn-outline" style="color: #fff; border-color: #fff; width: fit-content; margin-top: 20px;" onclick="navigate('hotels')">Explore Stays</button>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 6: HOTEL CATEGORIES -->
       <section>
         <h2 class="section-title">Hotel Categories</h2>
         <div class="categories-grid">
@@ -1713,74 +747,51 @@
         </div>
       </section>
 
-      <!-- SECTION 7: CUSTOMER REVIEWS -->
       <section>
         <h2 class="section-title">Customer Reviews</h2>
         <div class="feature-card" style="text-align: left; padding: 28px;">
-          <div style="color: #ffb400; font-size: 20px; margin-bottom: 10px;">★★★★★</div>
-          <p style="font-style: italic; margin-bottom: 14px; font-weight: 500; font-size: 15px; color: #444;">"Seamless
-            booking experience! Free airport transfer in Cox's Bazar was right on time. Highly recommended."</p>
+          <div style="color: #f98e0c; font-size: 20px; margin-bottom: 10px;">★★★★★</div>
+          <p style="font-style: italic; margin-bottom: 14px; font-weight: 500; font-size: 15px; color: #444;">"Seamless booking experience! Free airport transfer in Cox's Bazar was right on time. Highly recommended."</p>
           <strong style="color: var(--dark);">- Tanvir Islam</strong>
         </div>
       </section>
 
-      <!-- SECTION 8: OUR NUMBERS -->
       <section>
         <div class="stats-bar">
-          <div>
-            <div class="stat-number">150+</div>
-            <div class="stat-label">Hotels</div>
-          </div>
-          <div>
-            <div class="stat-number">25+</div>
-            <div class="stat-label">Cities</div>
-          </div>
-          <div>
-            <div class="stat-number">10k+</div>
-            <div class="stat-label">Guests</div>
-          </div>
-          <div>
-            <div class="stat-number">18k+</div>
-            <div class="stat-label">Bookings</div>
-          </div>
+          <div><div class="stat-number">150+</div><div class="stat-label">Hotels</div></div>
+          <div><div class="stat-number">25+</div><div class="stat-label">Cities</div></div>
+          <div><div class="stat-number">10k+</div><div class="stat-label">Guests</div></div>
+          <div><div class="stat-number">18k+</div><div class="stat-label">Bookings</div></div>
         </div>
       </section>
 
-      <!-- SECTION 9: TRAVEL BLOG -->
       <section>
         <h2 class="section-title">Travel Blog</h2>
         <div class="blogs-grid">
           <div class="blog-card">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80"
-              alt="Blog">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80" alt="Blog">
             <div class="blog-content">
               <h4 style="font-size: 16px;">Top 5 Beach Resorts in Cox's Bazar</h4>
-              <p style="font-size: 13px; color: var(--gray); margin-top: 8px;">Discover ultimate comfort next to the
-                ocean waves.</p>
+              <p style="font-size: 13px; color: var(--gray); margin-top: 8px;">Discover ultimate comfort next to the ocean waves.</p>
             </div>
           </div>
           <div class="blog-card">
-            <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=500&q=80"
-              alt="Blog">
+            <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=500&q=80" alt="Blog">
             <div class="blog-content">
               <h4 style="font-size: 16px;">Exploring Tea Gardens in Sylhet</h4>
-              <p style="font-size: 13px; color: var(--gray); margin-top: 8px;">A peaceful weekend journey among green
-                hills.</p>
+              <p style="font-size: 13px; color: var(--gray); margin-top: 8px;">A peaceful weekend journey among green hills.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 10: NEWSLETTER -->
       <section>
         <div class="newsletter-box">
           <h2 style="font-size: 26px;">Subscribe to Special Deals</h2>
-          <p style="font-size: 15px; color: var(--gray); margin-top: 6px;">Get exclusive discount coupons directly to
-            your inbox.</p>
+          <p style="font-size: 15px; color: var(--gray); margin-top: 6px;">Get exclusive discount coupons directly to your inbox.</p>
           <div class="newsletter-form">
             <input type="email" placeholder="Enter your email address">
-            <button class="btn btn-primary" style="width: auto; padding: 14px 28px;"
-              onclick="showToast('Subscribed successfully!')">Subscribe</button>
+            <button class="btn btn-primary" style="width: auto; padding: 14px 28px;" onclick="showToast('Subscribed successfully!')">Subscribe</button>
           </div>
         </div>
       </section>
@@ -1806,26 +817,85 @@
       <div class="grid" id="wishlistGrid"></div>
     </section>
 
-    <!-- PAGE 4: MY BOOKINGS PAGE -->
+    <!-- PAGE 4: MY BOOKINGS PAGE (WITH NEW USER PROFILE LOGIC) -->
     <section id="page-bookings" class="page-view hidden">
-      <h2 class="section-title">Your Reservations</h2>
+      <h2 class="section-title">My Profile & Bookings</h2>
+
+      <!-- STRICTLY ADDED: USER PROFILE CARD -->
+      <div class="feature-card" id="userProfileCard" style="text-align: left; margin-bottom: 24px; display: none; justify-content: space-between; align-items: center; padding: 20px;">
+         <div>
+            <h3 style="font-size: 18px; margin-bottom: 4px;" id="profileEmailDisplay">Loading...</h3>
+            <p style="color: var(--gray); font-size: 13px;">Role: <strong id="profileRoleDisplay" style="text-transform: capitalize; color: var(--dark);"></strong></p>
+         </div>
+         <div style="text-align: right;">
+            <p style="font-size: 12px; color: var(--gray); margin-bottom: 6px; font-weight: 700;">Unique Referral Code</p>
+            <span id="profileRefCodeDisplay" class="pnr-tag" style="font-size: 16px;">-</span>
+         </div>
+      </div>
+
+      <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Your Reservations</h3>
       <div class="form-group" style="max-width:320px; margin-bottom:20px;">
         <input type="text" id="myBookingsPnrSearch" placeholder="🔍 Search by PNR..." oninput="filterMyBookings()">
       </div>
       <div id="bookingsList"></div>
     </section>
 
-    <!-- PAGE 5: ABOUT US PAGE -->
-    <section id="page-about" class="page-view hidden">
-  <div class="form-container" style="max-width: 700px;">
-    <h2 class="section-title">About Travell Hut</h2>
-    <p style="line-height: 1.7; color: var(--gray); font-size: 15px;">Travell Hut provides premium accommodation
-      booking experiences across Bangladesh and top international travel spots. We offer transparent pricing,
-      instant voucher verification, and guaranteed comfort.</p>
+    <!-- PAGE 5: AGENT PORTAL -->
+    <section id="page-agent" class="page-view hidden">
+      <h2 class="section-title">Agent Commission Portal</h2>
+      <div class="feature-card" style="text-align: left; margin-bottom: 24px;">
+        <h3>Your Unique Referral Code: <span id="agentDisplayRefCode" class="pnr-tag" style="font-size: 16px;">-</span></h3>
+        <p style="color: var(--gray); font-size: 13px; margin-top: 6px;">Share this code with customers during their hotel bookings. For each booking made with your code, you earn a commission.</p>
+      </div>
+      <div class="stats-bar" style="padding: 24px;">
+        <div>
+          <div class="stat-number" id="agentPendingCommission">BDT 0</div>
+          <div class="stat-label">Pending Earnings (Unpaid)</div>
+        </div>
+        <div>
+          <div class="stat-number" id="agentPaidCommission">BDT 0</div>
+          <div class="stat-label">Total Paid to You from the Travel Hut</div>
+        </div>
+      </div>
+      <h3 style="font-size:20px; font-weight:800; margin:32px 0 16px;">Bookings made with your referral code</h3>
+      <div id="agentBookingsList"></div>
+    </section>
+
+   <!-- PAGE 6: ABOUT US PAGE -->
+<section id="page-about" class="page-view hidden">
+  <div class="about-page">
+    <h2>About us</h2>
+    <p>TravelHutt began with one simple idea: finding and booking a good place to stay should be easy, clear and honest for everyone.</p>
+    <p>We started with the stays people dream about, from the long sandy beaches of Inani and Laboni to the city views around Shugondha in Cox's Bazar. Every hotel on our platform is listed with its real location, a clear price per night and photos, so you know what you're getting before you book.</p>
+    <p>TravelHutt is built to take the stress out of travel planning. Pick your destination, choose your dates, add your guests and book in a few taps. Pay the way you prefer, with bKash, Nagad or card. When your booking is confirmed, you can download your e-ticket as a PDF. It includes a QR code that opens your live booking details, so check-in is quick and there is no confusion.</p>
+    <p>We also work with a growing network of travel agents. With their own referral codes, agents can bring their customers to TravelHutt, follow those bookings and download their tickets. Our admin team reviews and confirms each booking, so you always see its true status: pending, confirmed or cancelled.</p>
+<br>    <p><strong>Our promise is simple:</strong></p>
+    <ul class="about-list about-promise">
+      <li><strong>Transparent:</strong> clear prices, clear booking status, no surprises.</li>
+      <li><strong>Easy:</strong> a fast booking flow that works the same on your phone and your computer.</li>
+      <li><strong>Reliable:</strong> a confirmed e-ticket and real people behind every booking.</li>
+      <li><strong>Local:</strong> made in Bangladesh, for travelers who love exploring their own country and beyond.</li>
+    </ul>
+
+    <p>Whether you're planning a weekend by the sea or a family holiday, TravelHutt is here to help you find the right stay and make every trip a story worth telling.</p>
+
+    <h3>Our Office</h3>
+    <p class="about-sub">Bangladesh</p>
+    <!-- <p class="about-muted">Your full office address, City, postal code</p> -->
+    <ul class="about-list">
+      <li>Email: <a href="mailto:travelhut@gmail.com">travelhut@gmail.com</a></li>
+      <!-- <li>Phone: <a href="tel:+880XXXXXXXXXX">+880 XXXX XXXXXX</a></li> -->
+      <!-- <li>Visit: <a href="https://your-website.com">your-website.com</a></li> -->
+    </ul>
+
+    <!-- Only add this if you have a trade license, TIN or tourism registration:
+    <h3>Governance and Compliance</h3>
+    <p>Your registration details here.</p>
+    -->
   </div>
 </section>
 
-    <!-- PAGE 6: ADMIN PORTAL -->
+    <!-- PAGE 7: ADMIN PORTAL -->
     <section id="page-admin" class="page-view hidden">
       <h2 class="section-title">Admin Management Portal</h2>
       <div class="admin-grid">
@@ -1834,6 +904,7 @@
             <li onclick="showAdminSection('overview')">📊 Dashboard Overview</li>
             <li onclick="showAdminSection('bookings')">📋 Manage Bookings</li>
             <li onclick="showAdminSection('hotels')">🏨 Manage Hotels</li>
+            <li onclick="showAdminSection('users')">👥 Manage Users & Agents</li>
           </ul>
         </div>
         <div>
@@ -1873,6 +944,7 @@
                   <tr>
                     <th>PNR</th>
                     <th>Guest</th>
+                    <th>Referral</th> <!-- ADDED COLUMN HEADER -->
                     <th>Hotel</th>
                     <th>Price</th>
                     <th>Status</th>
@@ -1927,11 +999,31 @@
             </div>
           </div>
 
+          <!-- ADMIN: MANAGE USERS & AGENTS -->
+          <div id="adminSection-users" class="hidden">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Users, Roles & Agent Commissions</h3>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Referral Code</th>
+                    <th>Pending Comm.</th>
+                    <th>Paid Comm.</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- PAGE 7: LOGIN PAGE -->
+    <!-- PAGE 8: LOGIN PAGE -->
     <section id="page-login" class="page-view hidden">
       <div class="form-container">
         <h2 style="margin-bottom: 20px; text-align: center; font-size: 24px;">Welcome Back</h2>
@@ -1944,24 +1036,22 @@
           <input type="password" id="loginPassword" placeholder="••••••••">
         </div>
         <button class="btn btn-primary" onclick="handleLogin()">Sign In</button>
-        <p style="text-align:center; font-size:12px; color:var(--gray); margin-top:14px;">New here? Just sign in with an
-          email/password — an account is created automatically.</p>
+        <p style="text-align:center; font-size:12px; color:var(--gray); margin-top:14px;">New here? Just sign in with an email/password — an account is created automatically.</p>
       </div>
     </section>
 
-    <!-- PAGE 8: HOTEL DETAILS / BOOK NOW -->
+    <!-- PAGE 9: HOTEL DETAILS / BOOK NOW -->
     <section id="page-details" class="page-view hidden">
       <div id="detailsContent"></div>
     </section>
 
-    <!-- PAGE 9: PAYMENT RESULT (bKash/Nagad redirect back here) -->
+    <!-- PAGE 10: PAYMENT RESULT -->
     <section id="page-payment-result" class="page-view hidden">
       <div class="form-container" style="text-align:center;">
         <div id="paymentResultIcon" style="font-size:48px; margin-bottom:12px;"></div>
         <h2 id="paymentResultTitle" style="font-size:22px; font-weight:800;"></h2>
         <p id="paymentResultBody" style="color:var(--gray); margin-top:8px;"></p>
-        <button class="btn btn-primary" style="margin-top:20px;" onclick="navigate('bookings')">View My
-          Bookings</button>
+        <button class="btn btn-primary" style="margin-top:20px;" onclick="navigate('bookings')">View My Bookings</button>
       </div>
     </section>
   </main>
@@ -1970,15 +1060,13 @@
   <div class="mobile-bottom-nav">
     <div class="mobile-nav-items">
       <div class="mobile-nav-item" id="mnav-index" onclick="navigate('index')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9.5 12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
         </svg>
         <span>Home</span>
       </div>
       <div class="mobile-nav-item" id="mnav-hotels" onclick="navigate('hotels')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7" height="7" rx="1" />
           <rect x="14" y="3" width="7" height="7" rx="1" />
           <rect x="3" y="14" width="7" height="7" rx="1" />
@@ -1987,8 +1075,7 @@
         <span>Category</span>
       </div>
       <div class="mobile-nav-item" id="mnav-bookings" onclick="navigate('bookings')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1" />
           <circle cx="20" cy="21" r="1" />
           <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
@@ -1997,15 +1084,13 @@
         <span>Cart</span>
       </div>
       <div class="mobile-nav-item" id="mnav-chat" onclick="showToast('Chat support coming soon!')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
         <span>Chat</span>
       </div>
-      <div class="mobile-nav-item" id="mnav-login" onclick="navigate(currentUser ? 'bookings' : 'login')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
+      <div class="mobile-nav-item" id="mnav-login" onclick="navigate(currentUser ? (currentUser.role === 'admin' ? 'admin' : (currentUser.role === 'agent' ? 'agent' : 'bookings')) : 'login')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
           <circle cx="12" cy="7" r="4" />
         </svg>
@@ -2020,18 +1105,18 @@
       <div>
         <h4>Support</h4>
         <a>Help Center</a>
-        <a >travelhut@gmail.com</a>
-       <a>About Us</a>
+        <a>travelhut@gmail.com</a>
+        <a>About Us</a>
       </div>
       <div>
         <h4>Hosting</h4>
-        <a >Marketing Your Business</a>
+        <a onclick="showToast('Marketing Your Business')">Marketing Your Business</a>
       </div>
       <div>
-        <Travell Hut</h4>
-        <a >Newsroom</a>
-        <a >New features</a>
-        <a >Careers</a>
+        <h4>Travell Hut</h4>
+        <a onclick="showToast('Newsroom')">Newsroom</a>
+        <a onclick="showToast('New features')">New features</a>
+        <a onclick="showToast('Careers')">Careers</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -2047,7 +1132,6 @@
       signOut, onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-    // Firebase console -> Project settings -> General -> Your apps -> SDK config
     const firebaseConfig = {
       apiKey: "AIzaSyAr2QYSm6K9OHWrGnqyIX8GfFdsT8KlJYc",
       authDomain: "travel-hutt-security.firebaseapp.com",
@@ -2055,7 +1139,6 @@
       storageBucket: "travel-hutt-security.firebasestorage.app",
       messagingSenderId: "296563597622",
       appId: "1:296563597622:web:06ebb0f283ee665a4ad397",
-
     };
 
     const app = initializeApp(firebaseConfig);
@@ -2069,36 +1152,40 @@
   <!-- STRIPE.JS (Card payments) -->
   <script src="https://js.stripe.com/v3/"></script>
 
+  <!-- PDF TICKET LIBRARIES -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+
+  <div class="calendar-backdrop" id="calendarBackdrop" onclick="closeAllPopups()"></div>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // ⚠️ Set this to your deployed backend URL before going live.
-    const API_BASE = 'https://travel-hutt.onrender.com/api';
-    // Stripe publishable key (safe to expose client-side) — from dashboard.stripe.com/test/apikeys
+    const API_BASE = 'http://localhost:5000/api'; 
     const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY';
 
     let hotelsData = [];
-    let currentLocationFilter = ''; // active "Where" filter applied to the Hotels page
+    let currentLocationFilter = '';
     let wishlist = [];
     let guestCounts = { adults: 2, children: 0 };
 
-    // DATE RANGE PICKER STATE
-    let checkInDate = null;  // Date object
-    let checkOutDate = null; // Date object
-    let calendarViewDate = new Date(); // month currently shown as the LEFT calendar
+    let checkInDate = null;
+    let checkOutDate = null;
+    let calendarViewDate = new Date();
     calendarViewDate.setDate(1);
     const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    /* ==========================================
-        AUTH SYSTEM (Firebase + backend role sync)
-        ========================================== */
-    let currentUser = null;    // { email, role } — role comes from OUR backend (Mongo), not Firebase
+    let currentUser = null;
+
+    // Move the search popups to <body> so they are always centered on screen
+    ['popup-where', 'popup-when', 'popup-who'].forEach(id => document.body.appendChild(document.getElementById(id)));
+
+    const MIN_STAY_DAYS = 2; // minimum booking length
     let currentIdToken = null;
 
     async function authFetch(path, options = {}) {
       const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-      // Force token refresh to prevent 403 Invalid or expired token errors
       if (window.firebaseAuth && window.firebaseAuth.currentUser) {
         currentIdToken = await window.firebaseAuth.currentUser.getIdToken(true);
       }
@@ -2116,10 +1203,9 @@
         if (fbUser) {
           try {
             currentIdToken = await fbUser.getIdToken(true);
-            const profile = await authFetch('/auth/me'); // creates the Mongo user record on first login
-            currentUser = { email: fbUser.email, role: profile.role };
+            const profile = await authFetch('/auth/me'); 
+            currentUser = profile;
           } catch (err) {
-            console.error('Failed to sync user profile:', err);
             currentUser = { email: fbUser.email, role: 'user' };
           }
         } else {
@@ -2132,7 +1218,6 @@
         }
       });
 
-      // Kick off initial data load once Firebase is wired up
       loadHotels();
     });
 
@@ -2169,33 +1254,103 @@
       navigate('index');
     }
 
+    // =======================================================
+    // STRICT ROLE UI UPDATES
+    // =======================================================
     function updateAuthUI() {
       const navAuth = document.getElementById('navAuth');
       const adminLink = document.getElementById('navAdminLink');
+      const agentLink = document.getElementById('navAgentLink');
+      const bookingsLink = document.getElementById('navBookingsLink');
+      
       const mobileAdminLink = document.getElementById('mobileAdminLink');
+      const mobileAgentLink = document.getElementById('mobileAgentLink');
+      const mobileBookingsLink = document.getElementById('mobileBookingsLink');
+      
       const mobileAuthArea = document.getElementById('mobileAuthArea');
       const mobileLoginLabel = document.getElementById('mobileLoginLabel');
 
       if (currentUser) {
         const displayName = currentUser.email.split('@')[0];
+        let profileRoute = 'bookings';
+        let portalName = 'My Profile';
+        
+        // Strict Display Logic based on exact role
+        if (currentUser.role === 'admin') {
+            profileRoute = 'admin';
+            portalName = 'Admin Dashboard';
+            adminLink.style.display = 'inline-block';
+            if (agentLink) agentLink.style.display = 'none';
+            if (bookingsLink) bookingsLink.style.display = 'none'; // Admin shouldn't see normal user bookings nav
+            
+            if (mobileAdminLink) mobileAdminLink.style.display = 'block';
+            if (mobileAgentLink) mobileAgentLink.style.display = 'none';
+            if (mobileBookingsLink) mobileBookingsLink.style.display = 'none';
+            
+        } else if (currentUser.role === 'agent') {
+            profileRoute = 'agent';
+            portalName = 'Agent Portal';
+            adminLink.style.display = 'none';
+            if (agentLink) agentLink.style.display = 'inline-block';
+            if (bookingsLink) bookingsLink.style.display = 'inline-block';
+            
+            if (mobileAdminLink) mobileAdminLink.style.display = 'none';
+            if (mobileAgentLink) mobileAgentLink.style.display = 'block';
+            if (mobileBookingsLink) mobileBookingsLink.style.display = 'block';
+            
+        } else {
+            // Normal User
+            profileRoute = 'bookings';
+            portalName = 'My Bookings';
+            adminLink.style.display = 'none';
+            if (agentLink) agentLink.style.display = 'none';
+            if (bookingsLink) bookingsLink.style.display = 'inline-block';
+            
+            if (mobileAdminLink) mobileAdminLink.style.display = 'none';
+            if (mobileAgentLink) mobileAgentLink.style.display = 'none';
+            if (mobileBookingsLink) mobileBookingsLink.style.display = 'block';
+        }
+
         navAuth.innerHTML = `
-          <a onclick="navigate('bookings')" class="btn btn-outline" style="padding: 8px 18px; border-radius: 20px; font-size: 13px;">Hi, ${displayName}</a>
-          <a onclick="logout()" class="btn btn-outline" style="padding: 8px 18px; border-radius: 20px; font-size: 13px; margin-left: 8px;">Logout</a>
+          <div class="profile-dropdown-wrapper">
+            <button class="profile-icon-btn" onclick="toggleProfileDropdown(event)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </button>
+            <div class="profile-dropdown-menu" id="profileDropdownMenu">
+              <div class="dropdown-header">Hi, ${displayName}</div>
+              <a onclick="navigate('${profileRoute}'); toggleProfileDropdown(event);">${portalName}</a>
+              <a onclick="logout()">Logout</a>
+            </div>
+          </div>
         `;
-        adminLink.style.display = currentUser.role === 'admin' ? 'inline-block' : 'none';
-        if (mobileAdminLink) mobileAdminLink.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+
         if (mobileAuthArea) mobileAuthArea.innerHTML = `
-          <button class="btn btn-outline" style="margin-bottom:8px;" onclick="navigate('bookings'); toggleMobileMenu();">Hi, ${displayName}</button>
-          <button class="btn btn-primary" onclick="logout(); toggleMobileMenu();">Logout</button>
+          <button class="btn btn-outline" style="margin-bottom:8px; width:100%;" onclick="navigate('${profileRoute}'); toggleMobileMenu();">Hi, ${displayName}</button>
+          <button class="btn btn-primary" style="width:100%;" onclick="logout(); toggleMobileMenu();">Logout</button>
         `;
         if (mobileLoginLabel) mobileLoginLabel.innerText = 'Profile';
       } else {
         navAuth.innerHTML = `<a onclick="navigate('login')" class="btn btn-outline" style="padding: 8px 18px; border-radius: 20px; font-size: 13px;">Login</a>`;
         adminLink.style.display = 'none';
+        if (agentLink) agentLink.style.display = 'none';
+        if (bookingsLink) bookingsLink.style.display = 'none';
+        
         if (mobileAdminLink) mobileAdminLink.style.display = 'none';
-        if (mobileAuthArea) mobileAuthArea.innerHTML = `<button class="btn btn-primary" onclick="navigate('login'); toggleMobileMenu();">Login</button>`;
+        if (mobileAgentLink) mobileAgentLink.style.display = 'none';
+        if (mobileBookingsLink) mobileBookingsLink.style.display = 'none';
+        
+        if (mobileAuthArea) mobileAuthArea.innerHTML = `<button class="btn btn-primary" style="width:100%;" onclick="navigate('login'); toggleMobileMenu();">Login</button>`;
         if (mobileLoginLabel) mobileLoginLabel.innerText = 'Login';
       }
+    }
+
+    function toggleProfileDropdown(event) {
+        if (event) event.stopPropagation();
+        const menu = document.getElementById('profileDropdownMenu');
+        if (menu) menu.classList.toggle('show');
     }
 
     function toggleMobileMenu() {
@@ -2215,8 +1370,15 @@
 
     function navigate(pageId) {
       if (pageId === 'admin' && (!currentUser || currentUser.role !== 'admin')) {
-        showToast('Admin access only. Please login as admin.');
+        showToast('Admin access only.');
         pageId = 'login';
+      }
+      if (pageId === 'agent' && (!currentUser || currentUser.role !== 'agent')) {
+        showToast('Agent access only.');
+        pageId = 'login';
+      }
+      if (pageId === 'bookings' && currentUser && currentUser.role === 'admin') {
+        pageId = 'admin'; 
       }
 
       document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
@@ -2228,12 +1390,9 @@
       document.getElementById('mobileNavOverlay').classList.remove('open');
       setActiveBottomNav(pageId);
 
-      if (pageId === 'admin') {
-        showAdminSection('overview');
-      }
-      if (pageId === 'bookings') {
-        renderBookings();
-      }
+      if (pageId === 'admin') showAdminSection('overview');
+      if (pageId === 'agent') renderAgentPortal();
+      if (pageId === 'bookings') renderBookings();
     }
 
     function showToast(msg) {
@@ -2253,16 +1412,12 @@
       return `${symbol}${Number(hotel.pricePerNight).toLocaleString()}`;
     }
 
-    /* ==========================================
-        HOTELS: LOAD FROM BACKEND
-        ========================================== */
     async function loadHotels() {
       try {
         const res = await fetch(`${API_BASE}/hotels`);
         hotelsData = await res.json();
       } catch (err) {
-        console.error('Failed to load hotels:', err);
-        showToast('Could not reach the server — check API_BASE / backend is running.');
+        showToast('Could not reach the server.');
         hotelsData = [];
       }
       renderHotels();
@@ -2291,11 +1446,12 @@
 
       if (!allHotelsContainer) return;
 
-      const query = (currentLocationFilter || '').trim().toLowerCase();
+      const norm = t => (t || '').toLowerCase().replace(/['’`]/g, '').trim();
+      const query = norm(currentLocationFilter);
       const filtered = query
         ? hotelsData.filter(h =>
-            (h.location || '').toLowerCase().includes(query) ||
-            (h.title || '').toLowerCase().includes(query))
+            norm(h.location).includes(query) ||
+            norm(h.title).includes(query))
         : hotelsData;
 
       if (filterBar) filterBar.classList.toggle('hidden', !query);
@@ -2355,9 +1511,6 @@
       `).join('');
     }
 
-    /* ==========================================
-        HOTEL DETAILS / BOOK NOW PAGE
-        ========================================== */
     let selectedHotelId = null;
 
     function viewHotelDetails(id) {
@@ -2391,6 +1544,12 @@
             <div class="guest-row"><span>Dates</span><strong>${dates || 'Not selected'}</strong></div>
             <div class="guest-row"><span>Guests</span><strong>${totalGuests || 2} guest${totalGuests !== 1 ? 's' : ''}</strong></div>
             <div class="guest-row"><span>Booked by</span><strong>${currentUser ? currentUser.email : 'Guest'}</strong></div>
+            
+            <div class="form-group" style="margin-top: 16px;">
+              <label>Agent Referral Code (Optional)</label>
+              <input type="text" id="bookingReferralCode" placeholder="e.g. AG-XXXX" style="text-transform:uppercase;">
+            </div>
+
             <button class="btn btn-primary" style="margin-top:20px;" onclick="confirmBookingFromDetails()">Confirm Booking</button>
           </div>
         </div>
@@ -2399,9 +1558,6 @@
       navigate('details');
     }
 
-    /* ==========================================
-        PAYMENT METHOD MODAL + BOOKING CREATION
-        ========================================== */
     let pendingHotelId = null;
     let pendingBookingId = null;
     let stripeInstance = null;
@@ -2411,6 +1567,7 @@
     function confirmBookingFromDetails() {
       if (!currentUser) { showToast('Please login first'); navigate('login'); return; }
       if (!checkInDate || !checkOutDate) { showToast('Please select check-in and check-out dates'); return; }
+      if (Math.round((checkOutDate - checkInDate) / 86400000) < MIN_STAY_DAYS) { showToast(`Minimum ${MIN_STAY_DAYS} days booking required`); return; }
       pendingHotelId = selectedHotelId;
       openPaymentModal();
     }
@@ -2426,6 +1583,9 @@
     }
 
     async function payWith(method) {
+      const refInput = document.getElementById('bookingReferralCode');
+      const referralCode = refInput ? refInput.value.trim() : '';
+
       try {
         const booking = await authFetch('/bookings', {
           method: 'POST',
@@ -2435,28 +1595,20 @@
             checkOut: checkOutDate,
             guests: guestCounts,
             paymentMethod: method,
+            appliedReferralCode: referralCode || undefined
           }),
         });
         pendingBookingId = booking._id;
         showToast(`Booking created — PNR ${booking.pnr}`);
 
         if (method === 'bkash') {
-          const { bkashURL } = await authFetch('/payments/bkash/create', {
-            method: 'POST', body: JSON.stringify({ bookingId: booking._id }),
-          });
+          const { bkashURL } = await authFetch('/payments/bkash/create', { method: 'POST', body: JSON.stringify({ bookingId: booking._id }) });
           window.location.href = bkashURL;
-
         } else if (method === 'nagad') {
-          const { redirectURL } = await authFetch('/payments/nagad/create', {
-            method: 'POST', body: JSON.stringify({ bookingId: booking._id }),
-          });
+          const { redirectURL } = await authFetch('/payments/nagad/create', { method: 'POST', body: JSON.stringify({ bookingId: booking._id }) });
           window.location.href = redirectURL;
-
         } else {
-          // 'card' and 'stripe' both use Stripe's hosted card element
-          const { clientSecret } = await authFetch('/payments/stripe/create-intent', {
-            method: 'POST', body: JSON.stringify({ bookingId: booking._id }),
-          });
+          const { clientSecret } = await authFetch('/payments/stripe/create-intent', { method: 'POST', body: JSON.stringify({ bookingId: booking._id }) });
           await mountStripeCardElement(clientSecret);
         }
       } catch (err) {
@@ -2478,14 +1630,9 @@
         elements: stripeElements,
         confirmParams: { return_url: `${window.location.origin}${window.location.pathname}?payment=stripe` },
       });
-      if (error) {
-        showToast(error.message);
-      }
-      // On success, Stripe redirects to return_url; the webhook (server-side)
-      // is the actual source of truth for marking the booking confirmed.
+      if (error) showToast(error.message);
     }
 
-    // Handle bKash/Nagad bounce-back: ?ok=1&pnr=XXXX in the URL
     function handlePaymentRedirect() {
       const params = new URLSearchParams(window.location.search);
       if (!params.has('ok')) return;
@@ -2500,20 +1647,26 @@
       window.history.replaceState({}, '', window.location.pathname);
     }
 
-    /* ==========================================
-        MY BOOKINGS
-        ========================================== */
     let myBookingsCache = [];
 
     async function renderBookings() {
       const container = document.getElementById('bookingsList');
+      const profileCard = document.getElementById('userProfileCard');
       const mobileCartBadge = document.getElementById('mobileCartBadge');
       if (!container) return;
 
       if (!currentUser) {
+        if (profileCard) profileCard.style.display = 'none';
         container.innerHTML = '<p style="color:var(--gray);">Please login to see your reservations.</p>';
         if (mobileCartBadge) mobileCartBadge.innerText = '0';
         return;
+      }
+
+      if (profileCard) {
+        profileCard.style.display = 'flex';
+        document.getElementById('profileEmailDisplay').innerText = currentUser.email;
+        document.getElementById('profileRoleDisplay').innerText = currentUser.role;
+        document.getElementById('profileRefCodeDisplay').innerText = currentUser.referralCode || 'N/A';
       }
 
       try {
@@ -2527,7 +1680,6 @@
       filterMyBookings();
     }
 
-    // Filters the already-fetched bookings by PNR as the user types — no re-fetch needed.
     function filterMyBookings() {
       const container = document.getElementById('bookingsList');
       if (!container) return;
@@ -2540,7 +1692,7 @@
         : myBookingsCache;
 
       if (myBookingsCache.length === 0) {
-        container.innerHTML = '<p style="color:var(--gray);">No reservations found.</p>';
+        container.innerHTML = '<p style="color:var(--gray);">No reservations active.</p>';
         return;
       }
 
@@ -2558,19 +1710,313 @@
             </div>
             <div style="font-size:13px; color:var(--gray); margin-top:4px;">${b.hotel ? b.hotel.location : ''}</div>
             <div style="font-size:12px; margin-top:4px; font-weight:700; color:${b.status === 'cancelled' ? '#ef4444' : b.status === 'confirmed' ? '#10b981' : '#f59e0b'};">
-              ${b.status.replace('_', ' ')} · payment ${b.payment.status}
+              ${b.status.replace('_', ' ')} · ${b.payment.status === 'paid' ? 'Payment done' : b.payment.status === 'failed' ? 'Payment failed' : 'Payment pending'}
             </div>
           </div>
           <div style="text-align:right;">
             <div style="font-weight:700; color:var(--primary); margin-bottom:8px;">${b.currency} ${Number(b.totalAmount).toLocaleString()}</div>
-            ${b.status !== 'cancelled' ? `<button class="btn btn-outline" style="width:auto; padding:6px 14px; font-size:12px;" onclick="cancelBooking('${b._id}')">Cancel</button>` : ''}
+            ${b.status === 'pending' ? `<button class="btn btn-outline" style="width:auto; padding:6px 14px; font-size:12px;" onclick="cancelBooking('${b._id}')">Cancel</button>` : ''}
+            ${b.status !== 'cancelled' ? `<button class="btn" style="width:auto; padding:6px 14px; font-size:12px;" onclick="downloadTicketById('mine','${b._id}')">⬇ Download Ticket</button>` : ''}
           </div>
         </div>
       `).join('');
     }
 
-    // Permanently deletes the booking document from MongoDB (not a soft "cancelled" status).
-    // Requires a DELETE /api/bookings/:id route on the backend — see server.js notes.
+    /* ==========================================
+        PDF TICKET (customer + agent download)
+        ========================================== */
+    const TICKET_LOGO_SRC = 'travel_hutt_logo_1.PNG';
+    const TC = {
+      navy: [1, 42, 98], teal: [0, 186, 184], blue: [0, 118, 181], orange: [249, 142, 12],
+      ink: [10, 31, 68], gray: [100, 116, 139], line: [226, 232, 240], bg: [243, 247, 251],
+      green: [16, 185, 129], amber: [245, 158, 11], red: [239, 68, 68]
+    };
+
+    function ticketLoadImage(src, opts = {}) {
+      const { maxW = 700, cover = null, mime = 'image/png', quality = 0.85 } = opts;
+      return new Promise(resolve => {
+        if (!src) return resolve(null);
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        const timer = setTimeout(() => resolve(null), 5000);
+        img.onload = () => {
+          clearTimeout(timer);
+          try {
+            let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
+            if (cover) {
+              const target = cover.w / cover.h, current = sw / sh;
+              if (current > target) { const nw = sh * target; sx = (sw - nw) / 2; sw = nw; }
+              else { const nh = sw / target; sy = (sh - nh) / 2; sh = nh; }
+            }
+            const outW = Math.min(maxW, sw);
+            const outH = outW * (sh / sw);
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(outW);
+            canvas.height = Math.round(outH);
+            const ctx = canvas.getContext('2d');
+            if (mime === 'image/jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+            resolve({ data: canvas.toDataURL(mime, quality), w: canvas.width, h: canvas.height, format: mime === 'image/jpeg' ? 'JPEG' : 'PNG' });
+          } catch (e) { resolve(null); }
+        };
+        img.onerror = () => { clearTimeout(timer); resolve(null); };
+        img.src = src;
+      });
+    }
+
+    function ticketDate(d) {
+      return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+    function ticketWeekday(d) {
+      return new Date(d).toLocaleDateString('en-GB', { weekday: 'long' });
+    }
+
+    function ticketDrawQR(doc, text, x, y, size) {
+      if (typeof qrcode === 'undefined') return false;
+      try {
+        const qr = qrcode(0, 'M');
+        qr.addData(text);
+        qr.make();
+        const n = qr.getModuleCount();
+        const cell = size / n;
+        doc.setFillColor(...TC.navy);
+        for (let r = 0; r < n; r++) {
+          for (let c = 0; c < n; c++) {
+            if (qr.isDark(r, c)) doc.rect(x + c * cell, y + r * cell, cell + 0.02, cell + 0.02, 'F');
+          }
+        }
+        return true;
+      } catch (e) { return false; }
+    }
+
+    async function downloadTicket(b, guestEmail, copyType) {
+      if (!b) return;
+      if (b.status === 'cancelled') {
+        showToast('This booking was cancelled, so no ticket is available.');
+        return;
+      }
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        showToast('PDF library could not load. Please check your internet connection and refresh.');
+        return;
+      }
+      showToast('Preparing your ticket...');
+
+      const hotelTitle = (b.hotel && b.hotel.title) || 'Hotel';
+      const hotelLocation = (b.hotel && b.hotel.location) || '';
+      const [logo, hotelImg] = await Promise.all([
+        ticketLoadImage(TICKET_LOGO_SRC, { maxW: 700 }),
+        ticketLoadImage(b.hotel && b.hotel.image, { maxW: 600, cover: { w: 52, h: 36 }, mime: 'image/jpeg' })
+      ]);
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+      const W = 210, H = 297;
+
+      const fill = c => doc.setFillColor(c[0], c[1], c[2]);
+      const ink = c => doc.setTextColor(c[0], c[1], c[2]);
+      const label = (txt, x, y, align) => {
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(7); ink(TC.gray);
+        doc.text(String(txt).toUpperCase(), x, y, align ? { align } : undefined);
+      };
+      const value = (txt, x, y, size, color, align) => {
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(size || 11); ink(color || TC.ink);
+        doc.text(String(txt), x, y, align ? { align } : undefined);
+      };
+      const pill = (txt, rightX, y, color) => {
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        const w = doc.getTextWidth(txt) + 10;
+        fill(color); doc.roundedRect(rightX - w, y, w, 7.5, 3.75, 3.75, 'F');
+        ink([255, 255, 255]); doc.text(txt, rightX - w / 2, y + 5.1, { align: 'center' });
+        return w;
+      };
+
+      const nights = Math.max(1, Math.round((new Date(b.checkOut) - new Date(b.checkIn)) / 86400000));
+      const adults = (b.guests && b.guests.adults) != null ? b.guests.adults : 2;
+      const children = (b.guests && b.guests.children) != null ? b.guests.children : 0;
+      const methodNames = { bkash: 'bKash', nagad: 'Nagad', card: 'Card', stripe: 'Card (Stripe)' };
+      const payStatus = (b.payment && b.payment.status) || 'pending';
+      const payColor = payStatus === 'paid' ? TC.green : payStatus === 'failed' ? TC.red : TC.amber;
+      const statusColor = b.status === 'confirmed' ? TC.green : b.status === 'cancelled' ? TC.red : TC.amber;
+
+      // ---------- page background ----------
+      fill(TC.bg); doc.rect(0, 0, W, H, 'F');
+
+      // ---------- header ----------
+      fill(TC.navy); doc.rect(0, 0, W, 52, 'F');
+      const steps = 48;
+      for (let i = 0; i < steps; i++) {
+        const t = i / (steps - 1);
+        doc.setFillColor(
+          Math.round(TC.blue[0] + (TC.teal[0] - TC.blue[0]) * t),
+          Math.round(TC.blue[1] + (TC.teal[1] - TC.blue[1]) * t),
+          Math.round(TC.blue[2] + (TC.teal[2] - TC.blue[2]) * t));
+        doc.rect(i * (W / steps), 52, W / steps + 0.3, 2.4, 'F');
+      }
+      fill([255, 255, 255]); doc.roundedRect(14, 11, 78, 28, 4, 4, 'F');
+      if (logo) {
+        const maxLW = 70, maxLH = 20;
+        let lw = maxLW, lh = lw * (logo.h / logo.w);
+        if (lh > maxLH) { lh = maxLH; lw = lh * (logo.w / logo.h); }
+        doc.addImage(logo.data, logo.format, 14 + (78 - lw) / 2, 11 + (28 - lh) / 2, lw, lh);
+      } else {
+        value('TravelHutt', 53, 29, 18, TC.navy, 'center');
+      }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(21); ink([255, 255, 255]);
+      doc.text('HOTEL VOUCHER', 196, 22, { align: 'right' });
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); ink([150, 232, 230]);
+      doc.text('Booking confirmation & e-ticket', 196, 29, { align: 'right' });
+      const sw = pill(String(b.status).toUpperCase(), 196, 34, statusColor);
+      if (copyType === 'agent') pill('AGENT COPY', 196 - sw - 4, 34, TC.orange);
+
+      // ---------- ticket card ----------
+      fill(TC.line); doc.roundedRect(14.6, 63.4, 182, 210, 5, 5, 'F');   // soft shadow
+      fill([255, 255, 255]); doc.roundedRect(14, 62, 182, 210, 5, 5, 'F');
+
+      // reference + booked on
+      label('Booking reference', 24, 74);
+      value(b.pnr, 24, 87, 28, TC.teal);
+      label('Booked on', 186, 74, 'right');
+      value(ticketDate(b.createdAt || b.checkIn), 186, 81, 11, TC.ink, 'right');
+      doc.setDrawColor(...TC.line); doc.setLineWidth(0.3); doc.line(24, 95, 186, 95);
+
+      // hotel
+      label('Hotel', 24, 102);
+      const nameW = hotelImg ? 100 : 160;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(17);
+      const nameLines = doc.splitTextToSize(hotelTitle, nameW).slice(0, 2);
+      ink(TC.ink); doc.text(nameLines, 24, 112);
+      const locY = 112 + nameLines.length * 7 + 1;
+      fill(TC.orange); doc.circle(25.2, locY - 1.2, 1.4, 'F');
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); ink(TC.gray);
+      doc.text(hotelLocation, 29, locY, { maxWidth: nameW - 6 });
+      if (hotelImg) {
+        doc.addImage(hotelImg.data, hotelImg.format, 134, 99, 52, 36);
+        doc.setDrawColor(...TC.line); doc.setLineWidth(0.3); doc.rect(134, 99, 52, 36, 'S');
+      }
+
+      // stay schedule panel
+      fill(TC.bg); doc.roundedRect(24, 142, 162, 30, 3, 3, 'F');
+      label('Check-in', 34, 151);
+      value(ticketDate(b.checkIn), 34, 160, 15, TC.ink);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); ink(TC.gray);
+      doc.text(ticketWeekday(b.checkIn), 34, 166);
+      label('Check-out', 176, 151, 'right');
+      value(ticketDate(b.checkOut), 176, 160, 15, TC.ink, 'right');
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); ink(TC.gray);
+      doc.text(ticketWeekday(b.checkOut), 176, 166, { align: 'right' });
+      doc.setDrawColor(...TC.teal); doc.setLineWidth(0.5); doc.setLineDashPattern([1.6, 1.6], 0);
+      doc.line(72, 157, 94, 157); doc.line(116, 157, 138, 157);
+      doc.setLineDashPattern([], 0);
+      fill(TC.navy); doc.circle(105, 157, 9, 'F');
+      value(nights, 105, 158.2, 13, [255, 255, 255], 'center');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(6); ink([150, 232, 230]);
+      doc.text(nights > 1 ? 'NIGHTS' : 'NIGHT', 105, 162.6, { align: 'center' });
+
+      // guest + payment details
+      label('Guest email', 24, 185);
+      const emailText = doc.splitTextToSize(guestEmail || '-', 66)[0];
+      value(emailText, 24, 192, 10.5);
+      label('Guests', 100, 185);
+      value(`${adults} Adult${adults === 1 ? '' : 's'}${children ? ` + ${children} Child${children === 1 ? '' : 'ren'}` : ''}`, 100, 192, 10.5);
+      label('Payment method', 150, 185);
+      value(methodNames[b.payment && b.payment.method] || (b.payment && b.payment.method) || '-', 150, 192, 10.5);
+
+      label('Payment status', 24, 203);
+      value(payStatus.toUpperCase(), 24, 211, 11, payColor);
+      label('Referral code', 100, 203);
+      value(b.appliedReferralCode || '-', 100, 211, 10.5);
+      label('Total amount', 150, 203);
+      value(`${b.currency || 'BDT'} ${Number(b.totalAmount).toLocaleString('en-US')}`, 150, 211, 12, TC.teal);
+
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8); ink(TC.gray);
+      if (b.status === 'confirmed') {
+        doc.text('Please present this voucher together with a valid photo ID at check-in.', 24, 221);
+      } else {
+        ink(TC.amber);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Awaiting confirmation - not valid for check-in until the status shows CONFIRMED. Scan the QR code for the live status.', 24, 221, { maxWidth: 162 });
+      }
+
+      // perforation + notches
+      doc.setDrawColor(...TC.line); doc.setLineWidth(0.4); doc.setLineDashPattern([2, 2], 0);
+      doc.line(19, 232, 191, 232);
+      doc.setLineDashPattern([], 0);
+      fill(TC.bg); doc.circle(14, 232, 5, 'F'); doc.circle(196, 232, 5, 'F');
+
+      // stub: QR + summary
+      fill([255, 255, 255]); doc.setDrawColor(...TC.line); doc.setLineWidth(0.3);
+      doc.roundedRect(24, 239, 30, 30, 2, 2, 'FD');
+      const verifyBase = API_BASE.replace(/\/api\/?$/, '');
+      const qrText = b.ticketUrl || (b.ticketToken ? `${verifyBase}/ticket/${b.ticketToken}` : `TRAVELHUTT|${b.pnr}|${hotelTitle}|${String(b.checkIn).slice(0, 10)}|${nights}N`);
+      const qrOk = ticketDrawQR(doc, qrText, 26, 241, 26);
+      if (!qrOk) { value('PNR', 39, 255, 10, TC.navy, 'center'); }
+      label('Scan for live booking details', 62, 247);
+      value(b.pnr, 62, 258, 20, TC.teal);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); ink(TC.ink);
+      doc.text(doc.splitTextToSize(hotelTitle, 118)[0], 62, 265);
+      ink(TC.gray);
+      doc.text(`${ticketDate(b.checkIn)}  -  ${ticketDate(b.checkOut)}  |  ${nights} night${nights > 1 ? 's' : ''}`, 62, 270);
+
+      // ---------- footer ----------
+      fill(TC.navy); doc.rect(0, 281, W, 16, 'F');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9); ink([255, 255, 255]);
+      doc.text('TravelHutt', W / 2, 288, { align: 'center' });
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7); ink([150, 232, 230]);
+      doc.text(`Computer-generated voucher - issued ${ticketDate(new Date())}. No signature required.`, W / 2, 293, { align: 'center' });
+
+      doc.save(`TravelHutt-Ticket-${b.pnr}.pdf`);
+      showToast('Ticket downloaded');
+    }
+
+    function downloadTicketById(source, id) {
+      if (source === 'admin') {
+        const b = allBookingsCache.find(x => x._id === id);
+        return downloadTicket(b, b && b.user ? b.user.email : '', 'customer');
+      }
+      if (source === 'agent') {
+        const b = agentBookingsCache.find(x => x._id === id);
+        return downloadTicket(b, b && b.user ? b.user.email : '', 'agent');
+      }
+      const b = myBookingsCache.find(x => x._id === id);
+      return downloadTicket(b, currentUser ? currentUser.email : '', 'customer');
+    }
+
+    let agentBookingsCache = [];
+    async function renderAgentBookings() {
+      const box = document.getElementById('agentBookingsList');
+      if (!box) return;
+      try {
+        agentBookingsCache = await authFetch('/bookings/agent');
+      } catch (err) {
+        box.innerHTML = `<p style="color:var(--gray);">Could not load bookings: ${err.message}</p>`;
+        return;
+      }
+      if (!agentBookingsCache.length) {
+        box.innerHTML = '<p style="color:var(--gray);">No bookings with your referral code yet.</p>';
+        return;
+      }
+      box.innerHTML = agentBookingsCache.map(b => `
+        <div class="feature-card booking-row" style="text-align:left; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+          <div>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <strong>${b.hotel ? b.hotel.title : 'Hotel'}</strong>
+              <span class="pnr-tag">PNR ${b.pnr}</span>
+            </div>
+            <div style="font-size:13px; color:var(--gray); margin-top:4px;">${b.user ? b.user.email : ''}</div>
+            <div style="font-size:12px; margin-top:4px; font-weight:700; color:${b.status === 'cancelled' ? '#ef4444' : b.status === 'confirmed' ? '#10b981' : '#f59e0b'};">
+              ${b.status.replace('_', ' ')} · ${b.payment.status === 'paid' ? 'Payment done' : b.payment.status === 'failed' ? 'Payment failed' : 'Payment pending'}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:700; color:var(--primary); margin-bottom:8px;">${b.currency} ${Number(b.totalAmount).toLocaleString()}</div>
+            ${b.status !== 'cancelled'
+              ? `<button class="btn" style="width:auto; padding:6px 14px; font-size:12px;" onclick="downloadTicketById('agent','${b._id}')">⬇ Download Ticket</button>`
+              : '<span style="font-size:12px; color:var(--gray);">Cancelled</span>'}
+          </div>
+        </div>
+      `).join('');
+    }
+
     async function cancelBooking(id) {
       if (!confirm('Cancel this booking? This will permanently delete it and cannot be undone.')) return;
       try {
@@ -2584,45 +2030,62 @@
       }
     }
 
-    /* ==========================================
-        SEARCH POPUP INTERACTION ENGINE
-        ========================================== */
+    async function renderAgentPortal() {
+      try {
+        const profile = await authFetch('/auth/me');
+        currentUser = profile;
+        document.getElementById('agentDisplayRefCode').innerText = profile.referralCode || 'NOT ASSIGNED';
+        // FIXED schema variables matching the backend
+        document.getElementById('agentPendingCommission').innerText = `BDT ${(profile.pendingComm || 0).toLocaleString()}`;
+        document.getElementById('agentPaidCommission').innerText = `BDT ${(profile.paidComm || 0).toLocaleString()}`;
+        renderAgentBookings();
+      } catch (err) {
+        showToast('Could not load agent details: ' + err.message);
+      }
+    }
+
     function togglePopup(type, event) {
       if (event) event.stopPropagation();
-
       const targetPop = document.getElementById('popup-' + type);
       const isAlreadyShow = targetPop.classList.contains('show');
-
       closeAllPopups();
-
       if (!isAlreadyShow) {
         targetPop.classList.add('show');
         document.getElementById('seg-' + type).classList.add('active-segment');
+        document.getElementById('calendarBackdrop').classList.add('show');
       }
     }
 
     function closeAllPopups() {
       document.querySelectorAll('.search-popup').forEach(p => p.classList.remove('show'));
       document.querySelectorAll('.capsule-segment').forEach(s => s.classList.remove('active-segment'));
+      const bd = document.getElementById('calendarBackdrop');
+      if (bd) bd.classList.remove('show');
     }
 
     function selectDestination(name, country) {
-      document.getElementById('searchDest').value = `${name}, ${country}`;
+      const input = document.getElementById('searchDest');
+      input.value = `${name}, ${country}`;
+      input.dataset.filter = name;          // only this location's hotels will be shown
+      applyLocationFilter(name);
       closeAllPopups();
-      togglePopup('when'); // Auto open dates next
+      togglePopup('when');
     }
 
-    /* ==========================================
-        CALENDAR: TWO-MONTH RANGE PICKER
-        ========================================== */
+    function selectAllDestinations() {
+      const input = document.getElementById('searchDest');
+      input.value = '';
+      input.dataset.filter = '';
+      applyLocationFilter('');              // show all hotels
+      closeAllPopups();
+      togglePopup('when');
+    }
+
     function shiftCalendarMonth(direction) {
       const next = new Date(calendarViewDate);
       next.setMonth(next.getMonth() + direction);
-
-      // Don't allow navigating the left calendar before the current month
       const minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       if (next < minMonth) return;
-
       calendarViewDate = next;
       renderCalendar();
     }
@@ -2632,7 +2095,7 @@
       const month = monthDate.getMonth();
       const firstDay = new Date(year, month, 1);
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const startOffset = firstDay.getDay(); // 0=Sun
+      const startOffset = firstDay.getDay();
 
       let cellsHtml = `
         <div class="calendar-day-head">Sun</div><div class="calendar-day-head">Mon</div><div class="calendar-day-head">Tue</div>
@@ -2647,8 +2110,10 @@
         const cellDate = new Date(year, month, d);
         const classes = ['calendar-day'];
 
-        if (cellDate < today) {
-          classes.push('disabled');
+        if (cellDate < today) classes.push('disabled');
+        if (checkInDate && !checkOutDate) {
+          const diff = Math.round((cellDate - checkInDate) / 86400000);
+          if (diff > 0 && diff < MIN_STAY_DAYS) classes.push('min-stay');
         }
         if (checkInDate && cellDate.getTime() === checkInDate.getTime()) classes.push('selected');
         if (checkOutDate && cellDate.getTime() === checkOutDate.getTime()) classes.push('selected');
@@ -2656,7 +2121,6 @@
 
         cellsHtml += `<div class="${classes.join(' ')}" onclick="handleDateClick(${year}, ${month}, ${d})">${d}</div>`;
       }
-
       return cellsHtml;
     }
 
@@ -2685,15 +2149,15 @@
         checkOutDate = null;
         document.getElementById('calendarPrompt').innerText = 'Select Check-out Date';
       } else if (checkInDate && !checkOutDate) {
-        if (clicked > checkInDate) {
+        const stayDays = Math.round((clicked - checkInDate) / 86400000);
+        if (clicked > checkInDate && stayDays < MIN_STAY_DAYS) {
+          showToast(`Minimum ${MIN_STAY_DAYS} days booking required. Please select a later check-out date.`);
+          return;
+        } else if (clicked > checkInDate) {
           checkOutDate = clicked;
           const totalDays = Math.round((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
-          document.getElementById('searchDates').value =
-            `${formatShortDate(checkInDate)} - ${formatShortDate(checkOutDate)} (${totalDays} day${totalDays > 1 ? 's' : ''})`;
-          setTimeout(() => {
-            closeAllPopups();
-            togglePopup('who'); // Auto open guests
-          }, 250);
+          document.getElementById('searchDates').value = `${formatShortDate(checkInDate)} - ${formatShortDate(checkOutDate)} (${totalDays} day${totalDays > 1 ? 's' : ''})`;
+          setTimeout(() => { closeAllPopups(); togglePopup('who'); }, 250);
         } else {
           checkInDate = clicked;
         }
@@ -2702,7 +2166,6 @@
       if (checkInDate && !checkOutDate) {
         document.getElementById('searchDates').value = `${formatShortDate(checkInDate)} - Check-out`;
       }
-
       renderCalendar();
     }
 
@@ -2719,12 +2182,10 @@
       renderCalendar();
     }
 
-    /* GUEST COUNTER LOGIC */
     function updateGuests(type, change, event) {
       if (event) event.stopPropagation();
       guestCounts[type] = Math.max(0, guestCounts[type] + change);
       document.getElementById('cnt-' + type).innerText = guestCounts[type];
-
       const totalGuests = guestCounts.adults + guestCounts.children;
       document.getElementById('searchGuests').value = `${totalGuests} Guest${totalGuests > 1 ? 's' : ''} (${guestCounts.adults}A, ${guestCounts.children}C)`;
     }
@@ -2732,17 +2193,25 @@
     function executeSearch(event) {
       if (event) event.stopPropagation();
       closeAllPopups();
-      const destValue = document.getElementById('searchDest').value.trim();
+      const destInput = document.getElementById('searchDest');
+      const destValue = (destInput.dataset.filter !== undefined ? destInput.dataset.filter : destInput.value).trim();
       applyLocationFilter(destValue);
       showToast(destValue ? 'Searching in ' + destValue : 'Searching available hotel...');
       navigate('hotels');
     }
 
-    // Global Dismiss on outside click
     document.addEventListener('click', function (e) {
+      // Close search capsule popups
       const capsule = document.getElementById('searchCapsule');
-      if (capsule && !capsule.contains(e.target)) {
-        closeAllPopups();
+      if (capsule && !capsule.contains(e.target)) closeAllPopups();
+      
+      // Close profile dropdown menu
+      const profileDropdown = document.getElementById('profileDropdownMenu');
+      const profileWrapper = document.querySelector('.profile-dropdown-wrapper');
+      if (profileDropdown && profileDropdown.classList.contains('show')) {
+          if (profileWrapper && !profileWrapper.contains(e.target)) {
+              profileDropdown.classList.remove('show');
+          }
       }
     });
 
@@ -2753,21 +2222,19 @@
     }
 
     /* ==========================================
-        ADMIN: SECTION SWITCHING
+        ADMIN MANAGEMENT PORTAL
         ========================================== */
     function showAdminSection(section) {
-      ['overview', 'bookings', 'hotels'].forEach(s => {
+      ['overview', 'bookings', 'hotels', 'users'].forEach(s => {
         const el = document.getElementById('adminSection-' + s);
         if (el) el.classList.toggle('hidden', s !== section);
       });
       if (section === 'bookings') renderAdminBookings();
       if (section === 'hotels') renderAdminHotels();
+      if (section === 'users') renderAdminUsers();
       if (section === 'overview') updateAdminStats();
     }
 
-    /* ==========================================
-        ADMIN: MANAGE BOOKINGS (backend-backed)
-        ========================================== */
     let allBookingsCache = [];
 
     async function renderAdminBookings() {
@@ -2777,14 +2244,12 @@
       try {
         allBookingsCache = await authFetch('/bookings');
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="color:var(--gray); text-align:center;">${err.message}</td></tr>`;
         return;
       }
-
       filterAdminBookings();
     }
 
-    // Filters the already-fetched admin bookings by PNR as the user types — no re-fetch needed.
     function filterAdminBookings() {
       const tbody = document.getElementById('adminTableBody');
       if (!tbody) return;
@@ -2793,7 +2258,7 @@
       const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
 
       if (allBookingsCache.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">No bookings yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="color:var(--gray); text-align:center;">No bookings yet.</td></tr>`;
         return;
       }
 
@@ -2802,44 +2267,63 @@
         : allBookingsCache;
 
       if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">No booking found for PNR "${searchInput.value.trim()}".</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="color:var(--gray); text-align:center;">No booking found for PNR "${searchInput.value.trim()}".</td></tr>`;
         return;
       }
 
+      // ADDED: The referral code column renderer here
       tbody.innerHTML = rows.map(b => `
         <tr>
           <td><span class="pnr-tag">${b.pnr}</span></td>
           <td>${b.user ? b.user.email : ''}</td>
+          <td><span class="pnr-tag" style="background:#f0fdf4; color:#166534;">${b.appliedReferralCode || '-'}</span></td>
           <td>${b.hotel ? b.hotel.title : ''}</td>
           <td>${b.currency} ${Number(b.totalAmount).toLocaleString()}</td>
           <td><span style="color:${b.status === 'cancelled' ? '#ef4444' : b.status === 'confirmed' ? '#10b981' : '#f59e0b'}; font-weight: 700;">${b.status.replace('_', ' ')}</span></td>
           <td style="display:flex; gap:8px; flex-wrap:wrap;">
-            ${b.status !== 'confirmed' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px; background:#10b981; color:#fff; border:none;" onclick="toggleBookingStatus('${b._id}', 'confirmed')">Confirm</button>` : ''}
+            ${b.status === 'pending' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px; background:#10b981; color:#fff; border:none;" onclick="toggleBookingStatus('${b._id}', 'confirmed')">Confirm</button>` : ''}
             ${b.status !== 'cancelled' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="toggleBookingStatus('${b._id}', 'cancelled')">Cancel</button>` : ''}
-            ${b.status === 'cancelled' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="toggleBookingStatus('${b._id}', 'confirmed')">Restore</button>` : ''}
+            ${b.status === 'cancelled' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="toggleBookingStatus('${b._id}', 'pending')">Restore</button>` : ''}
+            ${b.status !== 'cancelled' ? `<button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px;" onclick="downloadTicketById('admin', '${b._id}')">Ticket</button>` : ''}
+            <button class="counter-btn" style="width:auto; border-radius:var(--radius-sm); padding:6px 12px; font-size:12px; background:#ef4444; color:#fff; border:none;" onclick="adminDeleteBooking('${b._id}', '${b.pnr}')">Delete</button>
           </td>
         </tr>
       `).join('');
     }
 
-    // Admin sets a booking's status explicitly (confirmed / cancelled / restored).
-    // Because renderBookings() on the client's "My Bookings" page always re-fetches
-    // fresh data from the backend, whatever the admin sets here shows up there too.
     async function toggleBookingStatus(id, nextStatus) {
+      const labels = {
+        confirmed: 'Confirm this booking?',
+        cancelled: 'Cancel this booking?',
+        pending: 'Restore this booking to Pending?'
+      };
+      if (!confirm(labels[nextStatus] || 'Change this booking status?')) return;
       try {
-        await authFetch(`/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: nextStatus }) });
-        showToast(`Booking marked as ${nextStatus}`);
-        renderAdminBookings();
-        renderBookings();
+        const updated = await authFetch(`/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: nextStatus }) });
+        // update only this one booking in the cache
+        const idx = allBookingsCache.findIndex(b => b._id === id);
+        if (idx !== -1) allBookingsCache[idx].status = updated.status;
+        showToast(`Booking marked as ${updated.status}`);
+        filterAdminBookings();
         updateAdminStats();
       } catch (err) {
         showToast(err.message);
       }
     }
 
-    /* ==========================================
-        ADMIN: MANAGE HOTELS (backend-backed)
-        ========================================== */
+    async function adminDeleteBooking(id, pnr) {
+      if (!confirm(`Permanently delete booking ${pnr}? It will be removed from the site and the database. This cannot be undone.`)) return;
+      try {
+        await authFetch(`/bookings/${id}`, { method: 'DELETE' });
+        allBookingsCache = allBookingsCache.filter(b => b._id !== id);
+        showToast(`Booking ${pnr} deleted`);
+        filterAdminBookings();
+        updateAdminStats();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
     async function renderAdminHotels() {
       const tbody = document.getElementById('adminHotelsTableBody');
       if (!tbody) return;
@@ -2927,9 +2411,57 @@
       }
     }
 
-    /* ==========================================
-        ADMIN: DASHBOARD STATS
-        ========================================== */
+    async function renderAdminUsers() {
+      const tbody = document.getElementById('adminUsersTableBody');
+      if (!tbody) return;
+
+      try {
+        const users = await authFetch('/users');
+        // FIXED schema variables matching the backend
+        tbody.innerHTML = users.map(u => `
+          <tr>
+            <td>${u.email}</td>
+            <td>
+              <select onchange="updateUserRole('${u._id}', this.value)" style="padding:6px; border-radius:6px; border:1px solid var(--border);">
+                <option value="user" ${u.role === 'user' ? 'selected' : ''}>User</option>
+                <option value="agent" ${u.role === 'agent' ? 'selected' : ''}>Agent</option>
+                <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+              </select>
+            </td>
+            <td><span class="pnr-tag">${u.referralCode || '-'}</span></td>
+            <td><strong>BDT ${(u.pendingComm || 0).toLocaleString()}</strong></td>
+            <td>BDT ${(u.paidComm || 0).toLocaleString()}</td>
+            <td>
+              ${u.pendingComm > 0 ? `<button class="btn btn-primary" style="padding:6px 14px; font-size:12px; width:auto;" onclick="markCommissionPaid('${u._id}')">Mark Paid</button>` : `<span style="color:var(--gray); font-size:12px;">Settled</span>`}
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--gray); text-align:center;">Failed to load users: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function updateUserRole(userId, newRole) {
+      try {
+        await authFetch(`/users/${userId}/role`, { method: 'PATCH', body: JSON.stringify({ role: newRole }) });
+        showToast(`User role changed to ${newRole}`);
+        renderAdminUsers();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    async function markCommissionPaid(userId) {
+      if (!confirm('Mark this agent commission as Paid? Ensure you have already sent the payment off-platform via bKash/Nagad.')) return;
+      try {
+        await authFetch(`/users/${userId}/pay-commission`, { method: 'POST' });
+        showToast('Commission marked as Paid successfully!');
+        renderAdminUsers();
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
     async function updateAdminStats() {
       const totalHotelsEl = document.getElementById('statTotalHotels');
       const totalBookingsEl = document.getElementById('statTotalBookings');
@@ -2937,7 +2469,6 @@
       const cancelledEl = document.getElementById('statCancelled');
 
       if (totalHotelsEl) totalHotelsEl.innerText = hotelsData.length;
-
       if (!currentUser || currentUser.role !== 'admin') return;
 
       try {
@@ -2946,11 +2477,10 @@
         if (confirmedEl) confirmedEl.innerText = bookings.filter(b => b.status === 'confirmed').length;
         if (cancelledEl) cancelledEl.innerText = bookings.filter(b => b.status === 'cancelled').length;
       } catch (err) {
-        // admin stats are non-critical — fail quietly
+        // non-critical
       }
     }
 
-    // Initialize
     window.onload = function () {
       renderCalendar();
       updateAuthUI();
@@ -2959,7 +2489,6 @@
       document.getElementById('mobileCartBadge').innerText = '0';
       document.getElementById('searchGuests').value = '2 Guests (2A, 0C)';
       handlePaymentRedirect();
-      // loadHotels() is triggered by the 'firebase-ready' event once auth is wired up
     };
   </script>
 </body>
