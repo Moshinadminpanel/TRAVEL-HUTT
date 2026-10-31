@@ -25,15 +25,43 @@ const apiLimiter = rateLimit({
 app.use('/api', apiLimiter);
 
 // FIX: use the modular Firebase Admin API (initializeApp + cert imported above)
+// Credentials are loaded from the first source that exists:
+//   1) Render Secret File:  /etc/secrets/serviceAccountKey.json
+//   2) Local file:          ./serviceAccountKey.json  (keep it in .gitignore!)
+//   3) Base64 env variable: FIREBASE_SERVICE_ACCOUNT_BASE64 (whole JSON, base64 encoded)
+//   4) Separate env vars:   FIREBASE_PROJECT_ID / FIREBASE_CLIENT_EMAIL / FIREBASE_PRIVATE_KEY
+const fs = require('fs');
+const path = require('path');
+
+function loadFirebaseCredentials() {
+    const secretFile = '/etc/secrets/serviceAccountKey.json';
+    const localFile = path.join(__dirname, 'serviceAccountKey.json');
+
+    if (fs.existsSync(secretFile)) {
+        console.log('🔑 Firebase: using Render secret file');
+        return JSON.parse(fs.readFileSync(secretFile, 'utf8'));
+    }
+    if (fs.existsSync(localFile)) {
+        console.log('🔑 Firebase: using local serviceAccountKey.json');
+        return JSON.parse(fs.readFileSync(localFile, 'utf8'));
+    }
+    if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
+        console.log('🔑 Firebase: using FIREBASE_SERVICE_ACCOUNT_BASE64');
+        return JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8'));
+    }
+    console.log('🔑 Firebase: using separate env variables');
+    return {
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: (process.env.FIREBASE_PRIVATE_KEY || '')
+            .replace(/^["']|["']$/g, '')   // remove accidental surrounding quotes
+            .replace(/\\n/g, '\n')         // turn literal \n into real newlines
+            .trim()
+    };
+}
+
 initializeApp({
-  credential: cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: (process.env.FIREBASE_PRIVATE_KEY || '')
-        .replace(/^["']|["']$/g, '')   // remove accidental surrounding quotes
-        .replace(/\\n/g, '\n')         // turn literal \n into real newlines
-        .trim()
-  })
+  credential: cert(loadFirebaseCredentials())
 });
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
