@@ -24,16 +24,16 @@ const apiLimiter = rateLimit({
 });
 app.use('/api', apiLimiter);
 
-const admin = require("firebase-admin");
-
-admin.initializeApp({
-  credential: admin.credential.cert({
+// FIX: use the modular Firebase Admin API (initializeApp + cert imported above)
+initializeApp({
+  credential: cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+    privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n')
   })
 });
 
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 
 
 // ==========================================
@@ -559,7 +559,7 @@ app.post('/api/payments/nagad/create', verifyToken, async (req, res) => {
 });
 
 
-// ==========================================
+// ==========================================   
 // 5. SERVER STARTUP
 // ==========================================
 const PORT = process.env.PORT || 5000;
