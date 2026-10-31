@@ -594,7 +594,11 @@ app.post('/api/payments/nagad/create', verifyToken, async (req, res) => {
 // 5. SERVER STARTUP
 // ==========================================
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/travelheart';
+const MONGO_URI = (process.env.MONGO_URI || 'mongodb://localhost:27017/travelheart')
+    .replace(/[\r\n]/g, '')          // remove accidental line breaks
+    .trim()                          // remove accidental spaces
+    .replace(/^["']|["']$/g, '')     // remove accidental surrounding quotes
+    .trim();
 
 mongoose.connect(MONGO_URI)
     .then(async () => {
