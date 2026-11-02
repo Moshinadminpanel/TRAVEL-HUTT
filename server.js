@@ -115,7 +115,7 @@ const bookingSchema = new mongoose.Schema({
 // Link encoded in the ticket's QR code. Set PUBLIC_URL in .env to your live server address
 // (e.g. https://api.yoursite.com) so phones can open it.
 bookingSchema.virtual('ticketUrl').get(function () {
-    const base = (process.env.PUBLIC_URL || `http://localhost:${process.env.PORT || 5000}`).replace(/\/+$/, '');
+    const base = (process.env.PUBLIC_URL || 'https://travel-hutt.onrender.com').replace(/\/+$/, '');
     return `${base}/ticket/${this.ticketToken}`;
 });
 const Booking = mongoose.model('Booking', bookingSchema);
@@ -580,13 +580,13 @@ app.post('/api/payments/stripe/create-intent', verifyToken, async (req, res) => 
 app.post('/api/payments/bkash/create', verifyToken, async (req, res) => {
     const { bookingId } = req.body;
     const booking = await Booking.findById(bookingId);
-    res.json({ bkashURL: `http://localhost:5500/index.html?payment=bkash&ok=1&pnr=${booking.pnr}` });
+    res.json({ bkashURL: `https://travel-hutt.onrender.com?payment=bkash&ok=1&pnr=${booking.pnr}` });
 });
 
 app.post('/api/payments/nagad/create', verifyToken, async (req, res) => {
     const { bookingId } = req.body;
     const booking = await Booking.findById(bookingId);
-    res.json({ redirectURL: `http://localhost:5500/index.html?payment=nagad&ok=1&pnr=${booking.pnr}` });
+    res.json({ redirectURL: `https://travel-hutt.onrender.com?payment=nagad&ok=1&pnr=${booking.pnr}` });
 });
 
 
@@ -594,7 +594,7 @@ app.post('/api/payments/nagad/create', verifyToken, async (req, res) => {
 // 5. SERVER STARTUP
 // ==========================================
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = (process.env.MONGO_URI || 'mongodb://localhost:27017/travelheart')
+const MONGO_URI = (process.env.MONGO_URI || 'mongodb://https://travel-hutt.onrender.com')
     .replace(/[\r\n]/g, '')          // remove accidental line breaks
     .trim()                          // remove accidental spaces
     .replace(/^["']|["']$/g, '')     // remove accidental surrounding quotes
