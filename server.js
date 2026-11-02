@@ -580,13 +580,13 @@ app.post('/api/payments/stripe/create-intent', verifyToken, async (req, res) => 
 app.post('/api/payments/bkash/create', verifyToken, async (req, res) => {
     const { bookingId } = req.body;
     const booking = await Booking.findById(bookingId);
-    res.json({ bkashURL: `https://travel-hutt.onrender.com?payment=bkash&ok=1&pnr=${booking.pnr}` });
+    res.json({ bkashURL: `https://travelhut.ai?payment=bkash&ok=1&pnr=${booking.pnr}` });
 });
 
 app.post('/api/payments/nagad/create', verifyToken, async (req, res) => {
     const { bookingId } = req.body;
     const booking = await Booking.findById(bookingId);
-    res.json({ redirectURL: `https://travel-hutt.onrender.com?payment=nagad&ok=1&pnr=${booking.pnr}` });
+    res.json({ redirectURL: `https://travelhut.ai?payment=nagad&ok=1&pnr=${booking.pnr}` });
 });
 
 
