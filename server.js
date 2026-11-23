@@ -13,9 +13,14 @@ const crypto = require('crypto');
 // 1. INITIALIZATION & SECURITY SETUP
 // ==========================================
 const app = express();
-app.use(express.json());
+
+// প্রথমে সিকিউরিটি এবং মিডলওয়্যারগুলো দিন
+app.use(helmet());
 app.use(cors());
-app.use(helmet()); 
+app.use(express.json());
+
+// এরপর চ্যাটবট বা অন্যান্য রাউটগুলো যুক্ত করুন
+require('./chatbot')(app);
     
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
