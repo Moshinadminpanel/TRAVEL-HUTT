@@ -14,12 +14,39 @@ const crypto = require('crypto');
 // ==========================================
 const app = express();
 
-// প্রথমে সিকিউরিটি এবং মিডলওয়্যারগুলো দিন
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.set('trust proxy', 1);
-// এরপর চ্যাটবট বা অন্যান্য রাউটগুলো যুক্ত করুন
+
+// ==========================================
+// 2. MONGODB SCHEMAS & MODELS
+// ==========================================
+const userSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    firebaseUid: { type: String, required: true, unique: true },
+    role: { type: String, enum: ['user', 'admin', 'agent'], default: 'user' },
+    referralCode: { type: String, default: 'PENDING' }, 
+    pendingComm: { type: Number, default: 0 },
+    paidComm: { type: Number, default: 0 }
+}, { timestamps: true });
+
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+const hotelSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    location: { type: String, required: true },
+    pricePerNight: { type: Number, required: true },
+    currency: { type: String, default: 'BDT' },
+    image: { type: String, required: true }
+}, { timestamps: true });
+
+const Hotel = mongoose.models.Hotel || mongoose.model('Hotel', hotelSchema);
+
+// চ্যাটবট বা অন্য ফাইলের জন্য এক্সপোর্ট করা হলো
+module.exports = { User, Hotel };
+
+// এরপর চ্যাটবট রাউট যুক্ত করা হলো
 require('./chatbot')(app);
     
 const apiLimiter = rateLimit({
@@ -29,12 +56,6 @@ const apiLimiter = rateLimit({
 });
 app.use('/api', apiLimiter);
 
-// FIX: use the modular Firebase Admin API (initializeApp + cert imported above)
-// Credentials are loaded from the first source that exists:
-//   1) Render Secret File:  /etc/secrets/serviceAccountKey.json
-//   2) Local file:          ./serviceAccountKey.json  (keep it in .gitignore!)
-//   3) Base64 env variable: FIREBASE_SERVICE_ACCOUNT_BASE64 (whole JSON, base64 encoded)
-//   4) Separate env vars:   FIREBASE_PROJECT_ID / FIREBASE_CLIENT_EMAIL / FIREBASE_PRIVATE_KEY
 const fs = require('fs');
 const path = require('path');
 
@@ -59,8 +80,8 @@ function loadFirebaseCredentials() {
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         privateKey: (process.env.FIREBASE_PRIVATE_KEY || '')
-            .replace(/^["']|["']$/g, '')   // remove accidental surrounding quotes
-            .replace(/\\n/g, '\n')         // turn literal \n into real newlines
+            .replace(/^["']|["']$/g, '')
+            .replace(/\\n/g, '\n')
             .trim()
     };
 }
@@ -70,29 +91,6 @@ initializeApp({
 });
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
-
-
-// ==========================================
-// 2. MONGODB SCHEMAS & MODELS
-// ==========================================
-const userSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    firebaseUid: { type: String, required: true, unique: true },
-    role: { type: String, enum: ['user', 'admin', 'agent'], default: 'user' },
-    referralCode: { type: String, default: 'PENDING' }, 
-    pendingComm: { type: Number, default: 0 },
-    paidComm: { type: Number, default: 0 }
-}, { timestamps: true });
-const User = mongoose.model('User', userSchema);
-
-const hotelSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    location: { type: String, required: true },
-    pricePerNight: { type: Number, required: true },
-    currency: { type: String, default: 'BDT' },
-    image: { type: String, required: true }
-}, { timestamps: true });
-const Hotel = mongoose.model('Hotel', hotelSchema);
 
 const bookingSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -113,17 +111,14 @@ const bookingSchema = new mongoose.Schema({
         transactionId: { type: String }
     },
     appliedReferralCode: { type: String, default: null },
-    // Unguessable token used by the QR code on the PDF ticket (public verification page)
     ticketToken: { type: String, default: () => crypto.randomBytes(12).toString('hex'), index: true }
 }, { timestamps: true, toJSON: { virtuals: true } });
 
-// Link encoded in the ticket's QR code. Set PUBLIC_URL in .env to your live server address
-// (e.g. https://api.yoursite.com) so phones can open it.
 bookingSchema.virtual('ticketUrl').get(function () {
     const base = (process.env.PUBLIC_URL || 'https://travel-hutt.onrender.com').replace(/\/+$/, '');
     return `${base}/ticket/${this.ticketToken}`;
 });
-const Booking = mongoose.model('Booking', bookingSchema);
+const Booking = mongoose.models.Booking || mongoose.model('Booking', bookingSchema);
 
 
 // ==========================================
@@ -178,8 +173,6 @@ const generatePNR = () => Math.random().toString(36).substring(2, 8).toUpperCase
 // ==========================================
 // 4. API ROUTES
 // ==========================================
-
-// --- PUBLIC TICKET VERIFICATION PAGE (opened by scanning the QR code on the PDF ticket) ---
 const ticketLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200 });
 
 const escHtml = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => (
@@ -277,12 +270,10 @@ app.get('/ticket/:token', ticketLimiter, async (req, res) => {
     }
 });
 
-// --- AUTH ROUTE ---
 app.get('/api/auth/me', verifyToken, (req, res) => {
     res.json(req.user);
 });
 
-// Admin gets all users
 app.get('/api/users', verifyToken, verifyAdmin, async (req, res) => {
     try {
         const users = await User.find().sort({ createdAt: -1 });
@@ -292,26 +283,19 @@ app.get('/api/users', verifyToken, verifyAdmin, async (req, res) => {
     }
 });
 
-// Admin updates user role (AND Generates Agent Code)
 app.patch('/api/users/:id/role', verifyToken, verifyAdmin, async (req, res) => {
     try {
         const { role } = req.body;
-
         if (!['user', 'admin', 'agent'].includes(role)) {
             return res.status(400).json({ error: 'Invalid role provided.' });
         }
-
         const user = await User.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
+        if (!user) return res.status(404).json({ error: 'User not found.' });
 
         user.role = role;
-        
         if (role === 'agent' && (user.referralCode === 'PENDING' || !user.referralCode)) {
             user.referralCode = 'AG-' + Math.random().toString(36).substring(2, 8).toUpperCase();
         }
-
         await user.save();
         res.json(user);
     } catch (err) {
@@ -319,7 +303,6 @@ app.patch('/api/users/:id/role', verifyToken, verifyAdmin, async (req, res) => {
     }
 });
 
-// Admin marks agent commission as paid
 app.post('/api/users/:id/pay-commission', verifyToken, verifyAdmin, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -330,14 +313,12 @@ app.post('/api/users/:id/pay-commission', verifyToken, verifyAdmin, async (req, 
             user.pendingComm = 0;
             await user.save();
         }
-
         res.json(user);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
 
-// --- HOTEL ROUTES ---
 app.get('/api/hotels', async (req, res) => {
     try {
         const hotels = await Hotel.find().sort({ createdAt: -1 });
@@ -374,7 +355,6 @@ app.delete('/api/hotels/:id', verifyToken, verifyAdmin, async (req, res) => {
     }
 });
 
-// --- BOOKING ROUTES ---
 app.post('/api/bookings', verifyToken, async (req, res) => {
     try {
         const { hotelId, checkIn, checkOut, guests, paymentMethod, appliedReferralCode } = req.body;
@@ -405,8 +385,7 @@ app.post('/api/bookings', verifyToken, async (req, res) => {
         if (appliedReferralCode) {
             const agent = await User.findOne({ referralCode: appliedReferralCode, role: 'agent' });
             if (agent) {
-                const commission = 50; 
-                agent.pendingComm += commission;
+                agent.pendingComm += 50; 
                 await agent.save();
             }
         }
@@ -417,7 +396,6 @@ app.post('/api/bookings', verifyToken, async (req, res) => {
     }
 });
 
-// Agent gets bookings made with their referral code
 app.get('/api/bookings/agent', verifyToken, async (req, res) => {
     try {
         if (req.user.role !== 'agent') return res.status(403).json({ error: 'Agent access only.' });
@@ -433,7 +411,6 @@ app.get('/api/bookings/agent', verifyToken, async (req, res) => {
     }
 });
 
-// Get user's own bookings
 app.get('/api/bookings/mine', verifyToken, async (req, res) => {
     try {
         const bookings = await Booking.find({ user: req.user._id })
@@ -445,7 +422,6 @@ app.get('/api/bookings/mine', verifyToken, async (req, res) => {
     }
 });
 
-// User cancels their own booking
 app.patch('/api/bookings/:id/cancel', verifyToken, async (req, res) => {
     try {
         const booking = await Booking.findOne({ _id: req.params.id, user: req.user._id });
@@ -459,7 +435,6 @@ app.patch('/api/bookings/:id/cancel', verifyToken, async (req, res) => {
             booking.status = 'cancelled';
             await booking.save();
 
-            // Deduct commission from agent
             if (booking.appliedReferralCode) {
                 const agent = await User.findOne({ referralCode: booking.appliedReferralCode, role: 'agent' });
                 if (agent) {
@@ -475,7 +450,6 @@ app.patch('/api/bookings/:id/cancel', verifyToken, async (req, res) => {
     }
 });
 
-// Hard delete booking (User or Admin)
 app.delete('/api/bookings/:id', verifyToken, async (req, res) => {
     try {
         const filter = req.user.role === 'admin'
@@ -489,7 +463,6 @@ app.delete('/api/bookings/:id', verifyToken, async (req, res) => {
             return res.status(403).json({ error: 'This booking is confirmed and cannot be cancelled. Please contact support.' });
         }
 
-        // Deduct commission if the booking wasn't already cancelled before deletion
         if (booking.status !== 'cancelled' && booking.appliedReferralCode) {
             const agent = await User.findOne({ referralCode: booking.appliedReferralCode, role: 'agent' });
             if (agent) {
@@ -499,14 +472,12 @@ app.delete('/api/bookings/:id', verifyToken, async (req, res) => {
         }
 
         await Booking.deleteOne({ _id: booking._id });
-
         res.json({ message: 'Booking deleted', _id: req.params.id });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
 
-// Admin gets all bookings
 app.get('/api/bookings', verifyToken, verifyAdmin, async (req, res) => {
     try {
         const bookings = await Booking.find()
@@ -519,7 +490,6 @@ app.get('/api/bookings', verifyToken, verifyAdmin, async (req, res) => {
     }
 });
 
-// Admin updates booking status
 app.patch('/api/bookings/:id/status', verifyToken, verifyAdmin, async (req, res) => {
     try {
         const booking = await Booking.findById(req.params.id);
@@ -534,23 +504,18 @@ app.patch('/api/bookings/:id/status', verifyToken, verifyAdmin, async (req, res)
         if (oldStatus === newStatus) return res.json(booking);
 
         booking.status = newStatus;
-
-        // Payment follows admin confirmation: confirmed -> paid, restored to pending -> pending
         if (newStatus === 'confirmed') booking.payment.status = 'paid';
         else if (newStatus === 'pending') booking.payment.status = 'pending';
 
         await booking.save();
 
-        // Adjust commission based on status change
         if (booking.appliedReferralCode) {
             const agent = await User.findOne({ referralCode: booking.appliedReferralCode, role: 'agent' });
             if (agent) {
                 if (oldStatus !== 'cancelled' && newStatus === 'cancelled') {
-                    // Booking was active, now cancelled -> Deduct 50
                     agent.pendingComm = Math.max(0, agent.pendingComm - 50);
                     await agent.save();
                 } else if (oldStatus === 'cancelled' && (newStatus === 'confirmed' || newStatus === 'pending')) {
-                    // Booking was cancelled, now restored -> Add 50 back
                     agent.pendingComm += 50;
                     await agent.save();
                 }
@@ -563,7 +528,6 @@ app.patch('/api/bookings/:id/status', verifyToken, verifyAdmin, async (req, res)
     }
 });
 
-// --- PAYMENT ROUTES ---
 app.post('/api/payments/stripe/create-intent', verifyToken, async (req, res) => {
     try {
         const { bookingId } = req.body;
@@ -594,26 +558,21 @@ app.post('/api/payments/nagad/create', verifyToken, async (req, res) => {
     res.json({ redirectURL: `https://travelhut.ai?payment=nagad&ok=1&pnr=${booking.pnr}` });
 });
 
-
-// ==========================================   
-// 5. SERVER STARTUP
-// ==========================================
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = (process.env.MONGO_URI || 'mongodb://https://travel-hutt.onrender.com')
-    .replace(/[\r\n]/g, '')          // remove accidental line breaks
-    .trim()                          // remove accidental spaces
-    .replace(/^["']|["']$/g, '')     // remove accidental surrounding quotes
+    .replace(/[\r\n]/g, '')
+    .trim()
+    .replace(/^["']|["']$/g, '')
     .trim();
 
 mongoose.connect(MONGO_URI)
     .then(async () => {
-        console.log('✅ MongoDB Connected[cite: 5]');
-        // Give every older booking a ticket token (needed for the QR verification page)
+        console.log('✅ MongoDB Connected');
         const missing = await Booking.find({ ticketToken: null }).select('_id');
         for (const m of missing) {
             await Booking.updateOne({ _id: m._id }, { $set: { ticketToken: crypto.randomBytes(12).toString('hex') } });
         }
         if (missing.length) console.log(`🎫 Added ticket tokens to ${missing.length} older booking(s)`);
-        app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}[cite: 5]`));
+        app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
     })
     .catch(err => console.error('❌ MongoDB connection error:', err));

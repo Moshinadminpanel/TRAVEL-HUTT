@@ -1,6 +1,8 @@
 const express = require('express');
 const crypto = require('crypto');
-const Hotel = require('./models/Hotel');
+// FIX: সরাসরি server.js থেকে Hotel মডেল রিকোয়ার করা হলো
+const { Hotel } = require('./server.js');
+
 module.exports = function(app) {
     const CB = {
         graphVersion: process.env.META_GRAPH_VERSION || 'v26.0',
@@ -322,7 +324,7 @@ module.exports = function(app) {
         let hasWs = true;
         try { require.resolve('ws'); } catch (e) {
             hasWs = false;
-            console.warn('⚠️ "ws" package not installed. Run: npm install ws  (HTTP chat /api/chat still works)');
+            console.warn('⚠️ "ws" package not installed. Run: npm install ws (HTTP chat /api/chat still works)');
         }
         const originalListen = app.listen.bind(app);
         app.listen = function (...args) {
@@ -331,4 +333,4 @@ module.exports = function(app) {
             return server;
         };
     })();
-};  
+};
