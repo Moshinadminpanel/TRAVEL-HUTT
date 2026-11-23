@@ -1,6 +1,6 @@
 const express = require('express');
 const crypto = require('crypto');
-
+const Hotel = require('./models/Hotel');
 module.exports = function(app) {
     const CB = {
         graphVersion: process.env.META_GRAPH_VERSION || 'v26.0',

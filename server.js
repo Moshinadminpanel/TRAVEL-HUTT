@@ -18,7 +18,7 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-
+app.set('trust proxy', 1);
 // এরপর চ্যাটবট বা অন্যান্য রাউটগুলো যুক্ত করুন
 require('./chatbot')(app);
     
