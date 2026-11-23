@@ -499,6 +499,11 @@
     #popup-when { width: min(620px, 94vw) !important; }
     #popup-who { width: min(360px, 94vw) !important; }
     .calendar-day.min-stay { color: var(--border); cursor: not-allowed; text-decoration: line-through; }
+  
+    *, *::before, *::after { box-sizing: border-box; }
+  html, body { max-width: 100%; overflow-x: hidden; }
+  img { max-width: 100%; height: auto; }
+  
   </style>
 </head>
 
@@ -1083,12 +1088,12 @@
         <span class="mobile-cart-badge" id="mobileCartBadge">0</span>
         <span>Cart</span>
       </div>
-      <div class="mobile-nav-item" id="mnav-chat" onclick="showToast('Chat support coming soon!')">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-        <span>Chat</span>
-      </div>
+      <div class="mobile-nav-item" id="mnav-chat" onclick="toggleChatWidget()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+    <span>Chat</span>
+</div>
       <div class="mobile-nav-item" id="mnav-login" onclick="navigate(currentUser ? (currentUser.role === 'admin' ? 'admin' : (currentUser.role === 'agent' ? 'agent' : 'bookings')) : 'login')">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -2490,6 +2495,231 @@
       handlePaymentRedirect();
     };
   </script>
+  <!-- CHAT FLOATING WIDGET -->
+  <div id="chat-widget" style="position: fixed; bottom: 80px; right: 20px; left: 20px; max-width: 400px; margin: 0 auto; height: 460px; background: #ffffff; border-radius: 20px; box-shadow: 0 20px 35px -10px rgba(10, 31, 68, 0.25); border: 1px solid var(--border-light); display: none; flex-direction: column; overflow: hidden; z-index: 9999; animation: popupBounce 0.25s ease forwards;">
+    <div style="background: var(--primary-gradient); color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 15px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span>💬</span>
+        <span>TravelHut AI Assistant</span>
+      </div>
+      <button onclick="toggleChatWidget()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">✕</button>
+    </div>
+
+    <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; background: #f8fafc;">
+      <div style="background: #ffffff; color: var(--dark); padding: 10px 14px; border-radius: 14px 14px 14px 4px; max-width: 85%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5;">
+        হ্যালো! ট্রাভেলহুটে (TravelHut) আপনাকে স্বাগতম। কক্সবাজার বা অন্য কোনো লোকেশনের হোটেল, রুম ভাড়া বা বুকিং সম্পর্কে জানতে আমাকে প্রশ্ন করতে পারেন।
+      </div>
+    </div>
+
+    <div style="display: flex; border-top: 1px solid var(--border-light); padding: 10px 12px; background: #ffffff; gap: 8px; align-items: center;">
+      <input type="text" id="chat-input" placeholder="আপনার মেসেজ লিখুন..." style="flex: 1; border: 1px solid var(--border); border-radius: 999px; outline: none; padding: 10px 16px; font-size: 14px;">
+      <button id="chat-send" style="background: var(--primary-gradient); color: white; border: none; padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0, 163, 162, 0.3);">পাঠান</button>
+    </div>
+  </div>
+
+  <!-- CHAT WIDGET LOGIC -->
+  <script>
+    function toggleChatWidget() {
+      const widget = document.getElementById('chat-widget');
+      if (!widget) return;
+      const isHidden = widget.style.display === 'none' || widget.style.display === '';
+      widget.style.display = isHidden ? 'flex' : 'none';
+      if (isHidden) {
+        const input = document.getElementById('chat-input');
+        if (input) input.focus();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const chatSend = document.getElementById('chat-send');
+      const chatInput = document.getElementById('chat-input');
+      const chatMessages = document.getElementById('chat-messages');
+      let sessionId = localStorage.getItem('travelhut_chat_session') || '';
+
+      // লোকাল সার্ভার (localhost/127.0.0.1) এবং লাইভ সার্ভারের সাথে অটোমেটিক অ্যাডজাস্ট হবে
+      const CHAT_ENDPOINT = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'https://travel-hutt.onrender.com/api'
+        : `${API_BASE}/chat`;
+
+      function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, m => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+      }
+
+      async function sendUserMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // ইউজারের মেসেজ যোগ করা
+        chatMessages.insertAdjacentHTML('beforeend', `
+          <div style="background: var(--primary-gradient); color: white; padding: 10px 14px; border-radius: 14px 14px 4px 14px; max-width: 85%; align-self: flex-end; line-height: 1.5; word-break: break-word;">
+            ${escapeHtml(text)}
+          </div>
+        `);
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // টাইপিং ইন্ডিকেটর দেখানো
+        const typingId = 'typing-' + Date.now();
+        chatMessages.insertAdjacentHTML('beforeend', `
+          <div id="${typingId}" style="background: #e2e8f0; color: var(--gray); padding: 8px 14px; border-radius: 14px; max-width: 60%; align-self: flex-start; font-size: 12px; font-style: italic;">
+            টাইপ করছে...
+          </div>
+        `);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+          const res = await fetch(CHAT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, sessionId })
+          });
+          const data = await res.json();
+
+          const typingEl = document.getElementById(typingId);
+          if (typingEl) typingEl.remove();
+
+          if (data.sessionId) {
+            sessionId = data.sessionId;
+            localStorage.setItem('travelhut_chat_session', sessionId);
+          }
+
+          if (!res.ok) {
+            throw new Error(data.error || 'Server error');
+          }
+
+          let botHtml = `<div style="background: #ffffff; color: var(--dark); padding: 10px 14px; border-radius: 14px 14px 14px 4px; max-width: 88%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5; white-space: pre-line;">${escapeHtml(data.reply || 'দুঃখিত, কোনো উত্তর পাওয়া যায়নি।')}`;
+
+          // হোটেল সাজেশন কার্ড যুক্ত করা (যদি বট কোনো হোটেল সাজেস্ট করে)
+          if (data.hotels && data.hotels.length > 0) {
+            botHtml += `<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">`;
+            data.hotels.forEach(h => {
+              botHtml += `
+                <div onclick="toggleChatWidget(); viewHotelDetails('${h.id}');" style="background: var(--light-gray); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; cursor: pointer;">
+                  <div style="font-weight: 700; font-size: 13px; color: var(--dark);">🏨 ${escapeHtml(h.title)}</div>
+                  <div style="font-size: 11px; color: var(--gray);">📍 ${escapeHtml(h.location)} · <strong style="color: var(--primary);">${h.currency} ${Number(h.pricePerNight).toLocaleString()}</strong>/night</div>
+                </div>
+              `;
+            });
+            botHtml += `</div>`;
+          }
+
+          botHtml += `</div>`;
+          chatMessages.insertAdjacentHTML('beforeend', botHtml);
+        } catch (err) {
+          const typingEl = document.getElementById(typingId);
+          if (typingEl) typingEl.remove();
+
+          chatMessages.insertAdjacentHTML('beforeend', `
+            <div style="background: #fee2e2; color: #991b1b; padding: 10px 14px; border-radius: 14px; max-width: 85%; align-self: flex-start; font-size: 13px;">
+              সার্ভারের সাথে সংযোগ করা যাচ্ছে না। আপনার লোকাল সার্ভার (port 5000) চালু আছে কি না নিশ্চিত করুন।
+            </div>
+          `);
+        }
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      chatSend.addEventListener('click', sendUserMessage);
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendUserMessage();
+      });
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const chatSend = document.getElementById('chat-send');
+      const chatInput = document.getElementById('chat-input');
+      const chatMessages = document.getElementById('chat-messages');
+      let sessionId = localStorage.getItem('travelhut_chat_session') || '';
+
+      // এটি স্বয়ংক্রিয়ভাবে আপনার রেন্ডার ব্যাকএন্ড (API_BASE) ব্যবহার করবে
+      const CHAT_ENDPOINT = `${API_BASE}/chat`;
+
+      function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, m => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+      }
+
+      async function sendUserMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        chatMessages.insertAdjacentHTML('beforeend', `
+          <div style="background: var(--primary-gradient); color: white; padding: 10px 14px; border-radius: 14px 14px 4px 14px; max-width: 85%; align-self: flex-end; line-height: 1.5; word-break: break-word;">
+            ${escapeHtml(text)}
+          </div>
+        `);
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        const typingId = 'typing-' + Date.now();
+        chatMessages.insertAdjacentHTML('beforeend', `
+          <div id="${typingId}" style="background: #e2e8f0; color: var(--gray); padding: 8px 14px; border-radius: 14px; max-width: 60%; align-self: flex-start; font-size: 12px; font-style: italic;">
+            টাইপ করছে...
+          </div>
+        `);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+          const res = await fetch(CHAT_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, sessionId })
+          });
+          const data = await res.json();
+
+          const typingEl = document.getElementById(typingId);
+          if (typingEl) typingEl.remove();
+
+          if (data.sessionId) {
+            sessionId = data.sessionId;
+            localStorage.setItem('travelhut_chat_session', sessionId);
+          }
+
+          if (!res.ok) {
+            throw new Error(data.error || 'Server error');
+          }
+
+          let botHtml = `<div style="background: #ffffff; color: var(--dark); padding: 10px 14px; border-radius: 14px 14px 14px 4px; max-width: 88%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5; white-space: pre-line;">${escapeHtml(data.reply || 'দুঃখিত, কোনো উত্তর পাওয়া যায়নি।')}`;
+
+          if (data.hotels && data.hotels.length > 0) {
+            botHtml += `<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">`;
+            data.hotels.forEach(h => {
+              botHtml += `
+                <div onclick="toggleChatWidget(); viewHotelDetails('${h.id}');" style="background: var(--light-gray); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; cursor: pointer;">
+                  <div style="font-weight: 700; font-size: 13px; color: var(--dark);">🏨 ${escapeHtml(h.title)}</div>
+                  <div style="font-size: 11px; color: var(--gray);">📍 ${escapeHtml(h.location)} · <strong style="color: var(--primary);">${h.currency} ${Number(h.pricePerNight).toLocaleString()}</strong>/night</div>
+                </div>
+              `;
+            });
+            botHtml += `</div>`;
+          }
+
+          botHtml += `</div>`;
+          chatMessages.insertAdjacentHTML('beforeend', botHtml);
+        } catch (err) {
+          const typingEl = document.getElementById(typingId);
+          if (typingEl) typingEl.remove();
+
+          chatMessages.insertAdjacentHTML('beforeend', `
+            <div style="background: #fee2e2; color: #991b1b; padding: 10px 14px; border-radius: 14px; max-width: 85%; align-self: flex-start; font-size: 13px;">
+              সার্ভারের সাথে সংযোগ স্থাপন করা যাচ্ছে না। দয়া করে রেন্ডার (Render) সার্ভারটি সচল আছে কি না চেক করুন।
+            </div>
+          `);
+        }
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      chatSend.addEventListener('click', sendUserMessage);
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendUserMessage();
+      });
+    });
+  </script>
+  
 </body>
 
 </html>
