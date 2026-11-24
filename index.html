@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>TRAVEL HUT</title>
 
   <style>
@@ -408,19 +408,14 @@
       .active-filter-bar { flex-wrap: wrap; }
     }
 @media (max-width: 768px) {
-  /* Prevent the grid columns from blowing out the viewport */
   .admin-grid > div { 
     min-width: 0; 
   }
-  
-  /* Restrict the sidebar width so horizontal scroll activates */
   .admin-sidebar { 
     max-width: 100%; 
     overflow: hidden; 
     padding: 16px; 
   }
-
-  /* Your existing list rule, updated with width: 100% */
   .admin-sidebar ul { 
     display: flex; 
     overflow-x: auto; 
@@ -428,44 +423,31 @@
     scrollbar-width: none; 
     width: 100%; 
   }
-  
-  /* ... (Keep your other existing mobile rules here) ... */
 }
 @media (max-width: 768px) {
-  /* ... your existing mobile rules ... */
-
-  /* FIX HOME PAGE OVERFLOW */
   .offers-grid, 
   .blogs-grid, 
   .grid {
     grid-template-columns: 1fr !important;
   }
-  
-  /* Ensure main container prevents inner elements from breaking out */
   main {
     max-width: 100vw;
     overflow-x: hidden;
     padding: 20px 5%;
   }
-
-  /* Make sure horizontal scrollers don't push the viewport */
   .destinations-flex {
     width: 100%;
   } 
 }
-/* FIX PROFILE CARD OVERFLOW ON MOBILE */
   #userProfileCard {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 16px;
   }
-  
   #userProfileCard > div:last-child {
     text-align: left !important;
     width: 100%;
   }
-
-  /* Force long email addresses to wrap to the next line if needed */
   #profileEmailDisplay {
     word-break: break-all;
   }
@@ -483,7 +465,6 @@
     #stripeCardElement { padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
     .pnr-tag { font-family: 'Courier New', monospace; font-weight: 800; letter-spacing: 1px; color: var(--primary); background: rgba(0, 163, 162, 0.08); padding: 3px 10px; border-radius: var(--radius-sm); font-size: 13px; }
 
-    /* SEARCH POPUPS (destination, calendar, guests): always centered on screen (desktop + mobile) */
     .calendar-backdrop { display: none; position: fixed; inset: 0; background: rgba(10, 31, 68, 0.45); z-index: 1999; }
     .calendar-backdrop.show { display: block; }
     #popup-where, #popup-when, #popup-who {
@@ -504,6 +485,63 @@
   html, body { max-width: 100%; overflow-x: hidden; }
   img { max-width: 100%; height: auto; }
   
+  
+    /* ==========================================
+        CHATBOT + SUBSCRIBE: RESPONSIVE FIXES (ALL PHONES / ALL USERS)
+        ========================================== */
+    #chat-widget {
+      position: fixed !important;
+      right: 20px !important; left: auto !important; margin: 0 !important;
+      bottom: 92px !important;
+      width: 380px; max-width: calc(100vw - 32px) !important;
+      height: min(560px, calc(var(--chat-vh, 100vh) - 130px)) !important;
+      background: #ffffff; border-radius: 20px !important;
+      box-shadow: 0 24px 48px -12px rgba(10, 31, 68, 0.35) !important;
+      border: 1px solid var(--border);
+      display: none; flex-direction: column; overflow: hidden;
+      z-index: 99999; box-sizing: border-box;
+    }
+    #chat-widget * { box-sizing: border-box; }
+    .chat-header { background: var(--primary-gradient); color: #fff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+    .chat-header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; }
+    .chat-avatar::after { content: ''; position: absolute; right: 0; bottom: 0; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; border: 2px solid #fff; }
+    .chat-title-wrap { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+    .chat-title-wrap .chat-title { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-title-wrap .chat-sub { font-size: 11px; font-weight: 500; opacity: 0.9; }
+    .chat-close-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; }
+    #chat-messages { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+    #chat-messages > div { overflow-wrap: anywhere; word-break: break-word; }
+    .chat-input-bar { display: flex; border-top: 1px solid var(--border-light); padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); background: #fff; gap: 8px; align-items: center; flex-shrink: 0; }
+    #chat-input { flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: 999px; outline: none; padding: 11px 16px; font-size: 16px; background: var(--light-gray); }
+    #chat-send { flex-shrink: 0; background: var(--primary-gradient); color: #fff; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,163,162,0.3); padding: 0; }
+    #chat-send:active { transform: scale(0.95); }
+
+    /* Floating chat launcher (desktop + tablet, all users) */
+    #chat-launcher { position: fixed; right: 20px; bottom: 20px; width: 58px; height: 58px; border-radius: 50%; border: none; background: var(--primary-gradient); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(0,163,162,0.4); z-index: 99998; transition: transform 0.2s ease; padding: 0; }
+    #chat-launcher:hover { transform: scale(1.07); }
+
+    @media (max-width: 768px) {
+      #chat-launcher { display: none !important; }
+      #chat-widget {
+        left: 10px !important; right: 10px !important; width: auto !important; max-width: none !important;
+        bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+        height: min(520px, calc(var(--chat-vh, 100vh) - 150px)) !important;
+        border-radius: 18px !important;
+      }
+      .newsletter-box { padding: 32px 16px; }
+      .newsletter-box h2 { font-size: 22px !important; }
+      .newsletter-form { flex-direction: column; width: 100%; max-width: 100%; gap: 10px; }
+      .newsletter-form input { width: 100%; min-width: 0; font-size: 16px; padding: 14px 18px; }
+      .newsletter-form .btn { width: 100% !important; padding: 14px 20px !important; }
+    }
+    @media (max-width: 380px) {
+      #chat-widget { left: 6px !important; right: 6px !important; }
+      .chat-title-wrap .chat-sub { display: none; }
+    }
+    @media (max-height: 520px) and (max-width: 900px) {
+      #chat-widget { bottom: calc(70px + env(safe-area-inset-bottom)) !important; height: calc(var(--chat-vh, 100vh) - 80px) !important; }
+    }
   </style>
 </head>
 
@@ -531,7 +569,7 @@
     </div>
   </div>
 
-  <!-- MOBILE TOP BAR (hamburger + logo + wishlist) -->
+  <!-- MOBILE TOP BAR -->
   <div class="mobile-header-bar">
     <button class="mobile-icon-btn" onclick="toggleMobileMenu()" aria-label="Menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -541,8 +579,8 @@
       </svg>
     </button>
     <a onclick="navigate('index')" class="logo img">
-    <img src="travel_hutt_logo_1.PNG" alt="Travel Hut Logo" width="200" height="60" style="max-width: 100%; height: auto;">
-</a>
+      <img src="travel_hutt_logo_1.PNG" alt="Travel Hut Logo" width="200" height="60" style="max-width: 100%; height: auto;">
+    </a>
     <button class="mobile-icon-btn" onclick="navigate('wishlist')" aria-label="Wishlist">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 21s-7.5-4.6-10-9.3C.6 8.2 2.3 4 6.4 4c2.1 0 3.7 1.2 5.6 3.4C13.9 5.2 15.5 4 17.6 4 21.7 4 23.4 8.2 22 11.7 19.5 16.4 12 21 12 21z" />
@@ -598,7 +636,6 @@
   <main>
     <!-- PAGE 1: HOME PAGE -->
     <section id="page-index" class="page-view">
-      <!-- HERO SECTION -->
       <div class="hero-banner">
         <h1 class="hero-title">Find Your Next Luxury Escape</h1>
         <p class="hero-subtitle">
@@ -713,11 +750,11 @@
       <section>
         <h2 class="section-title">Popular Destinations</h2>
         <div class="destinations-flex">
-          <div class="dest-chip" onclick="('Cox\'s Bazar')">Cox's Bazar</div>
-          <div class="dest-chip" onclick="('Saint Martin')">Saint Martin</div>
-          <div class="dest-chip" onclick="('Sylhet')">Sylhet</div>
-          <div class="dest-chip" onclick="('Sajek')">Sajek Valley</div>
-          <div class="dest-chip" onclick="('Dhaka')">Dhaka</div>
+          <div class="dest-chip" onclick="filterByDest('Cox\'s Bazar')">Cox's Bazar</div>
+          <div class="dest-chip" onclick="filterByDest('Saint Martin')">Saint Martin</div>
+          <div class="dest-chip" onclick="filterByDest('Sylhet')">Sylhet</div>
+          <div class="dest-chip" onclick="filterByDest('Sajek')">Sajek Valley</div>
+          <div class="dest-chip" onclick="filterByDest('Dhaka')">Dhaka</div>
         </div> 
       </section> 
  
@@ -800,7 +837,6 @@
           </div>
         </div>
       </section>
-
     </section>
 
     <!-- PAGE 2: EXPLORE HOTELS PAGE -->
@@ -822,11 +858,9 @@
       <div class="grid" id="wishlistGrid"></div>
     </section>
 
-    <!-- PAGE 4: MY BOOKINGS PAGE (WITH NEW USER PROFILE LOGIC) -->
+    <!-- PAGE 4: MY BOOKINGS PAGE -->
     <section id="page-bookings" class="page-view hidden">
       <h2 class="section-title">My Profile & Bookings</h2>
-
-      <!-- STRICTLY ADDED: USER PROFILE CARD -->
       <div class="feature-card" id="userProfileCard" style="text-align: left; margin-bottom: 24px; display: none; justify-content: space-between; align-items: center; padding: 20px;">
          <div>
             <h3 style="font-size: 18px; margin-bottom: 4px;" id="profileEmailDisplay">Loading...</h3>
@@ -874,29 +908,20 @@
     <p>We started with the stays people dream about, from the long sandy beaches of Inani and Laboni to the city views around Shugondha in Cox's Bazar. Every hotel on our platform is listed with its real location, a clear price per night and photos, so you know what you're getting before you book.</p>
     <p>TravelHutt is built to take the stress out of travel planning. Pick your destination, choose your dates, add your guests and book in a few taps. Pay the way you prefer, with bKash, Nagad or card. When your booking is confirmed, you can download your e-ticket as a PDF. It includes a QR code that opens your live booking details, so check-in is quick and there is no confusion.</p>
     <p>We also work with a growing network of travel agents. With their own referral codes, agents can bring their customers to TravelHutt, follow those bookings and download their tickets. Our admin team reviews and confirms each booking, so you always see its true status: pending, confirmed or cancelled.</p>
-<br>    <p><strong>Our promise is simple:</strong></p>
+    <br>
+    <p><strong>Our promise is simple:</strong></p>
     <ul class="about-list about-promise">
       <li><strong>Transparent:</strong> clear prices, clear booking status, no surprises.</li>
       <li><strong>Easy:</strong> a fast booking flow that works the same on your phone and your computer.</li>
       <li><strong>Reliable:</strong> a confirmed e-ticket and real people behind every booking.</li>
       <li><strong>Local:</strong> made in Bangladesh, for travelers who love exploring their own country and beyond.</li>
     </ul>
-
     <p>Whether you're planning a weekend by the sea or a family holiday, TravelHutt is here to help you find the right stay and make every trip a story worth telling.</p>
-
     <h3>Our Office</h3>
     <p class="about-sub">Bangladesh</p>
-    <!-- <p class="about-muted">Your full office address, City, postal code</p> -->
     <ul class="about-list">
       <li>Email: <a href="mailto:travelhut@gmail.com">travelhut@gmail.com</a></li>
-      <!-- <li>Phone: <a href="tel:+880XXXXXXXXXX">+880 XXXX XXXXXX</a></li> -->
-      <!-- <li>Visit: <a href="https://your-website.com">your-website.com</a></li> -->
     </ul>
-
-    <!-- Only add this if you have a trade license, TIN or tourism registration:
-    <h3>Governance and Compliance</h3>
-    <p>Your registration details here.</p>
-    -->
   </div>
 </section>
 
@@ -913,8 +938,6 @@
           </ul>
         </div>
         <div>
-
-          <!-- ADMIN: DASHBOARD OVERVIEW -->
           <div id="adminSection-overview">
             <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Dashboard Overview</h3>
             <div class="stats-bar" style="padding: 24px;">
@@ -937,7 +960,6 @@
             </div>
           </div>
 
-          <!-- ADMIN: MANAGE BOOKINGS -->
           <div id="adminSection-bookings" class="hidden">
             <h3 style="font-size: 18px; font-weight: 700;">Recent Bookings System</h3>
             <div class="form-group" style="max-width:320px;">
@@ -949,23 +971,20 @@
                   <tr>
                     <th>PNR</th>
                     <th>Guest</th>
-                    <th>Referral</th> <!-- ADDED COLUMN HEADER -->
+                    <th>Referral</th>
                     <th>Hotel</th>
                     <th>Price</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody id="adminTableBody">
-                </tbody>
+                <tbody id="adminTableBody"></tbody>
               </table>
             </div>
           </div>
 
-          <!-- ADMIN: MANAGE HOTELS -->
           <div id="adminSection-hotels" class="hidden">
             <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Hotel Inventory</h3>
-
             <div class="form-container" style="max-width: 100%; margin: 0 0 24px 0; padding: 24px;">
               <h4 style="font-size: 15px; margin-bottom: 14px;">Add New Hotel</h4>
               <div class="form-group">
@@ -998,13 +1017,11 @@
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody id="adminHotelsTableBody">
-                </tbody>
+                <tbody id="adminHotelsTableBody"></tbody>
               </table>
             </div>
           </div>
 
-          <!-- ADMIN: MANAGE USERS & AGENTS -->
           <div id="adminSection-users" class="hidden">
             <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Users, Roles & Agent Commissions</h3>
             <div class="table-responsive">
@@ -1023,7 +1040,6 @@
               </table>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -1089,11 +1105,11 @@
         <span>Cart</span>
       </div>
       <div class="mobile-nav-item" id="mnav-chat" onclick="toggleChatWidget()">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-    </svg>
-    <span>Chat</span>
-</div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2z"/><path d="M3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-2"/>
+        </svg>
+        <span>Chat</span>
+      </div>
       <div class="mobile-nav-item" id="mnav-login" onclick="navigate(currentUser ? (currentUser.role === 'admin' ? 'admin' : (currentUser.role === 'agent' ? 'agent' : 'bookings')) : 'login')">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -1129,7 +1145,7 @@
     </div>
   </footer>
 
-  <!-- FIREBASE SDK (Authentication) -->
+  <!-- FIREBASE SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import {
@@ -1154,7 +1170,7 @@
     window.dispatchEvent(new Event('firebase-ready'));
   </script>
 
-  <!-- STRIPE.JS (Card payments) -->
+  <!-- STRIPE.JS -->
   <script src="https://js.stripe.com/v3/"></script>
 
   <!-- PDF TICKET LIBRARIES -->
@@ -1182,10 +1198,9 @@
 
     let currentUser = null;
 
-    // Move the search popups to <body> so they are always centered on screen
     ['popup-where', 'popup-when', 'popup-who'].forEach(id => document.body.appendChild(document.getElementById(id)));
 
-    const MIN_STAY_DAYS = 2; // minimum booking length
+    const MIN_STAY_DAYS = 2;
     let currentIdToken = null;
 
     async function authFetch(path, options = {}) {
@@ -1258,9 +1273,6 @@
       navigate('index');
     }
 
-    // =======================================================
-    // STRICT ROLE UI UPDATES
-    // =======================================================
     function updateAuthUI() {
       const navAuth = document.getElementById('navAuth');
       const adminLink = document.getElementById('navAdminLink');
@@ -1279,18 +1291,16 @@
         let profileRoute = 'bookings';
         let portalName = 'My Profile';
         
-        // Strict Display Logic based on exact role
         if (currentUser.role === 'admin') {
             profileRoute = 'admin';
             portalName = 'Admin Dashboard';
             adminLink.style.display = 'inline-block';
             if (agentLink) agentLink.style.display = 'none';
-            if (bookingsLink) bookingsLink.style.display = 'none'; // Admin shouldn't see normal user bookings nav
+            if (bookingsLink) bookingsLink.style.display = 'none';
             
             if (mobileAdminLink) mobileAdminLink.style.display = 'block';
             if (mobileAgentLink) mobileAgentLink.style.display = 'none';
             if (mobileBookingsLink) mobileBookingsLink.style.display = 'none';
-            
         } else if (currentUser.role === 'agent') {
             profileRoute = 'agent';
             portalName = 'Agent Portal';
@@ -1301,9 +1311,7 @@
             if (mobileAdminLink) mobileAdminLink.style.display = 'none';
             if (mobileAgentLink) mobileAgentLink.style.display = 'block';
             if (mobileBookingsLink) mobileBookingsLink.style.display = 'block';
-            
         } else {
-            // Normal User
             profileRoute = 'bookings';
             portalName = 'My Bookings';
             adminLink.style.display = 'none';
@@ -1726,9 +1734,6 @@
       `).join('');
     }
 
-    /* ==========================================
-        PDF TICKET (customer + agent download)
-        ========================================== */
     const TICKET_LOGO_SRC = 'travel_hutt_logo_1.PNG';
     const TC = {
       navy: [1, 42, 98], teal: [0, 186, 184], blue: [0, 118, 181], orange: [249, 142, 12],
@@ -1800,7 +1805,7 @@
         return;
       }
       if (!window.jspdf || !window.jspdf.jsPDF) {
-        showToast('PDF library could not load. Please check your internet connection and refresh.');
+        showToast('PDF library could not load.');
         return;
       }
       showToast('Preparing your ticket...');
@@ -1842,10 +1847,7 @@
       const payColor = payStatus === 'paid' ? TC.green : payStatus === 'failed' ? TC.red : TC.amber;
       const statusColor = b.status === 'confirmed' ? TC.green : b.status === 'cancelled' ? TC.red : TC.amber;
 
-      // ---------- page background ----------
       fill(TC.bg); doc.rect(0, 0, W, H, 'F');
-
-      // ---------- header ----------
       fill(TC.navy); doc.rect(0, 0, W, 52, 'F');
       const steps = 48;
       for (let i = 0; i < steps; i++) {
@@ -1872,18 +1874,15 @@
       const sw = pill(String(b.status).toUpperCase(), 196, 34, statusColor);
       if (copyType === 'agent') pill('AGENT COPY', 196 - sw - 4, 34, TC.orange);
 
-      // ---------- ticket card ----------
-      fill(TC.line); doc.roundedRect(14.6, 63.4, 182, 210, 5, 5, 'F');   // soft shadow
+      fill(TC.line); doc.roundedRect(14.6, 63.4, 182, 210, 5, 5, 'F');
       fill([255, 255, 255]); doc.roundedRect(14, 62, 182, 210, 5, 5, 'F');
 
-      // reference + booked on
       label('Booking reference', 24, 74);
       value(b.pnr, 24, 87, 28, TC.teal);
       label('Booked on', 186, 74, 'right');
       value(ticketDate(b.createdAt || b.checkIn), 186, 81, 11, TC.ink, 'right');
       doc.setDrawColor(...TC.line); doc.setLineWidth(0.3); doc.line(24, 95, 186, 95);
 
-      // hotel
       label('Hotel', 24, 102);
       const nameW = hotelImg ? 100 : 160;
       doc.setFont('helvetica', 'bold'); doc.setFontSize(17);
@@ -1898,7 +1897,6 @@
         doc.setDrawColor(...TC.line); doc.setLineWidth(0.3); doc.rect(134, 99, 52, 36, 'S');
       }
 
-      // stay schedule panel
       fill(TC.bg); doc.roundedRect(24, 142, 162, 30, 3, 3, 'F');
       label('Check-in', 34, 151);
       value(ticketDate(b.checkIn), 34, 160, 15, TC.ink);
@@ -1916,7 +1914,6 @@
       doc.setFont('helvetica', 'bold'); doc.setFontSize(6); ink([150, 232, 230]);
       doc.text(nights > 1 ? 'NIGHTS' : 'NIGHT', 105, 162.6, { align: 'center' });
 
-      // guest + payment details
       label('Guest email', 24, 185);
       const emailText = doc.splitTextToSize(guestEmail || '-', 66)[0];
       value(emailText, 24, 192, 10.5);
@@ -1941,19 +1938,16 @@
         doc.text('Awaiting confirmation - not valid for check-in until the status shows CONFIRMED. Scan the QR code for the live status.', 24, 221, { maxWidth: 162 });
       }
 
-      // perforation + notches
       doc.setDrawColor(...TC.line); doc.setLineWidth(0.4); doc.setLineDashPattern([2, 2], 0);
       doc.line(19, 232, 191, 232);
       doc.setLineDashPattern([], 0);
       fill(TC.bg); doc.circle(14, 232, 5, 'F'); doc.circle(196, 232, 5, 'F');
 
-      // stub: QR + summary
       fill([255, 255, 255]); doc.setDrawColor(...TC.line); doc.setLineWidth(0.3);
       doc.roundedRect(24, 239, 30, 30, 2, 2, 'FD');
       const verifyBase = API_BASE.replace(/\/api\/?$/, '');
       const qrText = b.ticketUrl || (b.ticketToken ? `${verifyBase}/ticket/${b.ticketToken}` : `TRAVELHUTT|${b.pnr}|${hotelTitle}|${String(b.checkIn).slice(0, 10)}|${nights}N`);
-      const qrOk = ticketDrawQR(doc, qrText, 26, 241, 26);
-      if (!qrOk) { value('PNR', 39, 255, 10, TC.navy, 'center'); }
+      ticketDrawQR(doc, qrText, 26, 241, 26);
       label('Scan for live booking details', 62, 247);
       value(b.pnr, 62, 258, 20, TC.teal);
       doc.setFont('helvetica', 'normal'); doc.setFontSize(9); ink(TC.ink);
@@ -1961,7 +1955,6 @@
       ink(TC.gray);
       doc.text(`${ticketDate(b.checkIn)}  -  ${ticketDate(b.checkOut)}  |  ${nights} night${nights > 1 ? 's' : ''}`, 62, 270);
 
-      // ---------- footer ----------
       fill(TC.navy); doc.rect(0, 281, W, 16, 'F');
       doc.setFont('helvetica', 'bold'); doc.setFontSize(9); ink([255, 255, 255]);
       doc.text('TravelHutt', W / 2, 288, { align: 'center' });
@@ -2039,7 +2032,6 @@
         const profile = await authFetch('/auth/me');
         currentUser = profile;
         document.getElementById('agentDisplayRefCode').innerText = profile.referralCode || 'NOT ASSIGNED';
-        // FIXED schema variables matching the backend
         document.getElementById('agentPendingCommission').innerText = `BDT ${(profile.pendingComm || 0).toLocaleString()}`;
         document.getElementById('agentPaidCommission').innerText = `BDT ${(profile.paidComm || 0).toLocaleString()}`;
         renderAgentBookings();
@@ -2070,7 +2062,7 @@
     function selectDestination(name, country) {
       const input = document.getElementById('searchDest');
       input.value = `${name}, ${country}`;
-      input.dataset.filter = name;          // only this location's hotels will be shown
+      input.dataset.filter = name;
       applyLocationFilter(name);
       closeAllPopups();
       togglePopup('when');
@@ -2080,7 +2072,7 @@
       const input = document.getElementById('searchDest');
       input.value = '';
       input.dataset.filter = '';
-      applyLocationFilter('');              // show all hotels
+      applyLocationFilter('');
       closeAllPopups();
       togglePopup('when');
     }
@@ -2133,8 +2125,8 @@
       const rightMonth = new Date(calendarViewDate);
       rightMonth.setMonth(rightMonth.getMonth() + 1);
 
-      document.getElementById('calMonthTitle0').innerText = `${MONTH_NAMES[leftMonth.getMonth()]}, ${leftMonth.getFullYear()}`;
-      document.getElementById('calMonthTitle1').innerText = `${MONTH_NAMES[rightMonth.getMonth()]}, ${rightMonth.getFullYear()}`;
+      document.getElementById('calMonthTitle0').innerText = `${MONTH_NAMES[leftMonth.getMonth()]} ${leftMonth.getFullYear()}`;
+      document.getElementById('calMonthTitle1').innerText = `${MONTH_NAMES[rightMonth.getMonth()]} ${rightMonth.getFullYear()}`;
 
       document.getElementById('calendarGrid0').innerHTML = buildMonthCells(leftMonth);
       document.getElementById('calendarGrid1').innerHTML = buildMonthCells(rightMonth);
@@ -2155,7 +2147,7 @@
       } else if (checkInDate && !checkOutDate) {
         const stayDays = Math.round((clicked - checkInDate) / 86400000);
         if (clicked > checkInDate && stayDays < MIN_STAY_DAYS) {
-          showToast(`Minimum ${MIN_STAY_DAYS} days booking required. Please select a later check-out date.`);
+          showToast(`Minimum ${MIN_STAY_DAYS} days booking required.`);
           return;
         } else if (clicked > checkInDate) {
           checkOutDate = clicked;
@@ -2205,11 +2197,9 @@
     }
 
     document.addEventListener('click', function (e) {
-      // Close search capsule popups
       const capsule = document.getElementById('searchCapsule');
       if (capsule && !capsule.contains(e.target)) closeAllPopups();
       
-      // Close profile dropdown menu
       const profileDropdown = document.getElementById('profileDropdownMenu');
       const profileWrapper = document.querySelector('.profile-dropdown-wrapper');
       if (profileDropdown && profileDropdown.classList.contains('show')) {
@@ -2225,9 +2215,6 @@
       navigate('hotels');
     }
 
-    /* ==========================================
-        ADMIN MANAGEMENT PORTAL
-        ========================================== */
     function showAdminSection(section) {
       ['overview', 'bookings', 'hotels', 'users'].forEach(s => {
         const el = document.getElementById('adminSection-' + s);
@@ -2275,7 +2262,6 @@
         return;
       }
 
-      // ADDED: The referral code column renderer here
       tbody.innerHTML = rows.map(b => `
         <tr>
           <td><span class="pnr-tag">${b.pnr}</span></td>
@@ -2304,7 +2290,6 @@
       if (!confirm(labels[nextStatus] || 'Change this booking status?')) return;
       try {
         const updated = await authFetch(`/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: nextStatus }) });
-        // update only this one booking in the cache
         const idx = allBookingsCache.findIndex(b => b._id === id);
         if (idx !== -1) allBookingsCache[idx].status = updated.status;
         showToast(`Booking marked as ${updated.status}`);
@@ -2316,7 +2301,7 @@
     }
 
     async function adminDeleteBooking(id, pnr) {
-      if (!confirm(`Permanently delete booking ${pnr}? It will be removed from the site and the database. This cannot be undone.`)) return;
+      if (!confirm(`Permanently delete booking ${pnr}? It will be removed from the site and the database.`)) return;
       try {
         await authFetch(`/bookings/${id}`, { method: 'DELETE' });
         allBookingsCache = allBookingsCache.filter(b => b._id !== id);
@@ -2421,7 +2406,6 @@
 
       try {
         const users = await authFetch('/users');
-        // FIXED schema variables matching the backend
         tbody.innerHTML = users.map(u => `
           <tr>
             <td>${u.email}</td>
@@ -2456,7 +2440,7 @@
     }
 
     async function markCommissionPaid(userId) {
-      if (!confirm('Mark this agent commission as Paid? Ensure you have already sent the payment off-platform via bKash/Nagad.')) return;
+      if (!confirm('Mark this agent commission as Paid?')) return;
       try {
         await authFetch(`/users/${userId}/pay-commission`, { method: 'POST' });
         showToast('Commission marked as Paid successfully!');
@@ -2480,9 +2464,7 @@
         if (totalBookingsEl) totalBookingsEl.innerText = bookings.length;
         if (confirmedEl) confirmedEl.innerText = bookings.filter(b => b.status === 'confirmed').length;
         if (cancelledEl) cancelledEl.innerText = bookings.filter(b => b.status === 'cancelled').length;
-      } catch (err) {
-        // non-critical
-      }
+      } catch (err) {}
     }
 
     window.onload = function () {
@@ -2495,29 +2477,45 @@
       handlePaymentRedirect();
     };
   </script>
-  <!-- CHAT FLOATING WIDGET -->
-  <div id="chat-widget" style="position: fixed; bottom: 80px; right: 20px; left: 20px; max-width: 400px; margin: 0 auto; height: 460px; background: #ffffff; border-radius: 20px; box-shadow: 0 20px 35px -10px rgba(10, 31, 68, 0.25); border: 1px solid var(--border-light); display: none; flex-direction: column; overflow: hidden; z-index: 9999; animation: popupBounce 0.25s ease forwards;">
-    <div style="background: var(--primary-gradient); color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 15px;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span>💬</span>
-        <span>TravelHut AI Assistant</span>
+
+  <!-- CHAT FLOATING WIDGET (REVISED RESPONSIVE DESIGN & OVERLAP FIX) -->
+  <div id="chat-widget" role="dialog" aria-label="TravelHut Assistant">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">
+          <!-- Support / concierge headset icon -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2z"/><path d="M3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-2"/></svg>
+        </div>
+        <div class="chat-title-wrap">
+          <span class="chat-title">TravelHut AI Assistant</span>
+          <span class="chat-sub">Online · Hotel &amp; booking help</span>
+        </div>
       </div>
-      <button onclick="toggleChatWidget()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">✕</button>
+      <button class="chat-close-btn" onclick="toggleChatWidget()" aria-label="Close chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
 
-    <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; background: #f8fafc;">
-      <div style="background: #ffffff; color: var(--dark); padding: 10px 14px; border-radius: 14px 14px 14px 4px; max-width: 85%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5;">
-        হ্যালো! ট্রাভেলহুটে (TravelHut) আপনাকে স্বাগতম। কক্সবাজার বা অন্য কোনো লোকেশনের হোটেল, রুম ভাড়া বা বুকিং সম্পর্কে জানতে আমাকে প্রশ্ন করতে পারেন।
+    <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; background: #f8fafc;">
+      <div style="background: #ffffff; color: var(--dark); padding: 12px 16px; border-radius: 16px 16px 16px 4px; max-width: 88%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5;">
+        হ্যালো! ট্রাভেলহুটে (TravelHut) আপনাকে স্বাগতম। কক্সবাজার বা অন্যান্য লোকেশনের হোটেল, রুম ভাড়া বা বুকিং সম্পর্কে জানতে আমাকে যেকোনো প্রশ্ন করতে পারেন।
       </div>
     </div>
 
-    <div style="display: flex; border-top: 1px solid var(--border-light); padding: 10px 12px; background: #ffffff; gap: 8px; align-items: center;">
-      <input type="text" id="chat-input" placeholder="আপনার মেসেজ লিখুন..." style="flex: 1; border: 1px solid var(--border); border-radius: 999px; outline: none; padding: 10px 16px; font-size: 14px;">
-      <button id="chat-send" style="background: var(--primary-gradient); color: white; border: none; padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0, 163, 162, 0.3);">পাঠান</button>
+    <div class="chat-input-bar">
+      <input type="text" id="chat-input" placeholder="আপনার মেসেজ লিখুন..." autocomplete="off" enterkeyhint="send">
+      <button id="chat-send" aria-label="পাঠান" title="পাঠান">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
     </div>
   </div>
 
-  <!-- CHAT WIDGET LOGIC -->
+  <!-- Floating chat button: available for every visitor (guest, user, agent, admin) -->
+  <button id="chat-launcher" onclick="toggleChatWidget()" aria-label="Open chat">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2z"/><path d="M3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-2"/></svg>
+  </button>
+
+  <!-- CHAT WIDGET SCRIPT -->
   <script>
     function toggleChatWidget() {
       const widget = document.getElementById('chat-widget');
@@ -2536,105 +2534,6 @@
       const chatMessages = document.getElementById('chat-messages');
       let sessionId = localStorage.getItem('travelhut_chat_session') || '';
 
-      // লোকাল সার্ভার (localhost/127.0.0.1) এবং লাইভ সার্ভারের সাথে অটোমেটিক অ্যাডজাস্ট হবে
-      const CHAT_ENDPOINT = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        ? 'https://travel-hutt.onrender.com/api'
-        : `${API_BASE}/chat`;
-
-      function escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, m => ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        }[m]));
-      }
-
-      async function sendUserMessage() {
-        const text = chatInput.value.trim();
-        if (!text) return;
-
-        // ইউজারের মেসেজ যোগ করা
-        chatMessages.insertAdjacentHTML('beforeend', `
-          <div style="background: var(--primary-gradient); color: white; padding: 10px 14px; border-radius: 14px 14px 4px 14px; max-width: 85%; align-self: flex-end; line-height: 1.5; word-break: break-word;">
-            ${escapeHtml(text)}
-          </div>
-        `);
-        chatInput.value = '';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        // টাইপিং ইন্ডিকেটর দেখানো
-        const typingId = 'typing-' + Date.now();
-        chatMessages.insertAdjacentHTML('beforeend', `
-          <div id="${typingId}" style="background: #e2e8f0; color: var(--gray); padding: 8px 14px; border-radius: 14px; max-width: 60%; align-self: flex-start; font-size: 12px; font-style: italic;">
-            টাইপ করছে...
-          </div>
-        `);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        try {
-          const res = await fetch(CHAT_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text, sessionId })
-          });
-          const data = await res.json();
-
-          const typingEl = document.getElementById(typingId);
-          if (typingEl) typingEl.remove();
-
-          if (data.sessionId) {
-            sessionId = data.sessionId;
-            localStorage.setItem('travelhut_chat_session', sessionId);
-          }
-
-          if (!res.ok) {
-            throw new Error(data.error || 'Server error');
-          }
-
-          let botHtml = `<div style="background: #ffffff; color: var(--dark); padding: 10px 14px; border-radius: 14px 14px 14px 4px; max-width: 88%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5; white-space: pre-line;">${escapeHtml(data.reply || 'দুঃখিত, কোনো উত্তর পাওয়া যায়নি।')}`;
-
-          // হোটেল সাজেশন কার্ড যুক্ত করা (যদি বট কোনো হোটেল সাজেস্ট করে)
-          if (data.hotels && data.hotels.length > 0) {
-            botHtml += `<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">`;
-            data.hotels.forEach(h => {
-              botHtml += `
-                <div onclick="toggleChatWidget(); viewHotelDetails('${h.id}');" style="background: var(--light-gray); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; cursor: pointer;">
-                  <div style="font-weight: 700; font-size: 13px; color: var(--dark);">🏨 ${escapeHtml(h.title)}</div>
-                  <div style="font-size: 11px; color: var(--gray);">📍 ${escapeHtml(h.location)} · <strong style="color: var(--primary);">${h.currency} ${Number(h.pricePerNight).toLocaleString()}</strong>/night</div>
-                </div>
-              `;
-            });
-            botHtml += `</div>`;
-          }
-
-          botHtml += `</div>`;
-          chatMessages.insertAdjacentHTML('beforeend', botHtml);
-        } catch (err) {
-          const typingEl = document.getElementById(typingId);
-          if (typingEl) typingEl.remove();
-
-          chatMessages.insertAdjacentHTML('beforeend', `
-            <div style="background: #fee2e2; color: #991b1b; padding: 10px 14px; border-radius: 14px; max-width: 85%; align-self: flex-start; font-size: 13px;">
-              সার্ভারের সাথে সংযোগ করা যাচ্ছে না। আপনার লোকাল সার্ভার (port 5000) চালু আছে কি না নিশ্চিত করুন।
-            </div>
-          `);
-        }
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      chatSend.addEventListener('click', sendUserMessage);
-      chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendUserMessage();
-      });
-    });
-
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const chatSend = document.getElementById('chat-send');
-      const chatInput = document.getElementById('chat-input');
-      const chatMessages = document.getElementById('chat-messages');
-      let sessionId = localStorage.getItem('travelhut_chat_session') || '';
-
-      // এটি স্বয়ংক্রিয়ভাবে আপনার রেন্ডার ব্যাকএন্ড (API_BASE) ব্যবহার করবে
       const CHAT_ENDPOINT = `${API_BASE}/chat`;
 
       function escapeHtml(str) {
@@ -2648,7 +2547,7 @@
         if (!text) return;
 
         chatMessages.insertAdjacentHTML('beforeend', `
-          <div style="background: var(--primary-gradient); color: white; padding: 10px 14px; border-radius: 14px 14px 4px 14px; max-width: 85%; align-self: flex-end; line-height: 1.5; word-break: break-word;">
+          <div style="background: var(--primary-gradient); color: white; padding: 12px 16px; border-radius: 16px 16px 4px 16px; max-width: 88%; align-self: flex-end; line-height: 1.5; word-break: break-word; box-shadow: var(--shadow-sm);">
             ${escapeHtml(text)}
           </div>
         `);
@@ -2683,15 +2582,15 @@
             throw new Error(data.error || 'Server error');
           }
 
-          let botHtml = `<div style="background: #ffffff; color: var(--dark); padding: 10px 14px; border-radius: 14px 14px 14px 4px; max-width: 88%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5; white-space: pre-line;">${escapeHtml(data.reply || 'দুঃখিত, কোনো উত্তর পাওয়া যায়নি।')}`;
+          let botHtml = `<div style="background: #ffffff; color: var(--dark); padding: 12px 16px; border-radius: 16px 16px 16px 4px; max-width: 90%; align-self: flex-start; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); line-height: 1.5; white-space: pre-line;">${escapeHtml(data.reply || 'দুঃখিত, কোনো উত্তর পাওয়া যায়নি।')}`;
 
           if (data.hotels && data.hotels.length > 0) {
-            botHtml += `<div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">`;
+            botHtml += `<div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">`;
             data.hotels.forEach(h => {
               botHtml += `
-                <div onclick="toggleChatWidget(); viewHotelDetails('${h.id}');" style="background: var(--light-gray); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; cursor: pointer;">
+                <div onclick="toggleChatWidget(); viewHotelDetails('${h.id}');" style="background: var(--light-gray); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; cursor: pointer; transition: var(--transition);">
                   <div style="font-weight: 700; font-size: 13px; color: var(--dark);">🏨 ${escapeHtml(h.title)}</div>
-                  <div style="font-size: 11px; color: var(--gray);">📍 ${escapeHtml(h.location)} · <strong style="color: var(--primary);">${h.currency} ${Number(h.pricePerNight).toLocaleString()}</strong>/night</div>
+                  <div style="font-size: 11px; color: var(--gray); margin-top: 2px;">📍 ${escapeHtml(h.location)} · <strong style="color: var(--primary);">${h.currency} ${Number(h.pricePerNight).toLocaleString()}</strong>/night</div>
                 </div>
               `;
             });
@@ -2719,7 +2618,20 @@
       });
     });
   </script>
-  
+  <!-- CHAT VIEWPORT HELPER (keeps chat inside the screen when keyboard opens) -->
+  <script>
+    (function () {
+      function setChatVh() {
+        var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+        document.documentElement.style.setProperty('--chat-vh', h + 'px');
+      }
+      setChatVh();
+      window.addEventListener('resize', setChatVh);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', setChatVh);
+        window.visualViewport.addEventListener('scroll', setChatVh);
+      }
+    })();
+  </script>
 </body>
-
 </html>
